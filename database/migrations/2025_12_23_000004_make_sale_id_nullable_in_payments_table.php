@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('barang_masuk', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+        Schema::table('payments', function (Blueprint $table) {
+            // Ubah sale_id menjadi nullable
+            $table->foreignId('sale_id')->nullable()->change();
         });
     }
 
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('barang_masuk', function (Blueprint $table) {
-            $table->dropForeignIdFor('users');
+        Schema::table('payments', function (Blueprint $table) {
+            $table->foreignId('sale_id')->nullable(false)->change();
         });
     }
 };

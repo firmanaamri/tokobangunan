@@ -52,6 +52,7 @@ class ProductController extends Controller
             'sku' => 'required|string|unique:barang',
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
+            'harga' => 'nullable|numeric|min:0',
             'stok_saat_ini' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
         ]);
@@ -90,6 +91,7 @@ class ProductController extends Controller
             'sku' => 'required|string|unique:barang,sku,' . $barang->id,
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
+            'harga' => 'nullable|numeric|min:0',
             'stok_saat_ini' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
         ]);

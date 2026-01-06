@@ -1,188 +1,147 @@
-{{-- <aside 
-    @click.away="sidebarOpen = false"
-    x-cloak
-    class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-gray-300 p-6 space-y-6 
-           transform -translate-x-full transition-transform duration-300 
-           md:relative md:translate-x-0 md:flex md:flex-col md:justify-between"
-    :class="{ 'translate-x-0': sidebarOpen }">
-    
-    <div>
-        <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 mb-10">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h4a2 2 0 002-2V7a2 2 0 00-2-2h-4a2 2 0 00-2 2z" />
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h.01M7 10h.01M17 10h.01M21 10h.01M3 14h.01M7 14h.01M17 14h.01M21 14h.01" />
-            </svg>
-            <span class="text-2xl font-bold text-white">Inventori</span>
-        </a>
-        
-        <nav class="space-y-2">
-            <h3 class="text-xs uppercase text-gray-500 pt-2 pb-2 px-3 font-semibold">Menu Utama</h3>
-            
-            <a href="{{ route('dashboard') }}" 
-               class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-700 hover:text-white {{ request()->routeIs('dashboard') ? 'bg-gray-700 text-white' : '' }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6-4h.01M12 12h.01M15 12h.01M12 9h.01M15 9h.01M9 9h.01" /></svg>
-                <span>Dashboard</span>
-            </a>
-            
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-700 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                <span>Stok Barang</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-700 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3h-1a4 4 0 00-8 0H6a2 2 0 00-2 2v2h16V5a2 2 0 00-2-2z" /></svg>
-                <span>Supplier</span>
-            </a>
-            
-            <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-md hover:bg-gray-700 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 01-2-2v-6a2 2 0 012-2h4m4 10h4a2 2 0 002-2v-6a2 2 0 00-2-2h-4m0 10v-6a2 2 0 012-2h6" /></svg>
-                <span>Pelaporan</span>
-            </a>\
-            
-            
-            </nav>
-    </div>
+<style>
+.sidebar-collapsed .sidebar-label { display: none; }
+.sidebar-collapsed nav a { justify-content: center; }
+.sidebar-collapsed .section-title { display: none; }
+.sidebar-collapsed .profile-info { display: none; }
+.sidebar-collapsed .logout-text { display: none; }
+</style>
 
-    <div class="border-t border-gray-700 pt-4">
-        <div class="flex items-center mb-4 px-3">
-            <img class="h-10 w-10 rounded-full object-cover" src="https://via.placeholder.com/100" alt="Foto Profil">
-            <div class="ml-3">
-                <p class="text-sm font-medium text-white">{{ Auth::user()->name ?? 'Admin' }}</p>
-                <p class="text-xs text-gray-400">Online</p>
-            </div>
-        </div>
-        
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault(); this.closest('form').submit();"
-               class="flex items-center space-x-3 px-3 py-2.5 rounded-md text-red-400 hover:bg-red-500 hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                <span>Keluar (Logout)</span>
-            </a>
-        </form>
-    </div>
-</aside> --}}
-
-<aside 
-    @click.away="sidebarOpen = false"
+<div 
     x-cloak
-    x-data="{ sidebarOpen: true }" {{-- Tambahkan state Alpine.js --}}
-    :class="sidebarOpen ? 'w-64' : 'w-20'" {{-- Atur lebar berdasarkan state --}}
-    class="fixed inset-y-0 left-0 z-50 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-300 p-3 transition-all duration-500 ease-in-out shadow-2xl border-r border-slate-700 overflow-hidden
-           md:relative md:translate-x-0 md:flex md:flex-col md:justify-between"
+    :class="sidebarOpen ? 'w-64 translate-x-0' : 'w-20 sidebar-collapsed -translate-x-full md:translate-x-0'"
+    class="bg-gradient-to-b from-[#C5ADC5] via-[#B2B5E0] to-[#C5ADC5] text-white p-3 transition-all duration-500 ease-in-out shadow-2xl border-r border-[#C5ADC5] overflow-hidden
+           fixed inset-y-0 left-0 z-30 
+           md:relative md:z-auto md:flex md:flex-col md:justify-between"
 >
     
-    <div class="flex items-center space-x-3 mb-10 p-4 rounded-lg hover:bg-white/5 transition-colors duration-300">
-        <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 min-w-0" :class="sidebarOpen ? '' : 'justify-center w-full'">
-             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-400 flex-shrink-0 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24">
+    <div class="flex items-center justify-center mb-10 p-4">
+        <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 min-w-0 hover:bg-black/5 rounded-lg p-2 transition-all duration-300">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                  <path d="M3 13h2v8H3zM17 6h2v15h-2zM10 9h2v12h-2z" />
              </svg>
-             {{-- Teks Logo hanya muncul saat sidebar terbuka --}}
-             <span class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent whitespace-nowrap transition-all duration-500" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0)' : 'opacity: 0; transform: translateX(-10px)'">Jaya Prana</span>
+             <span class="text-xl font-bold text-white whitespace-nowrap sidebar-label">Jaya Prana</span>
         </a>
-        
-        <button @click="sidebarOpen = !sidebarOpen" 
-                class="hidden md:flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300 flex-shrink-0" 
-                :class="sidebarOpen ? 'ml-auto' : 'ml-0'">
-            {{-- Ikon panah sesuai state --}}
-            <svg x-show="sidebarOpen" x-transition:enter="transition-transform duration-300" x-transition:leave="transition-transform duration-300" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
-            <svg x-show="!sidebarOpen" x-transition:enter="transition-transform duration-300" x-transition:leave="transition-transform duration-300" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
-        </button>
     </div>
 
     <div class="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800">
         <div class="space-y-6">
             <nav class="space-y-1">
-                {{-- Judul Menu --}}
-                <h3 class="text-xs uppercase tracking-wider text-slate-500 pt-2 pb-3 px-4 font-bold transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; max-height: 100px' : 'opacity: 0; max-height: 0'">Menu Utama</h3>
-                
-                {{-- Item Navigasi Dashboard --}}
+                {{-- Dashboard --}}
                 <a href="{{ route('dashboard') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6-4h.01M12 12h.01M15 12h.01M12 9h.01M15 9h.01M9 9h.01" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Dashboard</span>
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('dashboard') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6-4h.01M12 12h.01M15 12h.01M12 9h.01M15 9h.01M9 9h.01" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Dashboard</span>
                 </a>
+
+                {{-- SECTION: MASTER DATA --}}
+                <div class="pt-6">
+                    <h3 class="text-xs uppercase tracking-wider text-blue-200 px-4 pb-3 font-bold section-title">Master Data</h3>
+                </div>
                 
-                {{-- Item Navigasi Stok Barang --}}
                 <a href="{{ route('stokbarang') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('stokbarang') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Stok Barang</span>
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('stokbarang') || request()->routeIs('barang.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Barang</span>
                 </a>
 
-                {{-- Item Navigasi Barang Masuk --}}
-                <a href="{{ route('barang-masuk.index') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('barang-masuk.*') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Barang Masuk</span>
+                <a href="{{ route('suppliers.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('suppliers.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3h-1a4 4 0 00-8 0H6a2 2 0 00-2 2v2h16V5a2 2 0 00-2-2z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Supplier</span>
                 </a>
 
-                {{-- Item Navigasi Barang Keluar --}}
-                <a href="{{ route('barang-keluar.index') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('barang-keluar.*') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 3H6a2 2 0 00-2 2v14a2 2 0 002 2h4" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12l-6-6v4H9v4h6v4l6-6z" />
-                    </svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Barang Keluar</span>
+                {{-- SECTION: TRANSAKSI --}}
+                <div class="pt-6">
+                    <h3 class="text-xs uppercase tracking-wider text-blue-200 px-4 pb-3 font-bold section-title">Transaksi</h3>
+                </div>
+
+                <a href="{{ route('purchases.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('purchases.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4l1-12z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Pembelian Barang</span>
                 </a>
-                
-                {{-- Item Navigasi Supplier --}}
-                <a href="#" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-gray-200 transition-all duration-300 ease-in-out group"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3h-1a4 4 0 00-8 0H6a2 2 0 00-2 2v2h16V5a2 2 0 00-2-2z" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Supplier</span>
+
+                <a href="{{ route('purchase-requests.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('purchase-requests.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Pengajuan Pembelian</span>
                 </a>
-                
-                {{-- Item Navigasi Pelaporan --}}
-                <a href="#" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 hover:text-gray-200 transition-all duration-300 ease-in-out group"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a2 2 0 012-2h6M9 17H5a2 2 0 01-2-2v-6a2 2 0 012-2h4m4 10h4a2 2 0 002-2v-6a2 2 0 00-2-2h-4m0 10v-6a2 2 0 012-2h6" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Pelaporan</span>
+
+                @can('isAdmin')
+                <a href="{{ route('purchase-approvals.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('purchase-approvals.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Persetujuan Pembelian</span>
+                    @php
+                        $pendingCount = \App\Models\PurchaseRequest::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingCount > 0)
+                        <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">{{ $pendingCount }}</span>
+                    @endif
                 </a>
+
+                <a href="{{ route('goods-receipts.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('goods-receipts.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Penerimaan Barang</span>
+                    @php
+                        $readyToReceive = \App\Models\Purchase::where('status_pembayaran', 'lunas')->whereDoesntHave('goodsReceipt')->count();
+                    @endphp
+                    @if($readyToReceive > 0)
+                        <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-green-500 rounded-full">{{ $readyToReceive }}</span>
+                    @endif
+                </a>
+                @endcan
                 
-                {{-- Item Navigasi Penjualan (Sales) --}}
                 <a href="{{ route('sales.index') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('sales.*') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h18M3 18h18" /></svg>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Penjualan</span>
-                </a>
-
-                {{-- Item Navigasi Keranjang (Cart) --}}
-                <a href="{{ route('cart.index') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group
-                          {{ request()->routeIs('cart.*') ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-300 shadow-lg shadow-emerald-500/10 border-l-2 border-emerald-500' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200' }}"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('sales.*') || request()->routeIs('cart.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                     <div class="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h18M3 18h18" /></svg>
                         @if(session('cart') && count(session('cart')) > 0)
                             <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">{{ count(session('cart')) }}</span>
                         @endif
                     </div>
-                    <span class="font-medium whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Keranjang</span>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Penjualan</span>
                 </a>
+
+                {{-- SECTION: LAPORAN (Admin Only) --}}
+                @can('isAdmin')
+                <div class="pt-6">
+                    <h3 class="text-xs uppercase tracking-wider text-blue-200 px-4 pb-3 font-bold section-title">Laporan</h3>
+                </div>
+
+                <a href="{{ route('barang-masuk.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('barang-masuk.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Barang Masuk</span>
+                </a>
+
+                <a href="{{ route('barang-keluar.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                          {{ request()->routeIs('barang-keluar.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Barang Keluar</span>
+                </a>
+                @endcan
                                 
             </nav>
         </div>
         
-        <div class="mt-auto border-t border-slate-700 pt-4 pb-2">
-            <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-white/5 transition-colors duration-300" :class="sidebarOpen ? 'justify-start' : 'justify-center'">
-                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-emerald-500/50 transition-all duration-300" src="profile.jpg" alt="Foto Profil">
-                <div class="ml-3 transition-all duration-500 overflow-hidden min-w-0" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">
+        <div class="mt-auto border-t border-white/20 pt-4 pb-2">
+            <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-white/10 transition-all duration-300">
+                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-white/50" src="profile.jpg" alt="Foto Profil">
+                <div class="ml-3 min-w-0 profile-info">
                     <p class="text-sm font-semibold text-white truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
-                    <p class="text-xs text-emerald-400 font-medium">Online</p>
+                    <p class="text-xs text-blue-200 font-medium">Online</p>
                 </div>
             </div>
             
@@ -190,12 +149,11 @@
                 @csrf
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault(); this.closest('form').submit();"
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-300 ease-in-out font-medium group"
-                   :class="sidebarOpen ? 'justify-start' : 'justify-center space-x-0'">
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-300 hover:bg-red-500/20 hover:text-red-200 transition-all duration-300 font-medium group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                    <span class="whitespace-nowrap transition-all duration-500 overflow-hidden" :style="sidebarOpen ? 'opacity: 1; transform: translateX(0); max-width: 500px' : 'opacity: 0; transform: translateX(-10px); max-width: 0'">Keluar</span>
+                    <span class="whitespace-nowrap logout-text">Keluar</span>
                 </a>
             </form>
         </div>
     </div>
-</aside>
+</div>

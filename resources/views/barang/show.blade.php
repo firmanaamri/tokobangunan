@@ -189,14 +189,21 @@
                 <!-- Action Buttons -->
                 <div class="space-y-2">
                     <a href="{{ route('barang.edit', $barang) }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium">
-                        Edit Barang
+                        <i class="fas fa-edit mr-2"></i>Edit Barang
                     </a>
-                    <a href="{{ route('barang-masuk.create') }}" class="block w-full text-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition text-sm font-medium">
-                        Barang Masuk
+                    <a href="{{ route('purchases.create') }}" class="block w-full text-center px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition text-sm font-medium">
+                        <i class="fas fa-shopping-bag mr-2"></i>Buat Pembelian
                     </a>
-                    <a href="{{ route('barang-keluar.create') }}" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm font-medium">
-                        Barang Keluar
+                    <a href="{{ route('sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm font-medium">
+                        <i class="fas fa-shopping-cart mr-2"></i>Buat Penjualan
                     </a>
+                    <form action="{{ route('barang.destroy', $barang) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus barang {{ $barang->nama_barang }}? Data tidak dapat dikembalikan!')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm font-medium">
+                            <i class="fas fa-trash mr-2"></i>Hapus Barang
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

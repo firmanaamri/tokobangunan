@@ -77,6 +77,17 @@
                 <p class="text-sm text-slate-600 mt-2">{{ $sale->notes ?? '-' }}</p>
             </div>
         </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 pt-6 border-t flex gap-3">
+            <form action="{{ route('sales.destroy', $sale) }}" method="POST" class="flex-1" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi penjualan ini? Stok barang akan dikembalikan otomatis.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-medium">
+                    <i class="fas fa-trash mr-2"></i>Hapus Penjualan
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

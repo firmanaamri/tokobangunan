@@ -49,6 +49,11 @@ class Sale extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function barangKeluar()
+    {
+        return $this->hasMany(BarangKeluar::class);
+    }
+
     public function paidAmount()
     {
         return $this->payments()->where('status', 'paid')->sum('amount');

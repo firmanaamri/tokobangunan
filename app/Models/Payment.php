@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
@@ -11,10 +12,12 @@ class Payment extends Model
 
     protected $fillable = [
         'sale_id',
+        'purchase_id',
         'amount',
         'method',
         'status',
         'reference',
+        'bukti_pembayaran',
         'paid_at',
         'metadata',
     ];
@@ -25,8 +28,19 @@ class Payment extends Model
         'metadata' => 'array',
     ];
 
-    public function sale()
+    /**
+     * Relasi ke Sale
+     */
+    public function sale(): BelongsTo
     {
         return $this->belongsTo(Sale::class);
+    }
+
+    /**
+     * Relasi ke Purchase (Pembelian)
+     */
+    public function purchase(): BelongsTo
+    {
+        return $this->belongsTo(Purchase::class);
     }
 }

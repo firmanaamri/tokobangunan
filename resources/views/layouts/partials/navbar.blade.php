@@ -1,7 +1,18 @@
 <nav class="bg-white border-b shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center">
+                {{-- Toggle Sidebar Button --}}
+                <button @click="sidebarOpen = !sidebarOpen" 
+                        class="mr-4 p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    {{-- Ikon hamburger saat terbuka, close saat tertutup --}}
+                    <svg x-show="!sidebarOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg x-show="sidebarOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
                 <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
                     <div class="text-2xl font-bold text-emerald-600">JP</div>
                     <div class="hidden sm:block">

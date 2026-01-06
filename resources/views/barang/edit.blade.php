@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
                 <select name="kategori_id" class="mt-1 block w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300">
@@ -49,6 +49,13 @@
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Satuan</label>
                 <input type="text" name="satuan" value="{{ old('satuan', $barang->satuan) }}" class="mt-1 block w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Harga Jual (Rp)</label>
+                <input type="number" name="harga" value="{{ old('harga', $barang->harga) }}" min="0" step="0.01" class="mt-1 block w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300" placeholder="0">
             </div>
 
             <div>
@@ -63,10 +70,23 @@
         </div>
 
         <div class="flex items-center space-x-3">
-            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">Simpan Perubahan</button>
-            <a href="{{ route('barang') }}" class="text-sm text-slate-600">Batal</a>
+            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
+                <i class="fas fa-save mr-2"></i>Simpan Perubahan
+            </button>
+            <a href="{{ route('barang') }}" class="text-sm text-slate-600 hover:text-slate-900">Batal</a>
         </div>
     </form>
+
+    <!-- Delete Form (Separate) -->
+    <div class="mt-6">
+        <form action="{{ route('barang.destroy', $barang) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus barang {{ $barang->nama_barang }}? Data tidak dapat dikembalikan!')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center font-semibold">
+                <i class="fas fa-trash mr-2"></i>Hapus Barang Permanen
+            </button>
+        </form>
+    </div>
 </div>
 
 @endsection

@@ -5,6 +5,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\PurchaseApprovalController;
+use App\Http\Controllers\GoodsReceiptController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,11 +35,44 @@ Route::middleware('auth')->group(function () {
     Route::put('/barang/{barang}', [ProductController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{barang}', [ProductController::class, 'destroy'])->name('barang.destroy');
     
-    // Routes untuk Barang Masuk (CRUD)
-    Route::resource('barang-masuk', BarangMasukController::class);
+    // Routes untuk Barang Masuk (READ ONLY - Auto-generated from Purchases) - Admin only
+    Route::resource('barang-masuk', BarangMasukController::class)->only(['index', 'show'])->middleware('can:isAdmin');
+    Route::get('/barang-masuk/export/pdf', [BarangMasukController::class, 'exportPDF'])->name('barang-masuk.export-pdf')->middleware('can:isAdmin');
     
-    // Routes untuk Barang Keluar (CRUD)
-    Route::resource('barang-keluar', BarangKeluarController::class);
+    // Routes untuk Barang Keluar (READ ONLY - Auto-generated from Sales) - Admin only
+    Route::resource('barang-keluar', BarangKeluarController::class)->only(['index', 'show'])->middleware('can:isAdmin');
+    Route::get('/barang-keluar/export/pdf', [BarangKeluarController::class, 'exportPDF'])->name('barang-keluar.export-pdf')->middleware('can:isAdmin');
+
+    // Routes untuk Supplier (CRUD)
+    Route::resource('suppliers', SupplierController::class);
+
+    // Routes untuk Purchase Request (PR) - Pengajuan Pembelian oleh Staff
+    Route::resource('purchase-requests', PurchaseRequestController::class)->middleware('auth');
+
+    // Routes untuk Purchase Approval (Admin approval workflow)
+    Route::prefix('purchase-approvals')->name('purchase-approvals.')->group(function () {
+        Route::get('/', [PurchaseApprovalController::class, 'index'])->name('index');
+        Route::get('/{purchaseRequest}', [PurchaseApprovalController::class, 'show'])->name('show');
+        Route::post('/{purchaseRequest}/approve', [PurchaseApprovalController::class, 'approve'])->name('approve');
+        Route::post('/{purchaseRequest}/reject', [PurchaseApprovalController::class, 'reject'])->name('reject');
+    });
+
+    // Routes untuk Goods Receipt (GRN - Penerimaan & Inspeksi Barang)
+    Route::prefix('goods-receipts')->name('goods-receipts.')->group(function () {
+        Route::get('/', [GoodsReceiptController::class, 'index'])->name('index');
+        Route::get('/ready-to-receive', [GoodsReceiptController::class, 'purchasesReadyToReceive'])->name('ready');
+        Route::get('/{purchase}/receive', [GoodsReceiptController::class, 'receive'])->name('receive');
+        Route::post('/{purchase}/receive', [GoodsReceiptController::class, 'store'])->name('store');
+        Route::get('/{goodsReceipt}/show', [GoodsReceiptController::class, 'show'])->name('show');
+    });
+
+    // Routes untuk Purchase (Transaksi Pembelian dari Supplier)
+    Route::resource('purchases', PurchaseController::class);
+    Route::post('/purchases/{purchase}/update-payment-status', [PurchaseController::class, 'updatePaymentStatus'])->name('purchases.updatePaymentStatus');
+    Route::get('/purchases/{purchase}/pdf', [PurchaseController::class, 'exportPDF'])->name('purchases.exportPDF');
+    Route::get('/purchases/{purchase}/record-payment', [PurchaseController::class, 'recordPayment'])->name('purchases.recordPayment');
+    Route::post('/purchases/{purchase}/record-payment', [PurchaseController::class, 'storePayment'])->name('purchases.storePayment');
+    Route::get('/barang-masuk/{barangMasuk}/create-purchase', [PurchaseController::class, 'create'])->name('purchases.createFromBarangMasuk');
 
     // Routes untuk Sales / Transaksi
     Route::resource('sales', App\Http\Controllers\SaleController::class)->middleware('auth');

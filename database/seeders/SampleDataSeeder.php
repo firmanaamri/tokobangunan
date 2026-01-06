@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Kategori;
 use App\Models\Barang;
 use App\Models\BarangMasuk;
+use App\Models\User;
 
 class SampleDataSeeder extends Seeder
 {
@@ -14,156 +15,169 @@ class SampleDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // Kategori contoh
-        $k1 = Kategori::firstOrCreate(['nama_kategori' => 'Bahan Bangunan'], ['deskripsi' => 'Pasir, semen, bata, dll.']);
-        $k2 = Kategori::firstOrCreate(['nama_kategori' => 'Peralatan'], ['deskripsi' => 'Alat tukang dan perlengkapan']);
+        $admin = User::where('role', 'admin')->first() ?? User::first();
 
-        // Barang contoh
+        // Ambil kategori yang sudah ada dari KategoriSeeder
+        $kSemen = Kategori::where('nama_kategori', 'Semen')->first();
+        $kBata = Kategori::where('nama_kategori', 'Batu Bata & Batako')->first();
+        $kPasir = Kategori::where('nama_kategori', 'Pasir & Kerikil')->first();
+        $kBesi = Kategori::where('nama_kategori', 'Besi & Baja')->first();
+        $kCat = Kategori::where('nama_kategori', 'Cat & Finishing')->first();
+        $kPipa = Kategori::where('nama_kategori', 'Pipa & Fitting')->first();
+        $kKeramik = Kategori::where('nama_kategori', 'Keramik & Granit')->first();
+        $kKayu = Kategori::where('nama_kategori', 'Kayu & Plywood')->first();
+        $kListrik = Kategori::where('nama_kategori', 'Listrik & Kabel')->first();
+        $kPintu = Kategori::where('nama_kategori', 'Pintu & Jendela')->first();
+        $kAlat = Kategori::where('nama_kategori', 'Alat Pertukangan')->first();
+        $kAtap = Kategori::where('nama_kategori', 'Atap & Genteng')->first();
+
+        // Barang contoh sesuai kategori
         $b1 = Barang::firstOrCreate([
-            'sku' => 'SKU-SEMEN-001'
+            'sku' => 'SMN-GRS-50KG'
         ], [
-            'nama_barang' => 'Semen Portland 50kg',
-            'kategori_id' => $k1->id,
+            'nama_barang' => 'Semen Gresik 50kg',
+            'kategori_id' => $kSemen->id,
             'satuan' => 'sak',
+            'harga' => 65000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Semen kualitas standar 50kg'
+            'deskripsi' => 'Semen Portland tipe I'
         ]);
 
         $b2 = Barang::firstOrCreate([
-            'sku' => 'SKU-PASIR-001'
+            'sku' => 'PSR-BET-M3'
         ], [
-            'nama_barang' => 'Pasir Putih 1m3',
-            'kategori_id' => $k1->id,
+            'nama_barang' => 'Pasir Beton 1m3',
+            'kategori_id' => $kPasir->id,
             'satuan' => 'm3',
+            'harga' => 350000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Pasir untuk adukan'
+            'deskripsi' => 'Pasir untuk cor beton dan adukan'
         ]);
 
         $b3 = Barang::firstOrCreate([
-            'sku' => 'SKU-PALU-001'
+            'sku' => 'BTA-MRH-001'
         ], [
-            'nama_barang' => 'Palu Tukang',
-            'kategori_id' => $k2->id,
-            'satuan' => 'pcs',
+            'nama_barang' => 'Batu Bata Merah Press',
+            'kategori_id' => $kBata->id,
+            'satuan' => 'biji',
+            'harga' => 1200,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Palu untuk keperluan tukang'
+            'deskripsi' => 'Bata merah kualitas press untuk dinding'
         ]);
 
-        // Tambahan barang contoh
         $b4 = Barang::firstOrCreate([
-            'sku' => 'SKU-CAT-5KG-001'
+            'sku' => 'CAT-AVN-5KG'
         ], [
-            'nama_barang' => 'Cat Tembok ABC 5kg',
-            'kategori_id' => $k1->id,
+            'nama_barang' => 'Cat Avian 5kg Putih',
+            'kategori_id' => $kCat->id,
             'satuan' => 'kaleng',
+            'harga' => 145000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Cat tembok interior, coverage baik'
+            'deskripsi' => 'Cat tembok interior dan eksterior'
         ]);
 
         $b5 = Barang::firstOrCreate([
-            'sku' => 'SKU-PIPA-004'
+            'sku' => 'PIP-PVC-4IN'
         ], [
-            'nama_barang' => 'Pipa PVC 4"',
-            'kategori_id' => $k1->id,
+            'nama_barang' => 'Pipa PVC Rucika 4 inch',
+            'kategori_id' => $kPipa->id,
             'satuan' => 'batang',
+            'harga' => 95000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Pipa PVC untuk instalasi air'
+            'deskripsi' => 'Pipa PVC untuk instalasi air bersih'
         ]);
 
         $b6 = Barang::firstOrCreate([
-            'sku' => 'SKU-SKOP-001'
+            'sku' => 'BSI-10MM-12M'
         ], [
-            'nama_barang' => 'Sekop Besi',
-            'kategori_id' => $k2->id,
-            'satuan' => 'pcs',
+            'nama_barang' => 'Besi Beton 10mm 12m',
+            'kategori_id' => $kBesi->id,
+            'satuan' => 'batang',
+            'harga' => 85000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Sekop untuk penggalian dan adukan'
+            'deskripsi' => 'Besi beton polos ukuran 10mm panjang 12 meter'
         ]);
 
         $b7 = Barang::firstOrCreate([
-            'sku' => 'SKU-KUNCI-ING-001'
+            'sku' => 'KRM-60X60-001'
         ], [
-            'nama_barang' => 'Kunci Inggris 10"',
-            'kategori_id' => $k2->id,
-            'satuan' => 'pcs',
+            'nama_barang' => 'Keramik Lantai 60x60 cm',
+            'kategori_id' => $kKeramik->id,
+            'satuan' => 'dus',
+            'harga' => 185000,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Kunci serbaguna untuk pekerjaan garasi dan proyek'
+            'deskripsi' => 'Keramik granit tile ukuran 60x60 cm per dus isi 4'
         ]);
 
         $b8 = Barang::firstOrCreate([
-            'sku' => 'SKU-KAWAT-10M'
+            'sku' => 'GNT-BET-001'
         ], [
-            'nama_barang' => 'Kawat Bendrat 10m',
-            'kategori_id' => $k2->id,
-            'satuan' => 'roll',
+            'nama_barang' => 'Genteng Beton Flat',
+            'kategori_id' => $kAtap->id,
+            'satuan' => 'biji',
+            'harga' => 8500,
             'stok_saat_ini' => 0,
-            'deskripsi' => 'Kawat bendrat untuk pengikat dan konstruksi'
+            'deskripsi' => 'Genteng beton flat untuk atap rumah'
         ]);
 
-        // Entri barang_masuk contoh
-        $m1 = BarangMasuk::create([
-            'barang_id' => $b1->id,
-            'jumlah_barang_masuk' => 20,
-            'tanggal_masuk' => now()->subDays(5),
-            'keterangan' => 'Stok awal dari supplier A'
+        $b9 = Barang::firstOrCreate([
+            'sku' => 'ALT-PLU-001'
+        ], [
+            'nama_barang' => 'Palu Tukang Batu',
+            'kategori_id' => $kAlat->id,
+            'satuan' => 'pcs',
+            'harga' => 55000,
+            'stok_saat_ini' => 0,
+            'deskripsi' => 'Palu dengan gagang kayu untuk pekerjaan tukang'
         ]);
-        $b1->increment('stok_saat_ini', 20);
 
-        $m2 = BarangMasuk::create([
-            'barang_id' => $b2->id,
-            'jumlah_barang_masuk' => 5,
-            'tanggal_masuk' => now()->subDays(3),
-            'keterangan' => 'Pengiriman pasokan'
+        $b10 = Barang::firstOrCreate([
+            'sku' => 'KBL-NYM-2X15'
+        ], [
+            'nama_barang' => 'Kabel NYM 2x1.5mm',
+            'kategori_id' => $kListrik->id,
+            'satuan' => 'meter',
+            'harga' => 5500,
+            'stok_saat_ini' => 0,
+            'deskripsi' => 'Kabel listrik instalasi rumah 2x1.5mm'
         ]);
-        $b2->increment('stok_saat_ini', 5);
 
-        $m3 = BarangMasuk::create([
-            'barang_id' => $b3->id,
-            'jumlah_barang_masuk' => 10,
-            'tanggal_masuk' => now()->subDays(1),
-            'keterangan' => 'Pengadaan alat baru'
+        $b10 = Barang::firstOrCreate([
+            'sku' => 'KBL-NYM-2X15'
+        ], [
+            'nama_barang' => 'Kabel NYM 2x1.5mm',
+            'kategori_id' => $kListrik->id,
+            'satuan' => 'meter',
+            'harga' => 5500,
+            'stok_saat_ini' => 0,
+            'deskripsi' => 'Kabel listrik instalasi rumah 2x1.5mm'
         ]);
-        $b3->increment('stok_saat_ini', 10);
 
-        // Barang masuk tambahan untuk produk baru
-        $m4 = BarangMasuk::create([
-            'barang_id' => $b4->id,
-            'jumlah_barang_masuk' => 50,
-            'tanggal_masuk' => now()->subDays(2),
-            'keterangan' => 'Stok awal cat tembok'
-        ]);
-        $b4->increment('stok_saat_ini', 50);
+        // Entri barang_masuk contoh untuk stok awal
+        $barangMasuk = [
+            ['barang' => $b1, 'jumlah' => 100, 'keterangan' => 'Stok awal semen dari supplier'],
+            ['barang' => $b2, 'jumlah' => 15, 'keterangan' => 'Pengiriman pasir beton'],
+            ['barang' => $b3, 'jumlah' => 5000, 'keterangan' => 'Stok bata merah'],
+            ['barang' => $b4, 'jumlah' => 80, 'keterangan' => 'Stok cat tembok'],
+            ['barang' => $b5, 'jumlah' => 120, 'keterangan' => 'Pengadaan pipa PVC'],
+            ['barang' => $b6, 'jumlah' => 150, 'keterangan' => 'Stok besi beton'],
+            ['barang' => $b7, 'jumlah' => 40, 'keterangan' => 'Keramik lantai berbagai motif'],
+            ['barang' => $b8, 'jumlah' => 2000, 'keterangan' => 'Genteng untuk proyek perumahan'],
+            ['barang' => $b9, 'jumlah' => 25, 'keterangan' => 'Perlengkapan alat tukang'],
+            ['barang' => $b10, 'jumlah' => 500, 'keterangan' => 'Kabel instalasi rumah'],
+        ];
 
-        $m5 = BarangMasuk::create([
-            'barang_id' => $b5->id,
-            'jumlah_barang_masuk' => 30,
-            'tanggal_masuk' => now()->subDays(3),
-            'keterangan' => 'Pengiriman pipa PVC'
-        ]);
-        $b5->increment('stok_saat_ini', 30);
+        foreach ($barangMasuk as $index => $item) {
+            BarangMasuk::create([
+                'barang_id' => $item['barang']->id,
+                'jumlah_barang_masuk' => $item['jumlah'],
+                'tanggal_masuk' => now()->subDays(10 - $index),
+                'user_id' => $admin?->id,
+                'keterangan' => $item['keterangan']
+            ]);
+            $item['barang']->increment('stok_saat_ini', $item['jumlah']);
+        }
 
-        $m6 = BarangMasuk::create([
-            'barang_id' => $b6->id,
-            'jumlah_barang_masuk' => 15,
-            'tanggal_masuk' => now()->subDays(4),
-            'keterangan' => 'Perlengkapan tukang'
-        ]);
-        $b6->increment('stok_saat_ini', 15);
-
-        $m7 = BarangMasuk::create([
-            'barang_id' => $b7->id,
-            'jumlah_barang_masuk' => 12,
-            'tanggal_masuk' => now()->subDays(6),
-            'keterangan' => 'Stok alat kunci'
-        ]);
-        $b7->increment('stok_saat_ini', 12);
-
-        $m8 = BarangMasuk::create([
-            'barang_id' => $b8->id,
-            'jumlah_barang_masuk' => 8,
-            'tanggal_masuk' => now()->subDays(7),
-            'keterangan' => 'Kawat bendrat untuk proyek'
-        ]);
-        $b8->increment('stok_saat_ini', 8);
+        $this->command->info('✓ ' . count($barangMasuk) . ' barang sample berhasil ditambahkan dengan stok awal');
     }
 }

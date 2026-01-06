@@ -11,8 +11,11 @@ class SaleFactory extends Factory
 
     public function definition()
     {
+        static $counter = 0;
+        $counter++;
+        
         return [
-            'nomor' => 'S'.now()->format('YmdHis').mt_rand(100,999),
+            'nomor' => 'S'.now()->format('YmdHis').str_pad($counter, 4, '0', STR_PAD_LEFT),
             'customer_id' => null,
             'user_id' => null,
             'subtotal' => 0,

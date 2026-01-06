@@ -9,7 +9,7 @@ class SaleController extends Controller
 {
     public function index()
     {
-        $query = Sale::with('customer')->latest();
+        $query = Sale::with(['customer', 'items.barang'])->latest();
 
         if ($search = request('search')) {
             $query->where('nomor', 'like', "%{$search}%");

@@ -10,11 +10,13 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_id')->constrained('sales')->cascadeOnDelete();
+            $table->foreignId('sale_id')->nullable()->constrained('sales')->cascadeOnDelete();
+            $table->foreignId('purchase_id')->nullable()->constrained('purchases')->cascadeOnDelete();
             $table->decimal('amount', 12, 2);
             $table->string('method')->nullable();
             $table->enum('status', ['pending','paid','failed','refunded'])->default('pending');
             $table->string('reference')->nullable();
+            $table->string('bukti_pembayaran')->nullable();
             $table->timestamp('paid_at')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();

@@ -13,7 +13,18 @@ class SalesSeeder extends Seeder
     {
         // ensure some barang exist
         if (Barang::count() < 5) {
-            Barang::factory()->count(10)->create();
+            // Get first kategori or create one
+            $kategori = \App\Models\Kategori::first();
+            if (!$kategori) {
+                $kategori = \App\Models\Kategori::create([
+                    'nama_kategori' => 'Umum',
+                    'deskripsi' => 'Kategori Umum'
+                ]);
+            }
+            
+            Barang::factory()->count(10)->create([
+                'kategori_id' => $kategori->id
+            ]);
         }
 
         $barangs = Barang::all();

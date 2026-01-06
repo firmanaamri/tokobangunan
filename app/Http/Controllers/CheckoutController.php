@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\BarangKeluar;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use Illuminate\Http\Request;
@@ -141,7 +142,17 @@ class CheckoutController extends Controller
                     'satuan' => $item['satuan'] ?? $barang->satuan ?? null,
                 ]);
 
-                // decrement stock directly for now
+                // Automatically create BarangKeluar record
+                BarangKeluar::create([
+                    'barang_id' => $barang->id,
+                    'sale_id' => $sale->id,
+                    'jumlah_barang_keluar' => $qty,
+                    'tanggal_keluar' => now(),
+                    'keterangan' => 'Penjualan #' . $sale->nomor,
+                    'user_id' => $request->user()->id ?? null,
+                ]);
+
+                // decrement stock
                 $barang->decrement('stok_saat_ini', $qty);
 
                 $subtotal += $totalPrice;

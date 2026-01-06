@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BarangMasuk extends Model
 {
@@ -18,7 +19,8 @@ class BarangMasuk extends Model
         'jumlah_barang_masuk',
         'tanggal_masuk',
         'keterangan',
-           'user_id',
+        'user_id',
+        'goods_receipt_id',
     ];
 
     protected $casts = [
@@ -34,11 +36,27 @@ class BarangMasuk extends Model
         return $this->belongsTo(Barang::class, 'barang_id');
     }
 
-       /**
-        * Relasi ke User
-        */
-       public function user(): BelongsTo
-       {
-           return $this->belongsTo(User::class, 'user_id');
-       }
+    /**
+     * Relasi ke User
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke Purchase (Transaksi)
+     */
+    public function purchase(): HasOne
+    {
+        return $this->hasOne(Purchase::class, 'barang_masuk_id');
+    }
+
+    /**
+     * Relasi ke GoodsReceipt (Barang Inspection)
+     */
+    public function goodsReceipt(): BelongsTo
+    {
+        return $this->belongsTo(GoodsReceipt::class, 'goods_receipt_id');
+    }
 }
