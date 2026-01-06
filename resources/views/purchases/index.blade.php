@@ -93,9 +93,9 @@
                                         <a href="{{ route('purchases.show', $purchase->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
                                             <i class="fas fa-eye mr-1"></i>Lihat
                                         </a>
-                                        <a href="{{ route('purchases.edit', $purchase->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
+                                        {{-- <a href="{{ route('purchases.edit', $purchase->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
                                             <i class="fas fa-edit mr-1"></i>Edit
-                                        </a>
+                                        </a> --}}
                                         <form action="{{ route('purchases.destroy', $purchase->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

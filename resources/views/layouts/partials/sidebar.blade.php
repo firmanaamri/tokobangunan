@@ -100,7 +100,7 @@
                 </a>
                 @endcan
                 
-                <a href="{{ route('sales.index') }}" 
+                <a href="#" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
                           {{ request()->routeIs('sales.*') || request()->routeIs('cart.*') ? 'bg-white/20 text-white shadow-lg border-l-4 border-white' : 'text-blue-100 hover:bg-white/10 hover:text-white' }}">
                     <div class="relative">
@@ -109,7 +109,7 @@
                             <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">{{ count(session('cart')) }}</span>
                         @endif
                     </div>
-                    <span class="font-medium whitespace-nowrap sidebar-label">Penjualan</span>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Catat Penjualan</span>
                 </a>
 
                 {{-- SECTION: LAPORAN (Admin Only) --}}

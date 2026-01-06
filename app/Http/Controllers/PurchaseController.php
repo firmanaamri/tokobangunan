@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
@@ -56,35 +57,47 @@ class PurchaseController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        // Buat barang masuk terlebih dahulu
-        $barangMasuk = \App\Models\BarangMasuk::create([
-            'barang_id' => $validated['barang_id'],
-            'jumlah_barang_masuk' => $validated['jumlah'],
-            'tanggal_masuk' => $validated['tanggal_pembelian'],
-            'user_id' => auth()->id(),
-            'keterangan' => 'Pembelian dari ' . \App\Models\Supplier::find($validated['supplier_id'])->nama_supplier,
-        ]);
+        DB::beginTransaction();
+        try {
+            // Buat barang masuk terlebih dahulu
+            $barangMasuk = \App\Models\BarangMasuk::create([
+                'barang_id' => $validated['barang_id'],
+                'jumlah_barang_masuk' => $validated['jumlah'],
+                'tanggal_masuk' => $validated['tanggal_pembelian'],
+                'user_id' => auth()->id(),
+                'keterangan' => 'Pembelian dari ' . \App\Models\Supplier::find($validated['supplier_id'])->nama_supplier,
+            ]);
 
-        // Update stok barang
-        $barang = \App\Models\Barang::find($validated['barang_id']);
-        $barang->increment('stok_saat_ini', $validated['jumlah']);
+            // Update stok barang
+            $barang = \App\Models\Barang::find($validated['barang_id']);
+            $barang->increment('stok_saat_ini', $validated['jumlah']);
 
-        // Generate nomor PO
-        $nomorPO = 'PO-' . date('Ymd') . '-' . str_pad(Purchase::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
+            // Generate nomor PO (gunakan count pada kolom nomor_po untuk menghindari race pada created_at)
+            $nomorPO = 'PO-' . date('Ymd') . '-' . str_pad(Purchase::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
 
-        $purchase = Purchase::create([
-            'barang_masuk_id' => $barangMasuk->id,
-            'supplier_id' => $validated['supplier_id'],
-            'user_id' => auth()->id(),
-            'nomor_po' => $nomorPO,
-            'tanggal_pembelian' => $validated['tanggal_pembelian'],
-            'total_harga' => $validated['total_harga'],
-            'tanggal_jatuh_tempo' => $validated['tanggal_jatuh_tempo'],
-            'keterangan' => $validated['keterangan'],
-        ]);
+            // Simpan purchase dengan informasi lengkap
+            $purchase = Purchase::create([
+                'barang_masuk_id' => $barangMasuk->id,
+                'supplier_id' => $validated['supplier_id'],
+                'user_id' => auth()->id(),
+                'nomor_po' => $nomorPO,
+                'jumlah_po' => $validated['jumlah'],
+                'harga_unit' => $validated['harga_per_unit'],
+                'satuan' => $barang->satuan ?? null,
+                'tanggal_pembelian' => $validated['tanggal_pembelian'],
+                'total_harga' => $validated['total_harga'],
+                'tanggal_jatuh_tempo' => $validated['tanggal_jatuh_tempo'],
+                'keterangan' => $validated['keterangan'],
+            ]);
 
-        return redirect()->route('purchases.show', $purchase->id)
-            ->with('success', 'Transaksi pembelian berhasil dibuat dengan nomor PO: ' . $nomorPO);
+            DB::commit();
+
+            return redirect()->route('purchases.show', $purchase->id)
+                ->with('success', 'Transaksi pembelian berhasil dibuat dengan nomor PO: ' . $nomorPO);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', 'Gagal menyimpan pembelian: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -180,7 +193,6 @@ class PurchaseController extends Controller
             'jumlah_bayar' => 'required|numeric|min:0.01',
             'metode_pembayaran' => 'required|string',
             'tanggal_pembayaran' => 'required|date',
-            'referensi' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
             'bukti_pembayaran' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
@@ -205,7 +217,6 @@ class PurchaseController extends Controller
             'amount' => $validated['jumlah_bayar'],
             'method' => $validated['metode_pembayaran'],
             'paid_at' => $validated['tanggal_pembayaran'],
-            'reference' => $validated['referensi'],
             'bukti_pembayaran' => $buktiPath,
             'status' => 'paid',
             'metadata' => ['keterangan' => $validated['keterangan']],

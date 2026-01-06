@@ -81,20 +81,21 @@
                                 <td class="px-6 py-4">
                                     @php $status = $product->status; @endphp
                                     @if ($status == 'Habis')
-                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">Habis</span>
+                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold animate-ping">Habis</span>
                                     @elseif ($status == 'Stok Menipis')
-                                        <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold">Menipis</span>
+                                        <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold animate-bounce">Menipis</span>
                                     @else
                                         <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">Aman</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex gap-2 justify-center">
-                                        <a href="{{ route('barang.show', $product->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
-                                            <i class="fas fa-eye mr-1"></i>Detail
+                                        <a href="{{ route('barang.show', $product->id) }}" title="Detail" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </a>
-                                        <a href="{{ route('barang.edit', $product->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
-                                            <i class="fas fa-edit mr-1"></i>Edit
+
+                                        <a href="{{ route('barang.edit', $product->id) }}" title="Edit" class="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>
                                         </a>
                                     </div>
                                 </td>

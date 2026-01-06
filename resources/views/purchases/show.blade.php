@@ -15,9 +15,9 @@
                         <i class="fas fa-money-bill mr-2"></i>Catat Pembayaran
                     </a>
                 @endif
-                <a href="{{ route('purchases.edit', $purchase->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                {{-- <a href="{{ route('purchases.edit', $purchase->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
                     <i class="fas fa-edit mr-2"></i>Edit
-                </a>
+                </a> --}}
                 <a href="{{ route('purchases.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
@@ -133,6 +133,46 @@
                 @endif
             </div>
         </div>
+
+        @if($purchase->payment)
+            @php
+                $payment = $purchase->payment;
+                $bukti = $payment->bukti_pembayaran ?? null;
+                $buktiUrl = $bukti ? asset('storage/' . $bukti) : null;
+                $ext = $bukti ? strtolower(pathinfo($bukti, PATHINFO_EXTENSION)) : null;
+                $isImage = in_array($ext, ['jpg','jpeg','png','gif']);
+            @endphp
+
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 mb-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">Pembayaran</h3>
+                <div class="grid grid-cols-2 gap-6 items-start">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-2">Jumlah Dibayar</p>
+                        <p class="text-lg font-bold text-slate-900">Rp {{ number_format($payment->amount, 0, ',', '.') }}</p>
+
+                        <p class="text-xs text-slate-500 uppercase font-bold mt-4 mb-2">Metode</p>
+                        <p class="text-lg font-bold text-slate-900">{{ $payment->method }}</p>
+
+                        <p class="text-xs text-slate-500 uppercase font-bold mt-4 mb-2">Tanggal Pembayaran</p>
+                        <p class="text-lg font-bold text-slate-900">{{ $payment->paid_at ? $payment->paid_at->format('d M Y H:i') : '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold mb-2">Bukti Pembayaran</p>
+                        @if($buktiUrl)
+                            @if($isImage)
+                                <a href="{{ $buktiUrl }}" target="_blank" class="inline-block">
+                                    <img src="{{ $buktiUrl }}" alt="Bukti Pembayaran" class="max-w-full h-40 object-contain rounded-md border border-slate-200">
+                                </a>
+                            @else
+                                <a href="{{ $buktiUrl }}" target="_blank" class="inline-block text-indigo-600 hover:underline">Lihat/Unduh bukti pembayar(an)</a>
+                            @endif
+                        @else
+                            <p class="text-slate-500">Tidak ada bukti pembayaran terlampir.</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <!-- Action Buttons -->
         <div class="flex gap-4">

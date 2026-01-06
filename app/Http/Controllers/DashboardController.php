@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\BarangMasuk;
 use App\Models\BarangKeluar;
-use App\Models\Sale;
+// use App\Models\Sale;
 use App\Models\Payment;
 use App\Models\PurchaseRequest;
 use App\Models\Supplier;
@@ -78,14 +78,14 @@ class DashboardController extends Controller
                                                ->take(10);
 
         // Sales metrics
-        $totalSales = Sale::count();
-        $salesThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
-                              ->whereMonth('created_at', Carbon::now()->month)
-                              ->count();
+        // $totalSales = Sale::count();
+        // $salesThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
+        //                       ->whereMonth('created_at', Carbon::now()->month)
+        //                       ->count();
 
-        $revenueThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
-                                ->whereMonth('created_at', Carbon::now()->month)
-                                ->sum('total');
+        // $revenueThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
+        //                         ->whereMonth('created_at', Carbon::now()->month)
+        //                         ->sum('total');
         
         return view('admindash', compact(
             'totalProduk',
@@ -93,9 +93,9 @@ class DashboardController extends Controller
             'stokHabis',
             'totalSuppliers',
             'aktivitas',
-            'totalSales',
-            'salesThisMonth',
-            'revenueThisMonth'
+            // 'totalSales',
+            // 'salesThisMonth',
+            // 'revenueThisMonth'
         ));
     }
 
@@ -109,8 +109,8 @@ class DashboardController extends Controller
         $approvedPRs = PurchaseRequest::where('user_id', $userId)->where('status', 'approved')->count();
 
         // Sales Today
-        $salesToday = Sale::whereDate('created_at', Carbon::today())->count();
-        $revenueToday = Sale::whereDate('created_at', Carbon::today())->sum('total');
+        // $salesToday = Sale::whereDate('created_at', Carbon::today())->count();
+        // $revenueToday = Sale::whereDate('created_at', Carbon::today())->sum('total');
 
         // Product Stats
         $totalProduk = Barang::count();
@@ -158,7 +158,7 @@ class DashboardController extends Controller
             'myPRs',
             'pendingPRs',
             'approvedPRs',
-            'salesToday',
+            // 'salesToday',
             'revenueToday',
             'totalProduk',
             'stokHabis',

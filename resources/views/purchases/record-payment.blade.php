@@ -32,6 +32,12 @@
             </div>
         </div>
 
+        @php
+            $alreadyPaid = \App\Models\Payment::where('purchase_id', $purchase->id)->sum('amount');
+            $remaining = $purchase->total_harga - $alreadyPaid;
+            if($remaining < 0) { $remaining = 0; }
+        @endphp
+
         <!-- Form Pembayaran -->
         <form action="{{ route('purchases.storePayment', $purchase->id) }}" method="POST" class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200" enctype="multipart/form-data">
             @csrf
@@ -39,8 +45,8 @@
             <div class="p-8 space-y-6">
                 <!-- Jumlah Bayar -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-900 mb-2">Jumlah Pembayaran (Rp) <span class="text-red-500">*</span></label>
-                    <input type="number" name="jumlah_bayar" value="{{ old('jumlah_bayar') }}" step="0.01" min="0.01" placeholder="0" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah_bayar') border-red-500 @enderror">
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Jumlah Pembayaran (Rp) <span class="text-red-500">*</span></label>
+                        <input type="number" name="jumlah_bayar" id="jumlah_bayar" value="{{ old('jumlah_bayar', $remaining) }}" step="0.01" min="0.01" placeholder="0" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah_bayar') border-red-500 @enderror">
                     @error('jumlah_bayar')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
@@ -52,11 +58,7 @@
                     <select name="metode_pembayaran" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('metode_pembayaran') border-red-500 @enderror">
                         <option value="">-- Pilih Metode --</option>
                         <option value="Transfer Bank" @selected(old('metode_pembayaran') == 'Transfer Bank')>Transfer Bank</option>
-                        <option value="Cek" @selected(old('metode_pembayaran') == 'Cek')>Cek</option>
                         <option value="Tunai" @selected(old('metode_pembayaran') == 'Tunai')>Tunai</option>
-                        <option value="Kartu Kredit" @selected(old('metode_pembayaran') == 'Kartu Kredit')>Kartu Kredit</option>
-                        <option value="E-Wallet" @selected(old('metode_pembayaran') == 'E-Wallet')>E-Wallet</option>
-                        <option value="Lainnya" @selected(old('metode_pembayaran') == 'Lainnya')>Lainnya</option>
                     </select>
                     @error('metode_pembayaran')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -73,13 +75,13 @@
                 </div>
 
                 <!-- Referensi Pembayaran -->
-                <div>
+                {{-- <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Referensi Pembayaran (No. Rekening/Cek)</label>
                     <input type="text" name="referensi" value="{{ old('referensi') }}" placeholder="Contoh: 1234567890" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('referensi') border-red-500 @enderror">
                     @error('referensi')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> --}}
 
                 <!-- Keterangan -->
                 <div>
@@ -159,41 +161,69 @@
         @endif
     </div>
 </div>
-@endsection
 
 <script>
-    // Handle file upload
-    const buktInput = document.getElementById('bukti-input');
-    const fileName = document.getElementById('file-name');
-    
-    buktInput.addEventListener('change', function(e) {
-        if (this.files.length > 0) {
-            fileName.textContent = '✓ File: ' + this.files[0].name;
-        } else {
-            fileName.textContent = '';
+    // Handle file upload (robust) with debug logs
+    (function(){
+        console.log('record-payment: init upload script');
+        const buktInput = document.getElementById('bukti-input');
+        const fileName = document.getElementById('file-name');
+        console.log('record-payment: elements', {buktInput: !!buktInput, fileName: !!fileName});
+        if (!buktInput || !fileName) {
+            console.log('record-payment: required elements missing, aborting');
+            return;
         }
-    });
 
-    // Handle drag and drop
-    const dropZone = buktInput.parentElement;
-    
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('border-emerald-500', 'bg-emerald-50');
-    });
-    
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('border-emerald-500', 'bg-emerald-50');
-    });
-    
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('border-emerald-500', 'bg-emerald-50');
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            buktInput.files = files;
-            fileName.textContent = '✓ File: ' + files[0].name;
+        // show filename if input already has files (e.g. after validation error)
+        if (buktInput.files && buktInput.files.length > 0) {
+            fileName.textContent = '✓ File: ' + buktInput.files[0].name;
         }
-    });
+
+        buktInput.addEventListener('change', function(e) {
+            console.log('record-payment: change event, files length=', this.files && this.files.length);
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = '✓ File: ' + this.files[0].name;
+            } else {
+                fileName.textContent = '';
+            }
+        });
+
+        // Handle drag and drop on the parent container
+        const dropZone = buktInput.parentElement;
+        if (!dropZone) {
+            console.log('record-payment: dropZone missing');
+            return;
+        }
+
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('border-emerald-500', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('dragleave', function() {
+            this.classList.remove('border-emerald-500', 'bg-emerald-50');
+        });
+
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('border-emerald-500', 'bg-emerald-50');
+
+            const files = e.dataTransfer.files;
+            console.log('record-payment: drop event, files=', files && files.length);
+            if (files && files.length > 0) {
+                try {
+                    const dataTransfer = new DataTransfer();
+                    for (let i = 0; i < files.length; i++) dataTransfer.items.add(files[i]);
+                    buktInput.files = dataTransfer.files;
+                    fileName.textContent = '✓ File: ' + buktInput.files[0].name;
+                } catch (err) {
+                    // fallback: cannot programmatically set FileList in some browsers
+                    console.log('record-payment: DataTransfer failed', err);
+                    fileName.textContent = '✓ File: ' + files[0].name;
+                }
+            }
+        });
+    })();
 </script>
+
+@endsection

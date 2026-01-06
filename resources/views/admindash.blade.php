@@ -61,8 +61,8 @@
                             <i class="fas fa-shopping-cart"></i>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-slate-900 mt-3">{{ number_format($totalSales) }}</p>
-                    <span class="text-xs text-indigo-600 font-semibold block mt-2">Transaksi bulan ini: {{ $salesThisMonth }}</span>
+                    {{-- <p class="text-3xl font-bold text-slate-900 mt-3">{{ number_format($totalSales) }}</p>
+                    <span class="text-xs text-indigo-600 font-semibold block mt-2">Transaksi bulan ini: {{ $salesThisMonth }}</span> --}}
                 </div>
 
                 <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-cyan-50">
@@ -91,8 +91,8 @@
                             <i class="fas fa-wallet"></i>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-emerald-600 mt-3">Rp {{ number_format($revenueThisMonth, 2, ',', '.') }}</p>
-                    <a href="{{ route('sales.index') }}" class="inline-flex items-center text-sm mt-3 text-emerald-600 hover:underline">Lihat Semua Penjualan</a>
+                    {{-- <p class="text-3xl font-bold text-emerald-600 mt-3">Rp {{ number_format($revenueThisMonth, 2, ',', '.') }}</p>
+                    <a href="{{ route('sales.index') }}" class="inline-flex items-center text-sm mt-3 text-emerald-600 hover:underline">Lihat Semua Penjualan</a> --}}
                 </div>
 
                 <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-slate-200 bg-white">
