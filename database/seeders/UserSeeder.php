@@ -16,26 +16,28 @@ class UserSeeder extends Seeder
     {
         // Admin User
         User::firstOrCreate(
-            ['email' => 'admin@tokobangunan.com'],
+            ['username' => 'admin'],
             [
                 'name' => 'Administrator',
+                'email' => 'admin@tokobangunan.com',
                 'role' => 'admin',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('admin12345'),
             ]
         );
 
         // Staff User
         User::firstOrCreate(
-            ['email' => 'staff@tokobangunan.com'],
+            ['username' => 'staff'],
             [
                 'name' => 'Staff Toko',
+                'email' => 'staff@tokobangunan.com',
                 'role' => 'staff',
-                'password' => Hash::make('staff123'),
+                'password' => Hash::make('staff12345'),
             ]
         );
 
         $this->command->info('Default users created:');
-        $this->command->info('Admin: admin@tokobangunan.com / admin123');
-        $this->command->info('Staff: staff@tokobangunan.com / staff123');
+        $this->command->info('Admin: admin / admin12345');
+        $this->command->info('Staff: staff / staff12345');
     }
 }

@@ -49,14 +49,26 @@
                     <label class="block text-sm font-bold text-slate-700 mb-2">
                         <i class="fas fa-truck mr-2 text-emerald-500"></i>Supplier *
                     </label>
-                    <select name="supplier_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('supplier_id') border-red-500 @enderror">
+                    <select id="supplier-select" name="supplier_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('supplier_id') border-red-500 @enderror">
                         <option value="">-- Pilih Supplier --</option>
                         @foreach($suppliers as $supplier)
                             <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
                                 {{ $supplier->nama_supplier }}
                             </option>
                         @endforeach
+                        <option value="new_supplier">+ Tambah supplier baru</option>
                     </select>
+                    <script>
+                        (function(){
+                            var sel = document.getElementById('supplier-select');
+                            if (!sel) return;
+                            sel.addEventListener('change', function(e){
+                                if (this.value === 'new_supplier') {
+                                    window.location.href = '{{ route('suppliers.create') }}';
+                                }
+                            });
+                        })();
+                    </script>
                     @error('supplier_id')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror

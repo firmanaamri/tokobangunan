@@ -10,6 +10,7 @@ use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\PurchaseApprovalController;
 use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\DailySaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -75,7 +76,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/barang-masuk/{barangMasuk}/create-purchase', [PurchaseController::class, 'create'])->name('purchases.createFromBarangMasuk');
 
     // Routes untuk Sales / Transaksi
-    Route::resource('sales', App\Http\Controllers\SaleController::class)->middleware('auth');
+    // Route::resource('sales', App\Http\Controllers\SaleController::class)->middleware('auth');
+
+    // Routes untuk Pencatatan Penjualan Harian (Catat Barang Keluar)
+    Route::resource('daily-sales', App\Http\Controllers\DailySaleController::class)->middleware('auth');
+    Route::get('/daily-sales/recap', [App\Http\Controllers\DailySaleController::class, 'recap'])->name('daily-sales.recap')->middleware('auth');
 
     // Cart / Checkout
     Route::get('/cart', [App\Http\Controllers\CheckoutController::class, 'cart'])->name('cart.index');

@@ -108,12 +108,18 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex gap-2 justify-center">
-                                    <a href="{{ route('purchase-requests.show', $pr) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
-                                        <i class="fas fa-eye mr-1"></i>Lihat
+                                    <a href="{{ route('purchase-requests.show', $pr) }}" class="bg-blue-500 hover:bg-blue-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors duration-200" aria-label="Lihat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
                                     </a>
                                     @if($pr->status === 'pending' && $pr->user_id === auth()->id())
-                                        <a href="{{ route('purchase-requests.edit', $pr) }}" class="bg-slate-500 hover:bg-slate-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
-                                            <i class="fas fa-edit mr-1"></i>Edit
+                                        <a href="{{ route('purchase-requests.edit', $pr) }}" class="bg-slate-500 hover:bg-slate-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors duration-200" aria-label="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                            </svg>
                                         </a>
                                     @endif
                                 </div>

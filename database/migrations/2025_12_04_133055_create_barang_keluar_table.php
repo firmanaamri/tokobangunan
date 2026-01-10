@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('jumlah_barang_keluar');
             $table->date('tanggal_keluar');
             $table->text('keterangan')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }
@@ -28,4 +29,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('barang_keluar');
     }
+
+    
+
 };

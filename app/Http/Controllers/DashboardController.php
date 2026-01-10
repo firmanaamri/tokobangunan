@@ -77,25 +77,22 @@ class DashboardController extends Controller
                                                ->sortByDesc('tanggal')
                                                ->take(10);
 
-        // Sales metrics
-        // $totalSales = Sale::count();
-        // $salesThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
-        //                       ->whereMonth('created_at', Carbon::now()->month)
-        //                       ->count();
+        // Barang Keluar metrics (for dashboard cards)
+        $totalBarangKeluar = BarangKeluar::count();
+        $barangKeluarThisMonth = BarangKeluar::whereYear('tanggal_keluar', Carbon::now()->year)
+                                    ->whereMonth('tanggal_keluar', Carbon::now()->month)
+                                    ->sum('jumlah_barang_keluar');
+        $barangKeluarToday = BarangKeluar::whereDate('tanggal_keluar', Carbon::today())->count();
 
-        // $revenueThisMonth = Sale::whereYear('created_at', Carbon::now()->year)
-        //                         ->whereMonth('created_at', Carbon::now()->month)
-        //                         ->sum('total');
-        
         return view('admindash', compact(
             'totalProduk',
             'produkBaru',
             'stokHabis',
             'totalSuppliers',
             'aktivitas',
-            // 'totalSales',
-            // 'salesThisMonth',
-            // 'revenueThisMonth'
+            'totalBarangKeluar',
+            'barangKeluarThisMonth',
+            'barangKeluarToday'
         ));
     }
 
@@ -114,7 +111,16 @@ class DashboardController extends Controller
 
         // Product Stats
         $totalProduk = Barang::count();
+        $produkBaru = Barang::where('created_at', '>=', Carbon::now()->subDays(30))->count();
         $stokHabis = Barang::where('stok_saat_ini', '<', 50)->count();
+        $totalSuppliers = Supplier::where('status', 'aktif')->count();
+
+        // Barang Keluar metrics (match admin cards)
+        $totalBarangKeluar = BarangKeluar::count();
+        $barangKeluarThisMonth = BarangKeluar::whereYear('tanggal_keluar', Carbon::now()->year)
+                                    ->whereMonth('tanggal_keluar', Carbon::now()->month)
+                                    ->sum('jumlah_barang_keluar');
+        $barangKeluarToday = BarangKeluar::whereDate('tanggal_keluar', Carbon::today())->count();
 
         // Recent PRs
         $recentPRs = PurchaseRequest::with(['barang', 'supplier'])
@@ -124,7 +130,7 @@ class DashboardController extends Controller
                                     ->get();
 
         // Recent Activities (simplified for staff)
-        $barangMasukRecent = BarangMasuk::with(['barang.kategori'])
+        $barangMasukRecent = BarangMasuk::with(['barang.kategori', 'user'])
                                        ->orderBy('tanggal_masuk', 'desc')
                                        ->limit(5)
                                        ->get()
@@ -134,10 +140,11 @@ class DashboardController extends Controller
                                                'nama_barang' => $item->barang->nama_barang,
                                                'tipe' => 'Stok Masuk',
                                                'jumlah' => '+' . $item->jumlah_barang_masuk . ' ' . ($item->barang->satuan ?? 'pcs'),
+                                               'oleh' => $item->user?->name ?? 'Admin Gudang',
                                            ];
                                        });
         
-        $barangKeluarRecent = BarangKeluar::with(['barang.kategori'])
+        $barangKeluarRecent = BarangKeluar::with(['barang.kategori', 'user'])
                                          ->orderBy('tanggal_keluar', 'desc')
                                          ->limit(5)
                                          ->get()
@@ -147,6 +154,7 @@ class DashboardController extends Controller
                                                'nama_barang' => $item->barang->nama_barang,
                                                'tipe' => 'Stok Keluar',
                                                'jumlah' => '-' . $item->jumlah_barang_keluar . ' ' . ($item->barang->satuan ?? 'pcs'),
+                                               'oleh' => $item->user?->name ?? 'Staf Proyek',
                                            ];
                                        });
         
@@ -158,10 +166,15 @@ class DashboardController extends Controller
             'myPRs',
             'pendingPRs',
             'approvedPRs',
-            // 'salesToday',
-            'revenueToday',
+            
+            
             'totalProduk',
             'stokHabis',
+            'produkBaru',
+            'totalSuppliers',
+            'totalBarangKeluar',
+            'barangKeluarThisMonth',
+            'barangKeluarToday',
             'recentPRs',
             'aktivitas'
         ));

@@ -6,7 +6,7 @@
         <!-- Header -->
         <div class="mb-8 flex justify-between items-center">
             <div>
-                <h1 class="text-4xl font-bold text-slate-900">Penerimaan Barang (GRN)</h1>
+                <h1 class="text-4xl font-bold text-slate-900">Penerimaan Barang</h1>
                 <p class="text-slate-600 mt-2">Daftar Goods Receipt Notes dan Inspeksi Barang</p>
             </div>
             <a href="{{ route('goods-receipts.ready') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">
@@ -96,7 +96,9 @@
                                         <span class="text-sm text-slate-600 font-mono">{{ $receipt->purchase->nomor_po }}</span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="text-sm font-semibold text-slate-900">{{ $receipt->purchase->barang->nama_barang ?? '-' }}</span>
+                                        <span class="text-sm font-semibold text-slate-900">
+                                            {{ optional($receipt->purchase->barang)->nama_barang ?? optional(optional($receipt->purchase->barangMasuk)->barang)->nama_barang ?? '-' }}
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="text-sm text-slate-600">{{ $receipt->purchase->supplier->nama_supplier }}</span>

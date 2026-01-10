@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             KategoriSeeder::class,
             SampleDataSeeder::class,
             PurchaseSeeder::class,
-            SalesSeeder::class,
         ]);
     }
 }

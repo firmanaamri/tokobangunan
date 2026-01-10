@@ -18,7 +18,7 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                     <a href="{{ route('purchases.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold px-4 py-2 rounded-lg shadow">+ Pembelian</a>
-                    <a href="{{ route('sales.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold px-4 py-2 rounded-lg shadow">+ Penjualan</a>
+                    {{-- <a href="{{ route('sales.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold px-4 py-2 rounded-lg shadow">+ Penjualan</a> --}}
                 </div>
             </div>
 
@@ -51,19 +51,7 @@
                     <span class="text-xs text-rose-600 font-semibold block mt-2">Butuh restock segera</span>
                 </div>
 
-                <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs uppercase font-semibold text-indigo-600">Penjualan</p>
-                            <h4 class="text-sm font-medium text-slate-600">Penjualan (Total)</h4>
-                        </div>
-                        <div class="h-10 w-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                    </div>
-                    {{-- <p class="text-3xl font-bold text-slate-900 mt-3">{{ number_format($totalSales) }}</p>
-                    <span class="text-xs text-indigo-600 font-semibold block mt-2">Transaksi bulan ini: {{ $salesThisMonth }}</span> --}}
-                </div>
+                
 
                 <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-cyan-100 bg-gradient-to-br from-cyan-50 via-white to-cyan-50">
                     <div class="flex items-center justify-between">
@@ -78,35 +66,18 @@
                     <p class="text-3xl font-bold text-slate-900 mt-3">{{ number_format($totalSuppliers) }}</p>
                     <span class="text-xs text-cyan-600 font-semibold block mt-2"><a href="{{ route('suppliers.index') }}" class="hover:underline">Lihat semua supplier</a></span>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-emerald-100 bg-white">
+                <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-amber-50">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-xs uppercase font-semibold text-emerald-600">Keuangan</p>
-                            <h4 class="text-sm font-medium text-slate-600">Pendapatan (Bulan Ini)</h4>
+                            <p class="text-xs uppercase font-semibold text-amber-600">Barang Keluar</p>
+                            <h4 class="text-sm font-medium text-slate-600">Jumlah Keluar (Bulan Ini)</h4>
                         </div>
-                        <div class="h-10 w-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                    {{-- <p class="text-3xl font-bold text-emerald-600 mt-3">Rp {{ number_format($revenueThisMonth, 2, ',', '.') }}</p>
-                    <a href="{{ route('sales.index') }}" class="inline-flex items-center text-sm mt-3 text-emerald-600 hover:underline">Lihat Semua Penjualan</a> --}}
-                </div>
-
-                <div class="p-5 sm:p-6 rounded-xl shadow-lg border border-slate-200 bg-white">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-xs uppercase font-semibold text-slate-600">Operasional</p>
-                            <h4 class="text-sm font-medium text-slate-600">Keranjang Aktif</h4>
-                        </div>
-                        <div class="h-10 w-10 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
-                            <i class="fas fa-shopping-basket"></i>
+                        <div class="h-10 w-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+                            <i class="fas fa-truck-loading"></i>
                         </div>
                     </div>
-                    <p class="text-3xl font-bold text-slate-900 mt-3">{{ session('cart') ? count(session('cart')) : 0 }}</p>
-                    <a href="{{ route('cart.index') }}" class="inline-flex items-center text-sm mt-3 text-slate-700 hover:underline">Buka Keranjang</a>
+                    <p class="text-3xl font-bold text-slate-900 mt-3">{{ number_format($barangKeluarThisMonth) }}</p>
+                    <span class="text-xs text-amber-600 font-semibold block mt-2"><a href="{{ route('barang-keluar.index') }}" class="hover:underline">Lihat detail</a></span>
                 </div>
             </div>
 

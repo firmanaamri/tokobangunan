@@ -112,7 +112,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500 mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <div class="text-sm text-amber-700">
             <strong class="font-semibold">Informasi:</strong>
-            <p class="mt-1">Data ini otomatis dibuat dari transaksi <a href="{{ route('sales.index') }}" class="underline hover:text-amber-900">Penjualan</a>. Untuk menambah barang keluar, silakan buat transaksi penjualan baru.</p>
+            <p class="mt-1">Data ini otomatis dibuat dari transaksi <a href="{{ route('daily-sales.index') }}" class="underline hover:text-amber-900">Penjualan</a>. Untuk menambah barang keluar, silakan buat transaksi penjualan baru.</p>
         </div>
     </div>
 
@@ -186,7 +186,7 @@
                     <tr>
                         <td colspan="6" class="px-6 py-10 text-center text-slate-500">
                             <svg class="h-10 w-10 text-slate-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
-                            Belum ada data barang keluar. Silakan buat <a href="{{ route('sales.index') }}" class="text-amber-600 hover:text-amber-800 underline">transaksi penjualan</a> untuk mengeluarkan barang.
+                            Belum ada data barang keluar. Silakan buat <a href="{{ route('daily-sales.index') }}" class="text-amber-600 hover:text-amber-800 underline">transaksi penjualan</a> untuk mengeluarkan barang.
                         </td>
                     </tr>
                     @endforelse

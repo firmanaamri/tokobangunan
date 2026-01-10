@@ -144,8 +144,10 @@ class GoodsReceiptController extends Controller
                     }
                 }
             } else {
-                // All rejected
-                $purchase->update(['status_pembelian' => 'rejected']);
+                // All rejected — do not write an invalid enum value to purchases.
+                // Keep purchase status as pending (procurement may need to re-order),
+                // and rely on the GoodsReceipt `status` = 'rejected' for inspection result.
+                $purchase->update(['status_pembelian' => 'pending']);
             }
 
             \DB::commit();

@@ -12,42 +12,54 @@
         <!-- Form -->
         <form action="{{ route('suppliers.store') }}" method="POST" class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
             @csrf
-
             <div class="p-8 space-y-6">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Tambah Supplier Baru</h2>
+                        <p class="text-sm text-slate-500 mt-1">Masukkan informasi supplier lengkap untuk keperluan pembelian.</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-400">Formulir cepat</span>
+                    </div>
+                </div>
                 <!-- Nama Supplier -->
-                <div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Nama Supplier <span class="text-red-500">*</span></label>
                     <input type="text" name="nama_supplier" value="{{ old('nama_supplier') }}" placeholder="Contoh: PT. Bahan Bangunan Jaya" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('nama_supplier') border-red-500 @enderror">
                     @error('nama_supplier')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </div>
+                    </div>
 
-                <!-- Kontak Person -->
-                <div>
+                    <!-- Kontak Person -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Kontak Person</label>
                     <input type="text" name="kontak_person" value="{{ old('kontak_person') }}" placeholder="Nama kontak person" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kontak_person') border-red-500 @enderror">
                     @error('kontak_person')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
+                    </div>
                 </div>
 
-                <!-- Nomor Telepon -->
-                <div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <!-- Nomor Telepon -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Nomor Telepon</label>
                     <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" placeholder="Contoh: +62-812-3456-7890" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('nomor_telepon') border-red-500 @enderror">
                     @error('nomor_telepon')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </div>
+                    </div>
 
-                <!-- Email -->
-                <div>
+                    <!-- Email -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Email</label>
                     <input type="email" name="email" value="{{ old('email') }}" placeholder="Contoh: info@supplier.com" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('email') border-red-500 @enderror">
                     @error('email')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
+                    </div>
                 </div>
 
                 <!-- Alamat -->
@@ -58,36 +70,50 @@
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
                 </div>
-
                 <!-- Kota -->
-                <div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Kota</label>
-                    <input type="text" name="kota" value="{{ old('kota') }}" placeholder="Contoh: Jakarta" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kota') border-red-500 @enderror">
+                    <select id="kota-select" name="kota" data-old="{{ old('kota') }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kota') border-red-500 @enderror">
+                        <option value="">-- Pilih atau ketik kota --</option>
+                        @foreach(config('indonesia.cities', []) as $city)
+                            <option value="{{ $city }}" @selected(old('kota') == $city)>{{ $city }}</option>
+                        @endforeach
+                    </select>
+                    <p class="mt-2 text-xs text-slate-500">Ketik untuk mencari atau tambahkan kota baru.</p>
                     @error('kota')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </div>
+                    </div>
 
-                <!-- Provinsi -->
-                <div>
+                    <!-- Provinsi -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Provinsi</label>
-                    <input type="text" name="provinsi" value="{{ old('provinsi') }}" placeholder="Contoh: DKI Jakarta" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('provinsi') border-red-500 @enderror">
+                    <select id="provinsi-select" name="provinsi" data-old="{{ old('provinsi') }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('provinsi') border-red-500 @enderror">
+                        <option value="">-- Pilih provinsi --</option>
+                        @foreach(config('indonesia.provinces', []) as $prov)
+                            <option value="{{ $prov }}" @selected(old('provinsi') == $prov)>{{ $prov }}</option>
+                        @endforeach
+                    </select>
+                    <p class="mt-2 text-xs text-slate-500">Pilih provinsi dari daftar.</p>
                     @error('provinsi')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
+                    </div>
                 </div>
 
-                <!-- Kode Pos -->
-                <div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <!-- Kode Pos -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Kode Pos</label>
                     <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" placeholder="Contoh: 12345" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kode_pos') border-red-500 @enderror">
                     @error('kode_pos')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
-                </div>
+                    </div>
 
-                <!-- Status -->
-                <div>
+                    <!-- Status -->
+                    <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Status <span class="text-red-500">*</span></label>
                     <select name="status" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('status') border-red-500 @enderror">
                         <option value="aktif" @selected(old('status') == 'aktif')>Aktif</option>
@@ -96,6 +122,7 @@
                     @error('status')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
+                    </div>
                 </div>
 
                 <!-- Keterangan -->
@@ -120,4 +147,25 @@
         </form>
     </div>
 </div>
+    {{-- Select2 assets and init for kota search --}}
+    <style>
+        /* Make Select2 look like Tailwind inputs */
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            height: 44px;
+            padding: 0.25rem 0.75rem;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px;
+            color: #0f172a;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 44px;
+        }
+        /* Ensure dropdown matches width nicely */
+        .select2-container { width: 100% !important; }
+    </style>
+    {{-- Select2 is bundled via Vite and initialized in resources/js/app.js --}}
 @endsection

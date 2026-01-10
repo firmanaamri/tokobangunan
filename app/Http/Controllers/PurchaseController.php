@@ -59,25 +59,18 @@ class PurchaseController extends Controller
 
         DB::beginTransaction();
         try {
-            // Buat barang masuk terlebih dahulu
-            $barangMasuk = \App\Models\BarangMasuk::create([
-                'barang_id' => $validated['barang_id'],
-                'jumlah_barang_masuk' => $validated['jumlah'],
-                'tanggal_masuk' => $validated['tanggal_pembelian'],
-                'user_id' => auth()->id(),
-                'keterangan' => 'Pembelian dari ' . \App\Models\Supplier::find($validated['supplier_id'])->nama_supplier,
-            ]);
-
-            // Update stok barang
+            // NOTE: Do NOT update stock here. Stock should only change when
+            // barang diterima (Goods Receipt). We'll store the Purchase record
+            // and let the GoodsReceiptController create BarangMasuk and
+            // increment stock upon actual receipt.
             $barang = \App\Models\Barang::find($validated['barang_id']);
-            $barang->increment('stok_saat_ini', $validated['jumlah']);
 
             // Generate nomor PO (gunakan count pada kolom nomor_po untuk menghindari race pada created_at)
             $nomorPO = 'PO-' . date('Ymd') . '-' . str_pad(Purchase::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
 
-            // Simpan purchase dengan informasi lengkap
+            // Simpan purchase dengan informasi lengkap (tidak membuat BarangMasuk)
             $purchase = Purchase::create([
-                'barang_masuk_id' => $barangMasuk->id,
+                'barang_id' => $validated['barang_id'],
                 'supplier_id' => $validated['supplier_id'],
                 'user_id' => auth()->id(),
                 'nomor_po' => $nomorPO,
@@ -88,6 +81,7 @@ class PurchaseController extends Controller
                 'total_harga' => $validated['total_harga'],
                 'tanggal_jatuh_tempo' => $validated['tanggal_jatuh_tempo'],
                 'keterangan' => $validated['keterangan'],
+                'status_pembelian' => 'pending',
             ]);
 
             DB::commit();
