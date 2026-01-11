@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
@@ -46,7 +46,8 @@
                     <!-- Nomor Telepon -->
                     <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Nomor Telepon</label>
-                    <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" placeholder="Contoh: +62-812-3456-7890" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('nomor_telepon') border-red-500 @enderror">
+                    <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" placeholder="Masukkan hanya angka (maks 14)" inputmode="numeric" pattern="[0-9]*" maxlength="14" oninput="this.value = this.value.replace(/\D/g, '').slice(0,14)" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('nomor_telepon') border-red-500 @enderror">
+                    <p class="text-xs text-slate-500 mt-1">⚠️ Maksimal 14 digit, hanya angka</p>
                     @error('nomor_telepon')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
@@ -137,7 +138,7 @@
 
             <!-- Buttons -->
             <div class="bg-slate-100 px-8 py-4 flex gap-4">
-                <button type="submit" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Supplier')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
                     <i class="fas fa-save mr-2"></i>Simpan
                 </button>
                 <a href="{{ route('suppliers.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">

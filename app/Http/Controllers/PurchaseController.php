@@ -27,18 +27,37 @@ class PurchaseController extends Controller
     /**
      * Form create transaksi pembelian
      */
-    public function create($barangMasukId = null)
+    public function create($purchaseRequestId = null)
     {
-        $barangMasuk = null;
-        if ($barangMasukId) {
-            $barangMasuk = BarangMasuk::with('barang')->find($barangMasukId);
-            if (!$barangMasuk) {
-                return redirect()->route('barang-masuk.index')->with('error', 'Barang masuk tidak ditemukan');
-            }
+        // Purchases must be created from an approved Purchase Request (PR)
+        if (!$purchaseRequestId) {
+            return redirect()->route('purchase-requests.index')
+                ->with('error', 'Pembelian hanya dapat dibuat dari Purchase Request yang sudah disetujui.');
         }
 
+        $pr = \App\Models\PurchaseRequest::with('barang')->find($purchaseRequestId);
+        if (!$pr) {
+            return redirect()->route('purchase-requests.index')
+                ->with('error', 'Purchase Request tidak ditemukan.');
+        }
+
+        if ($pr->status !== 'approved') {
+            return redirect()->route('purchase-requests.show', $pr->id)
+                ->with('error', 'Purchase Request belum disetujui. Hanya PR yang disetujui yang dapat dibuat pembeliannya.');
+        }
+
+        // Prefill form values from PR
+        $barangMasuk = null;
         $suppliers = Supplier::where('status', 'aktif')->get();
-        return view('purchases.create', compact('barangMasuk', 'suppliers'));
+        $prefill = [
+            'barang' => $pr->barang,
+            'jumlah' => $pr->jumlah_diminta,
+            'satuan' => $pr->satuan,
+            'supplier_id' => $pr->supplier_id,
+            'purchase_request_id' => $pr->id,
+        ];
+
+        return view('purchases.create', compact('barangMasuk', 'suppliers', 'prefill'));
     }
 
     /**
@@ -47,6 +66,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'purchase_request_id' => 'required|exists:purchase_requests,id',
             'barang_id' => 'required|exists:barang,id',
             'jumlah' => 'required|integer|min:1',
             'harga_per_unit' => 'required|numeric|min:0',
@@ -56,6 +76,12 @@ class PurchaseController extends Controller
             'tanggal_jatuh_tempo' => 'nullable|date|after_or_equal:tanggal_pembelian',
             'keterangan' => 'nullable|string',
         ]);
+
+        // Ensure PR exists and is approved
+        $pr = \App\Models\PurchaseRequest::find($validated['purchase_request_id']);
+        if (!$pr || $pr->status !== 'approved') {
+            return back()->withInput()->with('error', 'Purchase Request tidak valid atau belum disetujui.');
+        }
 
         DB::beginTransaction();
         try {
@@ -81,6 +107,7 @@ class PurchaseController extends Controller
                 'total_harga' => $validated['total_harga'],
                 'tanggal_jatuh_tempo' => $validated['tanggal_jatuh_tempo'],
                 'keterangan' => $validated['keterangan'],
+                'purchase_request_id' => $validated['purchase_request_id'],
                 'status_pembelian' => 'pending',
             ]);
 
@@ -99,7 +126,7 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        $purchase->load(['supplier', 'barangMasuk.barang', 'barang', 'user', 'payment']);
+        $purchase->load(['supplier', 'barangMasuk.barang', 'barang', 'user', 'payment', 'payments']);
         return view('purchases.show', compact('purchase'));
     }
 

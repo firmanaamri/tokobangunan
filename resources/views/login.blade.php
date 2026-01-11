@@ -1,182 +1,182 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full">
+<html lang="id" class="h-full bg-[#FAF7F2]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Jaya Prana</title>
+    <title>Login - Jaya Prana Inventory</title>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v={{ time() }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-800">
+<body class="h-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
 
-    <!-- Decorative elements -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="w-full max-w-md p-8 space-y-8 bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl relative z-10 border border-white/20">
+    <div class="w-full max-w-5xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-stone-100">
         
-        <!-- Header -->
-        <div class="text-center space-y-3">
-            <div class="flex justify-center mb-4">
-                <div class="p-3 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                </div>
-            </div>
+        <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center relative">
             
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                Jaya Prana
-            </h1>
-            <h2 class="text-sm font-semibold text-slate-600">
-                Sistem Manajemen Inventori
-            </h2>
-            <p class="text-xs text-slate-500">
-                Masuk untuk mengakses dashboard
-            </p>
-        </div>
+            <div class="mb-10">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="h-10 w-10 bg-gradient-to-br from-emerald-600 to-amber-600 rounded-lg flex items-center justify-center p-1 shadow-lg">
+                        <img src="{{ asset('favicon.png') }}" alt="JP" class="h-6 w-6 brightness-200 grayscale-0">
+                    </div>
+                    <h1 class="text-2xl font-bold text-stone-800 tracking-tight">Jaya Prana</h1>
+                </div>
+                <h2 class="text-stone-500 text-sm font-medium">Sistem Manajemen Inventori Terpadu</h2>
+            </div>
 
-        <!-- Error Alert -->
-        @if ($errors->any())
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                <div class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4v2m0-6a4 4 0 110 8 4 4 0 010-8z" />
-                    </svg>
-                    <div>
-                        <p class="font-bold text-sm">Gagal Login</p>
-                        <ul class="mt-2 list-disc list-inside text-sm space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+            <div class="mb-8">
+                <h3 class="text-3xl font-bold text-stone-900 mb-2">Selamat Datang! 👋</h3>
+                <p class="text-stone-500">Silakan masukkan detail akun Anda untuk mulai mengelola stok.</p>
+            </div>
+
+            @if ($errors->any())
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-md">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700 font-medium">Gagal Login</p>
+                        <p class="text-xs text-red-600 mt-1">{{ $errors->first() }}</p>
                     </div>
                 </div>
             </div>
-        @endif
+            @endif
 
-        <!-- Form -->
-        <form class="space-y-5" action="{{ route('login') }}" method="POST">
-            @csrf
-            <input type="hidden" name="remember" value="true">
-            
-            <!-- Username Input -->
-            <div>
-                <label for="username" class="block text-sm font-semibold text-slate-900 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5 mr-1 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>Username
-                </label>
-                <input 
-                    id="username" 
-                    name="username" 
-                    type="text" 
-                    autocomplete="username" 
-                    required
-                    value="{{ old('username') }}"
-                    class="w-full px-4 py-3 border-2 border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none transition-all duration-200"
-                    placeholder="Masukkan username">
-                @error('username')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Password Input with Toggle -->
-            <div>
-                <label for="password" class="block text-sm font-semibold text-slate-900 mb-2">
-                    <i class="fas fa-lock mr-1 text-emerald-600"></i>Password (Min. 8 karakter)
-                </label>
-                <div class="relative">
+            <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                @csrf
+                
+                <div class="space-y-2">
+                    <label for="username" class="text-sm font-semibold text-stone-700">Username</label>
                     <input 
-                        id="password" 
-                        name="password" 
-                        type="password" 
-                        autocomplete="current-password" 
+                        type="text" 
+                        name="username" 
+                        id="username" 
+                        class="w-full px-4 py-3 rounded-lg border border-stone-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 outline-none text-stone-800 placeholder-stone-400 bg-stone-50"
+                        placeholder="Contoh: admin_gudang"
+                        value="{{ old('username') }}"
                         required
-                        minlength="8"
-                        class="w-full px-4 py-3 pr-12 border-2 border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 focus:outline-none transition-all duration-200"
-                        placeholder="Minimal 8 karakter">
-                    <button 
-                        type="button"
-                        onclick="togglePassword()"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors"
-                        aria-label="Toggle password visibility">
-                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
+                        autofocus
+                    >
                 </div>
-                @error('password')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
 
-            <!-- Remember Me -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="password" class="text-sm font-semibold text-stone-700">Password</label>
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">
+                                Lupa Password?
+                            </a>
+                        @endif
+                    </div>
+                    <div class="relative group">
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            class="w-full px-4 py-3 rounded-lg border border-stone-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 outline-none text-stone-800 placeholder-stone-400 bg-stone-50"
+                            placeholder="••••••••"
+                            required
+                        >
+                        <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-emerald-700 transition-colors p-1">
+                            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-800 hover:to-emerald-700 text-white font-bold rounded-lg shadow-lg shadow-emerald-500/20 transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 text-sm tracking-wide">
+                    MASUK KE SISTEM
+                </button>
+
+                <div class="pt-4 text-center">
+                    <p class="text-sm text-stone-500">
+                        Belum punya akun? 
+                        <a href="{{ route('register') }}" class="font-bold text-emerald-700 hover:text-emerald-800 transition-colors">Hubungi Admin</a>
+                    </p>
+                </div>
+            </form>
             
-
-            <!-- Submit Button -->
-            <button 
-                type="submit"
-                class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="inline h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3v-1" />
-                </svg>
-                Masuk
-            </button>
-        </form>
-
-        <div class="flex items-center justify-center">
-                <div class="flex items-center gap-2">
-                </div>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
-                        Lupa password?
-                    </a>
-                @endif
+            <div class="mt-8 pt-6 border-t border-stone-100 text-center">
+                <p class="text-xs text-stone-400">&copy; {{ date('Y') }} Jaya Prana Building Store. v1.0.0</p>
             </div>
-
-        <!-- Divider -->
-        <div class="flex items-center gap-3">
-            <div class="flex-1 h-px bg-slate-200"></div>
-            <span class="text-xs text-slate-500">atau</span>
-            <div class="flex-1 h-px bg-slate-200"></div>
         </div>
 
-        <!-- Register Link -->
-        @if (Route::has('register'))
-            <div class="text-center">
-                <p class="text-slate-600">
-                    Belum punya akun?
-                    <a href="{{ route('register') }}" class="font-bold text-emerald-600 hover:text-emerald-700 transition-colors">
-                        Daftar sekarang
-                    </a>
-                </p>
-            </div>
-        @endif
+        <div class="hidden md:flex w-1/2 relative overflow-hidden items-center justify-center bg-stone-900">
+            
+            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop" 
+                 alt="Warehouse Background" 
+                 class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-amber-900/20"></div>
 
-        <!-- Footer -->
-        <p class="text-center text-xs text-slate-500 border-t border-slate-200 pt-6">
-            &copy; {{ date('Y') }} Sistem Inventori Jaya Prana. Semua hak dilindungi.
-        </p>
+            <div class="relative z-20 w-full max-w-md text-center p-8">
+                
+                <div class="mb-6 inline-flex p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-3xl font-bold text-white tracking-wide">
+                        Inventori Terkontrol,<br>
+                        Bisnis Lancar.
+                    </h3>
+                    <p class="text-stone-300 text-sm leading-relaxed px-4">
+                        Pantau stok bahan bangunan, kelola pesanan masuk, dan optimalkan gudang Jaya Prana dalam satu dashboard.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3 pt-8">
+                    <span class="flex items-center gap-1 px-3 py-1.5 bg-emerald-500/20 rounded-full text-xs font-medium text-emerald-300 border border-emerald-500/30">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Real-time
+                    </span>
+                    <span class="flex items-center gap-1 px-3 py-1.5 bg-amber-500/20 rounded-full text-xs font-medium text-amber-300 border border-amber-500/30">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Aman
+                    </span>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Password Toggle Script -->
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeOpen = document.getElementById('eyeOpen');
+            const eyeClosed = document.getElementById('eyeClosed');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-4.803M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+                eyeOpen.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
             } else {
                 passwordInput.type = 'password';
-                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
+                eyeOpen.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
             }
         }
     </script>
-
 </body>
 </html>

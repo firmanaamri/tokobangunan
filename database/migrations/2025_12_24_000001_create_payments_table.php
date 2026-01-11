@@ -8,6 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Guard: skip jika tabel sudah ada
+        if (Schema::hasTable('payments')) {
+            return;
+        }
+
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sale_id')->nullable()->constrained('sales')->cascadeOnDelete();

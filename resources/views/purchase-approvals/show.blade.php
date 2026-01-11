@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="flex justify-between items-start mb-8">
@@ -131,7 +131,7 @@
                                 </div>
 
                                 <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
-                                    onclick="return confirm('Yakin ingin menolak PR ini? Staff akan menerima notifikasi penolakan.')">
+                                    onclick="confirmRejectPR(this.form)">
                                     <i class="fas fa-times-circle mr-2"></i>Tolak PR
                                 </button>
                             </form>

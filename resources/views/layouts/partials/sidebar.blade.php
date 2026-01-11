@@ -9,7 +9,7 @@
 <div 
     x-cloak
     :class="sidebarOpen ? 'w-64 translate-x-0' : 'w-20 sidebar-collapsed -translate-x-full md:translate-x-0'"
-    class="bg-gradient-to-b from-[#F5E6D3] via-[#F0DCC8] to-[#E8D4C0] text-slate-800 p-3 transition-all duration-500 ease-in-out shadow-2xl border-r border-[#DCC4B0] overflow-hidden
+    class="bg-gradient-to-b from-[#FAF7F2] via-[#F8F4EE] to-[#F5F0E8] text-slate-800 p-3 transition-all duration-500 ease-in-out shadow-2xl border-r border-[#E8DFD3] overflow-hidden
            fixed inset-y-0 left-0 z-50 
            md:relative md:z-auto md:flex md:flex-col md:justify-between"
 >
@@ -142,14 +142,27 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span class="font-medium whitespace-nowrap sidebar-label">Barang Keluar</span>
                 </a>
-                @endcan
+                
+                    <!-- Pengaturan (Admin) -->
+                    <div class="pt-6">
+                        <h3 class="text-xs uppercase tracking-wider text-amber-700 px-4 pb-3 font-bold section-title">Pengaturan</h3>
+                    </div>
+
+                    <a href="{{ route('admin.users.index') }}" 
+                       class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                              {{ request()->routeIs('admin.users.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                        <span class="font-medium whitespace-nowrap sidebar-label">Manajemen User</span>
+                    </a>
+
+                    @endcan
                                 
             </nav>
         </div>
         
-        <div class="mt-auto border-t border-slate-300 pt-4 pb-2">
-            <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-amber-100/50 transition-all duration-300">
-                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-amber-700" src="profile.jpg" alt="Foto Profil">
+        <div class="mt-auto border-t border-[#E8DFD3] pt-4 pb-2 bg-gradient-to-b from-transparent to-[#F5F0E8]/30 rounded-lg">
+            <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-white/50 transition-all duration-300">
+                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-amber-600" src="profile.jpg" alt="Foto Profil">
                 <div class="ml-3 min-w-0 profile-info">
                     <p class="text-sm font-semibold text-slate-900 truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                     <p class="text-xs text-amber-700 font-medium">Online</p>

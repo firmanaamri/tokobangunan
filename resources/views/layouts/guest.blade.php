@@ -7,6 +7,12 @@
 
         <title>{{ config('app.name', 'Jaya Prana') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v={{ time() }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}?v={{ time() }}">
+        <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
+        <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

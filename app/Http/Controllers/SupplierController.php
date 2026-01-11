@@ -29,18 +29,27 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'nama_supplier' => 'required|string|max:255|unique:suppliers',
             'kontak_person' => 'nullable|string|max:255',
-            'nomor_telepon' => 'nullable|string|max:20',
+            // Hanya angka untuk nomor telepon, maksimal 14 digit
+            'nomor_telepon' => ['nullable','regex:/^\d+$/','max:14'],
             'email' => 'nullable|email|max:255',
             'alamat' => 'nullable|string',
             'kota' => 'nullable|string|max:100',
             'provinsi' => 'nullable|string|max:100',
-            'kode_pos' => 'nullable|string|max:10',
+            // Hanya angka untuk kode pos
+            'kode_pos' => ['nullable','regex:/^\d+$/','max:10'],
             'status' => 'required|in:aktif,nonaktif',
             'keterangan' => 'nullable|string',
-        ]);
+        ];
+        $messages = [
+            'nomor_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
+            'nomor_telepon.max' => 'Nomor telepon maksimal 14 angka.',
+            'kode_pos.regex' => 'Kode pos hanya boleh berisi angka.',
+            'kode_pos.max' => 'Kode pos maksimal 10 angka.',
+        ];
+        $validated = $request->validate($rules, $messages);
 
         Supplier::create($validated);
 
@@ -69,18 +78,27 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        $validated = $request->validate([
+        $rules = [
             'nama_supplier' => 'required|string|max:255|unique:suppliers,nama_supplier,' . $supplier->id,
             'kontak_person' => 'nullable|string|max:255',
-            'nomor_telepon' => 'nullable|string|max:20',
+            // Hanya angka untuk nomor telepon, maksimal 14 digit
+            'nomor_telepon' => ['nullable','regex:/^\d+$/','max:14'],
             'email' => 'nullable|email|max:255',
             'alamat' => 'nullable|string',
             'kota' => 'nullable|string|max:100',
             'provinsi' => 'nullable|string|max:100',
-            'kode_pos' => 'nullable|string|max:10',
+            // Hanya angka untuk kode pos
+            'kode_pos' => ['nullable','regex:/^\d+$/','max:10'],
             'status' => 'required|in:aktif,nonaktif',
             'keterangan' => 'nullable|string',
-        ]);
+        ];
+        $messages = [
+            'nomor_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
+            'nomor_telepon.max' => 'Nomor telepon maksimal 14 angka.',
+            'kode_pos.regex' => 'Kode pos hanya boleh berisi angka.',
+            'kode_pos.max' => 'Kode pos maksimal 10 angka.',
+        ];
+        $validated = $request->validate($rules, $messages);
 
         $supplier->update($validated);
 

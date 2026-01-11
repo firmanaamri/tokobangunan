@@ -7,10 +7,6 @@
         <a href="{{ route('daily-sales.create') }}" class="px-4 py-2 bg-amber-400 text-white rounded">Buat Pencatatan</a>
     </div>
 
-    @if(session('success'))
-        <div class="mb-4 p-3 bg-green-200 text-green-800 rounded">{{ session('success') }}</div>
-    @endif
-
     <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
         <div class="overflow-x-auto">
             @if($items->isEmpty())

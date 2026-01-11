@@ -6,7 +6,7 @@ return [
         'Aceh Barat','Aceh Besar','Aceh Jaya','Aceh Selatan','Aceh Tengah','Aceh Tenggara','Aceh Timur','Aceh Utara','Banda Aceh','Bener Meriah',
         'Bireuen','Sabang','Langsa','Lhokseumawe','Pidie','Pidie Jaya','Simeulue','Subulussalam',
         'Bandung','Bekasi','Bogor','Cimahi','Depok','Sukabumi','Tasikmalaya','Cirebon','Banjar',
-        'Semarang','Surakarta (Solo)','Magelang','Salatiga','Pekalongan','Tegal','Purwokerto',
+        'Semarang','Surakarta (Solo)','Magelang','Salatiga','Pemalang' ,'Pekalongan','Tegal','Purwokerto',
         'Jakarta','Surabaya','Sidoarjo','Malang','Kediri','Madiun','Banyuwangi','Bojonegoro','Jember',
         'Yogyakarta','Bantul','Sleman','Kulon Progo','Gunungkidul',
         'Bandar Lampung','Metro','Pematangsiantar','Medan','Binjai','Tebing Tinggi','Padang','Bukittinggi',

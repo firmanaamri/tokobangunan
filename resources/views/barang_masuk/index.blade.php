@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-7xl mx-auto">
     <div class="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
@@ -183,7 +183,7 @@
                     <tr>
                         <td colspan="6" class="px-6 py-10 text-center text-slate-500">
                             <svg class="h-10 w-10 text-slate-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
-                            Belum ada data barang masuk. Silakan buat <a href="{{ route('purchases.create') }}" class="text-blue-600 hover:text-blue-800 underline">transaksi pembelian</a> untuk menambah barang.
+                            Belum ada data barang masuk. Silakan buat <a href="{{ route('purchase-requests.create') }}" class="text-blue-600 hover:text-blue-800 underline">Purchase Request</a> untuk memulai proses pembelian.
                         </td>
                     </tr>
                     @endforelse

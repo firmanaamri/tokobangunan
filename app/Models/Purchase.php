@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Purchase extends Model
 {
@@ -74,9 +75,17 @@ class Purchase extends Model
     /**
      * Relasi ke Payment
      */
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'purchase_id');
+    }
+
+    /**
+     * Relasi ke Payment (ambil yang terakhir untuk kemudahan akses)
+     */
     public function payment(): HasOne
     {
-        return $this->hasOne(Payment::class, 'purchase_id');
+        return $this->hasOne(Payment::class, 'purchase_id')->latestOfMany();
     }
 
     /**

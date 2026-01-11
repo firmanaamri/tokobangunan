@@ -8,7 +8,7 @@
         Dashboard
     </x-slot:header>
 
-    <div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-4 sm:p-6">
+    <div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-4 sm:p-6">
         <div class="max-w-7xl mx-auto space-y-8">
 
             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

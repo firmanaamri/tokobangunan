@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
@@ -13,6 +13,10 @@
         <form action="{{ route('purchases.store') }}" method="POST" class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
             @csrf
 
+            @if(isset($prefill) && !empty($prefill['purchase_request_id']))
+                <input type="hidden" name="purchase_request_id" value="{{ $prefill['purchase_request_id'] }}">
+            @endif
+
             <div class="p-8 space-y-6">
                 <!-- Barang -->
                 <div>
@@ -20,8 +24,8 @@
                     <select name="barang_id" id="barang_id" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('barang_id') border-red-500 @enderror">
                         <option value="">-- Pilih Barang --</option>
                         @foreach (\App\Models\Barang::with('kategori')->get() as $barang)
-                            <option value="{{ $barang->id }}" data-satuan="{{ $barang->satuan }}" data-harga="{{ $barang->harga }}" @selected(old('barang_id') == $barang->id)>
-                                {{ $barang->nama_barang }} ({{ $barang->kategori->nama_kategori }}) - Rp {{ number_format($barang->harga, 0, ',', '.') }}
+                            <option value="{{ $barang->id }}" data-satuan="{{ $barang->satuan }}" @selected((old('barang_id') == $barang->id) || (isset($prefill['barang']) && $prefill['barang']->id == $barang->id))>
+                                {{ $barang->nama_barang }} ({{ $barang->kategori->nama_kategori }})
                             </option>
                         @endforeach
                     </select>
@@ -34,7 +38,7 @@
                 <div>
                     <label class="block text-sm font-bold text-slate-900 mb-2">Jumlah <span class="text-red-500">*</span></label>
                     <div class="flex gap-4">
-                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah') }}" min="1" placeholder="0" class="flex-1 border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah') border-red-500 @enderror">
+                        <input type="number" name="jumlah" id="jumlah" value="{{ old('jumlah', isset($prefill['jumlah']) ? $prefill['jumlah'] : '') }}" min="1" placeholder="0" class="flex-1 border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah') border-red-500 @enderror">
                         <input type="text" id="satuan" readonly placeholder="Satuan" class="w-32 border-2 border-slate-300 rounded-lg px-4 py-2 bg-slate-100 text-slate-600">
                     </div>
                     @error('jumlah')
@@ -66,7 +70,7 @@
                     <select name="supplier_id" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('supplier_id') border-red-500 @enderror">
                         <option value="">-- Pilih Supplier --</option>
                         @foreach ($suppliers as $supplier)
-                            <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>{{ $supplier->nama_supplier }}</option>
+                            <option value="{{ $supplier->id }}" @selected((old('supplier_id') == $supplier->id) || (isset($prefill['supplier_id']) && $prefill['supplier_id'] == $supplier->id))>{{ $supplier->nama_supplier }}</option>
                         @endforeach
                     </select>
                     @error('supplier_id')
@@ -113,7 +117,7 @@
 
             <!-- Buttons -->
             <div class="bg-slate-100 px-8 py-4 flex gap-4">
-                <button type="submit" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Transaksi Pembelian')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
                     <i class="fas fa-save mr-2"></i>Simpan
                 </button>
                 <a href="{{ route('purchases.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
@@ -136,10 +140,10 @@
     barangSelect.addEventListener('change', function() {
         const selectedOption = this.options[this.selectedIndex];
         const satuan = selectedOption.getAttribute('data-satuan');
-        const harga = selectedOption.getAttribute('data-harga');
         
         satuanInput.value = satuan || '';
-        hargaPerUnitInput.value = harga || '';
+        // Harga pembelian harus mengikuti penawaran supplier, tidak otomatis dari harga jual toko
+        hargaPerUnitInput.value = '';
         
         calculateTotal();
     });

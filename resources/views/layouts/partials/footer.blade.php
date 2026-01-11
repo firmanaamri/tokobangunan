@@ -1,4 +1,4 @@
-<footer class="mt-auto bg-gradient-to-r from-[#F5E6D3] via-[#F0DCC8] to-[#E8D4C0] border-t shadow-lg">
+<footer class="mt-auto bg-gradient-to-r from-[#FAF7F2] via-[#F8F4EE] to-[#F5F0E8] border-t shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Section 1: About Company -->
@@ -68,7 +68,7 @@
         </div>
 
         <!-- Divider -->
-        <div class="border-t border-slate-300 mt-8 pt-6">
+        <div class="border-t border-[#E8DFD3] mt-8 pt-6">
             <div class="flex flex-col md:flex-row items-center justify-between">
                 <p class="text-slate-700 text-sm">
                     &copy; {{ date('Y') }} <span class="font-semibold">Toko Bangunan Jaya Prana</span>. All rights reserved.

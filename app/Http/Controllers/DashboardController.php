@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\BarangMasuk;
 use App\Models\BarangKeluar;
-// use App\Models\Sale;
 use App\Models\Payment;
 use App\Models\PurchaseRequest;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -16,10 +16,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Staff Dashboard
-        if ($user->isStaff()) {
+        if ($user->role === 'staff') {
             return $this->staffDashboard();
         }
 
@@ -43,12 +43,12 @@ class DashboardController extends Controller
         
         // Aktivitas Terbaru (gabungan masuk dan keluar, diurutkan terbaru)
         $barangMasukRecent = BarangMasuk::with(['barang.kategori', 'user'])
-                                       ->orderBy('tanggal_masuk', 'desc')
+                                       ->orderBy('created_at', 'desc')
                                        ->limit(10)
                                        ->get()
                                        ->map(function ($item) {
                                            return [
-                                               'tanggal' => $item->tanggal_masuk,
+                                               'tanggal' => $item->created_at,
                                                'nama_barang' => $item->barang->nama_barang,
                                                'kategori' => $item->barang->kategori?->nama_kategori,
                                                'tipe' => 'Stok Masuk',
@@ -58,12 +58,12 @@ class DashboardController extends Controller
                                        });
         
         $barangKeluarRecent = BarangKeluar::with(['barang.kategori', 'user'])
-                                         ->orderBy('tanggal_keluar', 'desc')
+                                         ->orderBy('created_at', 'desc')
                                          ->limit(10)
                                          ->get()
                                          ->map(function ($item) {
                                            return [
-                                               'tanggal' => $item->tanggal_keluar,
+                                               'tanggal' => $item->created_at,
                                                'nama_barang' => $item->barang->nama_barang,
                                                'kategori' => $item->barang->kategori?->nama_kategori,
                                                'tipe' => 'Stok Keluar',
@@ -98,7 +98,7 @@ class DashboardController extends Controller
 
     private function staffDashboard()
     {
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         // Staff PR Stats
         $myPRs = PurchaseRequest::where('user_id', $userId)->count();
@@ -131,12 +131,12 @@ class DashboardController extends Controller
 
         // Recent Activities (simplified for staff)
         $barangMasukRecent = BarangMasuk::with(['barang.kategori', 'user'])
-                                       ->orderBy('tanggal_masuk', 'desc')
+                                       ->orderBy('created_at', 'desc')
                                        ->limit(5)
                                        ->get()
                                        ->map(function ($item) {
                                            return [
-                                               'tanggal' => $item->tanggal_masuk,
+                                               'tanggal' => $item->created_at,
                                                'nama_barang' => $item->barang->nama_barang,
                                                'tipe' => 'Stok Masuk',
                                                'jumlah' => '+' . $item->jumlah_barang_masuk . ' ' . ($item->barang->satuan ?? 'pcs'),
@@ -145,12 +145,12 @@ class DashboardController extends Controller
                                        });
         
         $barangKeluarRecent = BarangKeluar::with(['barang.kategori', 'user'])
-                                         ->orderBy('tanggal_keluar', 'desc')
+                                         ->orderBy('created_at', 'desc')
                                          ->limit(5)
                                          ->get()
                                          ->map(function ($item) {
                                            return [
-                                               'tanggal' => $item->tanggal_keluar,
+                                               'tanggal' => $item->created_at,
                                                'nama_barang' => $item->barang->nama_barang,
                                                'tipe' => 'Stok Keluar',
                                                'jumlah' => '-' . $item->jumlah_barang_keluar . ' ' . ($item->barang->satuan ?? 'pcs'),

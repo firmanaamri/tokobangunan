@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
@@ -21,14 +21,6 @@
                 <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg font-bold">Cari</button>
             </div>
         </form>
-
-        <!-- Alerts -->
-        @if (session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
-                <span>{{ session('success') }}</span>
-                <button onclick="this.parentElement.style.display='none';" class="text-green-700 font-bold text-xl">&times;</button>
-            </div>
-        @endif
 
         <!-- Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
@@ -81,7 +73,7 @@
                                 <td class="px-6 py-4">
                                     @php $status = $product->status; @endphp
                                     @if ($status == 'Habis')
-                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold animate-ping">Habis</span>
+                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold animate-pulse">Habis</span>
                                     @elseif ($status == 'Stok Menipis')
                                         <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold animate-bounce">Menipis</span>
                                     @else

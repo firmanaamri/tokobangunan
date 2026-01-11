@@ -11,11 +11,10 @@ use App\Http\Controllers\PurchaseApprovalController;
 use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DailySaleController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('login');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -92,6 +91,11 @@ Route::middleware('auth')->group(function () {
 
     // Payments
     Route::post('/payments', [App\Http\Controllers\PaymentController::class, 'store'])->name('payments.store');
+
+    // Admin: User management
+    Route::prefix('admin')->name('admin.')->middleware('can:isAdmin')->group(function () {
+        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+    });
 
     // Mirror API endpoints on web routes for simplicity / local testing
     Route::post('/api/payments', [App\Http\Controllers\Api\PaymentApiController::class, 'store']);

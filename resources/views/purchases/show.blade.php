@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8 flex justify-between items-center">
@@ -23,13 +23,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Alert Messages -->
-        @if (session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <!-- Main Content -->
         <div class="grid grid-cols-3 gap-6 mb-8">
@@ -134,12 +127,14 @@
             </div>
         </div>
 
-        @if($purchase->payment)
+        @if($purchase->payments->count() > 0)
             @php
-                $payment = $purchase->payment;
+                $payment = $purchase->payments->first();
                 $bukti = $payment->bukti_pembayaran ?? null;
-                $buktiUrl = $bukti ? asset('storage/' . $bukti) : null;
-                $ext = $bukti ? strtolower(pathinfo($bukti, PATHINFO_EXTENSION)) : null;
+                $relative = $bukti ? str_replace('\\', '/', ltrim($bukti, '/')) : null;
+                $exists = $relative ? Storage::disk('public')->exists($relative) : false;
+                $buktiUrl = $exists ? asset('storage/' . $relative) : null;
+                $ext = $relative ? strtolower(pathinfo($relative, PATHINFO_EXTENSION)) : null;
                 $isImage = in_array($ext, ['jpg','jpeg','png','gif']);
             @endphp
 
@@ -174,12 +169,63 @@
             </div>
         @endif
 
+        <!-- Riwayat Pembayaran -->
+        @if($purchase->payments->count() > 0)
+            <div class="bg-white rounded-xl shadow-lg border border-slate-200 p-6 mb-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6">Riwayat Pembayaran</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-full">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Tanggal</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Jumlah</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Metode</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Bukti Pembayaran</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            @foreach ($purchase->payments as $payment)
+                                @php
+                                    $bukti = $payment->bukti_pembayaran ?? null;
+                                    $relative = $bukti ? str_replace('\\', '/', ltrim($bukti, '/')) : null;
+                                    $exists = $relative ? Storage::disk('public')->exists($relative) : false;
+                                    $buktiUrl = $exists ? asset('storage/' . $relative) : null;
+                                    $ext = $relative ? strtolower(pathinfo($relative, PATHINFO_EXTENSION)) : null;
+                                    $isImage = in_array($ext, ['jpg','jpeg','png','gif']);
+                                @endphp
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="px-6 py-4 text-sm text-slate-600">{{ $payment->paid_at?->format('d M Y') ?? '-' }}</td>
+                                    <td class="px-6 py-4 text-sm font-bold text-slate-900">Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">{{ $payment->method }}</td>
+                                    <td class="px-6 py-4 text-sm">
+                                        @if($buktiUrl)
+                                            @if($isImage)
+                                                <a href="{{ $buktiUrl }}" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-2">
+                                                    <i class="fas fa-image"></i>Lihat Gambar
+                                                </a>
+                                            @else
+                                                <a href="{{ $buktiUrl }}" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-2">
+                                                    <i class="fas fa-file"></i>Unduh File
+                                                </a>
+                                            @endif
+                                        @else
+                                            <span class="text-slate-400">Tidak ada</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
         <!-- Action Buttons -->
         <div class="flex gap-4">
             <form action="{{ route('purchases.destroy', $purchase->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
-                <button type="submit" onclick="return confirm('Yakin ingin menghapus transaksi ini?')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                <button type="button" onclick="confirmDeletePurchase(this.form)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
                     <i class="fas fa-trash mr-2"></i>Hapus Transaksi
                 </button>
             </form>

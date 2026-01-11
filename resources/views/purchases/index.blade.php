@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
@@ -9,8 +9,8 @@
                 <h1 class="text-4xl font-bold text-slate-900">Manajemen Pembelian</h1>
                 <p class="text-slate-600 mt-2">Kelola transaksi pembelian dari supplier</p>
             </div>
-            <a href="{{ route('purchases.create') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
-                <i class="fas fa-plus mr-2"></i>Transaksi Baru
+            <a href="{{ route('purchase-requests.create') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+                <i class="fas fa-plus mr-2"></i>Transaksi Baru (Buat PR)
             </a>
         </div>
 
@@ -23,13 +23,6 @@
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
-        @endif
-
-        @if (session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
-                <span>{{ session('success') }}</span>
-                <button onclick="this.parentElement.style.display='none';" class="text-green-700 font-bold text-xl">&times;</button>
             </div>
         @endif
 
@@ -99,7 +92,7 @@
                                         <form action="{{ route('purchases.destroy', $purchase->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Yakin ingin menghapus?')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
+                                            <button type="button" onclick="confirmDeletePurchase(this.form)" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200">
                                                 <i class="fas fa-trash mr-1"></i>Hapus
                                             </button>
                                         </form>

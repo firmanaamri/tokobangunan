@@ -155,19 +155,10 @@
                     @endif
                 </div>
 
-                <!-- Harga & Tambah ke Keranjang -->
+                <!-- Harga -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-1">Harga</p>
                     <p class="text-2xl font-bold text-slate-900">Rp {{ number_format($barang->harga ?? 0, 2, ',', '.') }}</p>
-                    <form action="{{ route('cart.add') }}" method="POST" class="mt-4 grid grid-cols-1 gap-2">
-                        @csrf
-                        <input type="hidden" name="barang_id" value="{{ $barang->id }}">
-                        <input type="hidden" name="unit_price" value="{{ $barang->harga ?? 0 }}">
-                        <div class="flex items-center space-x-2">
-                            <input type="number" name="qty" min="1" value="1" class="w-20 rounded border-gray-200 text-right">
-                            <button class="px-4 py-2 bg-emerald-600 text-white rounded-md">Tambah ke Keranjang</button>
-                        </div>
-                    </form>
                 </div>
 
                 <!-- Total Masuk -->
@@ -191,16 +182,13 @@
                     <a href="{{ route('barang.edit', $barang) }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium">
                         <i class="fas fa-edit mr-2"></i>Edit Barang
                     </a>
-                    <a href="{{ route('purchases.create') }}" class="block w-full text-center px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition text-sm font-medium">
-                        <i class="fas fa-shopping-bag mr-2"></i>Buat Pembelian
-                    </a>
-                    <a href="{{ route('sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm font-medium">
+                    <a href="{{ route('daily-sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm font-medium">
                         <i class="fas fa-shopping-cart mr-2"></i>Buat Penjualan
                     </a>
-                    <form action="{{ route('barang.destroy', $barang) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus barang {{ $barang->nama_barang }}? Data tidak dapat dikembalikan!')">
+                    <form id="deleteBarangForm{{ $barang->id }}" action="{{ route('barang.destroy', $barang) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm font-medium">
+                        <button type="button" onclick="confirmDelete('deleteBarangForm{{ $barang->id }}', 'barang {{ $barang->nama_barang }}')" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm font-medium">
                             <i class="fas fa-trash mr-2"></i>Hapus Barang
                         </button>
                     </form>

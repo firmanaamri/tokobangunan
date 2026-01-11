@@ -39,7 +39,10 @@ class DailySaleController extends Controller
             })
             ->groupBy('barang_id')
             ->with('barang')
-            ->get();
+            ->get()
+            ->each(function ($record) {
+                $record->last_recorded = \Carbon\Carbon::parse($record->last_recorded);
+            });
 
         $totalPortions = $records->sum('total_jumlah');
         $typesCount = $records->count();
@@ -64,7 +67,10 @@ class DailySaleController extends Controller
             })
             ->groupBy('barang_id')
             ->with('barang')
-            ->get();
+            ->get()
+            ->each(function ($record) {
+                $record->last_recorded = \Carbon\Carbon::parse($record->last_recorded);
+            });
 
         $totalPortions = $records->sum('total_jumlah');
         $typesCount = $records->count();

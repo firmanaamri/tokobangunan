@@ -1,11 +1,17 @@
 
 
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-gray-100">
+<html lang="id" class="h-full bg-[#FAF7F2]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Dashboard Inventori' }}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v={{ time() }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon.png') }}?v={{ time() }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,7 +94,7 @@
             </div>
         </header>
 
-        <main class="flex-1 p-6 md:p-10">
+        <main class="flex-1 p-6 md:p-10 bg-[#FAF7F2]">
             @include('layouts.partials.notification')
             
             @hasSection('content')

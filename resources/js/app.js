@@ -12,6 +12,13 @@ window.$ = window.jQuery = $;
 import "select2/dist/css/select2.min.css";
 import "select2";
 
+// Import SweetAlert2
+import Swal from "sweetalert2";
+window.Swal = Swal;
+
+// Import SweetAlert2 helper functions
+import "./sweetalert-helpers.js";
+
 // Initialize Select2 for supplier form selects if present
 document.addEventListener("DOMContentLoaded", function () {
     if (window.jQuery && jQuery().select2) {

@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('barang_keluar', function (Blueprint $table) {
-            $table->foreignId('sale_id')->nullable()->after('barang_id')->constrained('sales')->onDelete('cascade');
+            // Add sale_id without foreign key constraint if sales table doesn't exist
+            if (Schema::hasTable('sales')) {
+                $table->foreignId('sale_id')->nullable()->after('barang_id')->constrained('sales')->onDelete('cascade');
+            } else {
+                $table->unsignedBigInteger('sale_id')->nullable()->after('barang_id');
+            }
         });
     }
 

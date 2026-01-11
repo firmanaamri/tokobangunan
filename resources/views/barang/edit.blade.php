@@ -70,7 +70,7 @@
         </div>
 
         <div class="flex items-center space-x-3">
-            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
+            <button type="button" onclick="confirmSave(this.closest('form'), 'barang')" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
                 <i class="fas fa-save mr-2"></i>Simpan Perubahan
             </button>
             <a href="{{ route('barang') }}" class="text-sm text-slate-600 hover:text-slate-900">Batal</a>
@@ -79,10 +79,10 @@
 
     <!-- Delete Form (Separate) -->
     <div class="mt-6">
-        <form action="{{ route('barang.destroy', $barang) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus barang {{ $barang->nama_barang }}? Data tidak dapat dikembalikan!')">
+        <form id="deleteBarangFormEdit{{ $barang->id }}" action="{{ route('barang.destroy', $barang) }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" class="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center font-semibold">
+            <button type="button" onclick="confirmDelete('deleteBarangFormEdit{{ $barang->id }}', 'barang {{ $barang->nama_barang }}')" class="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition flex items-center justify-center font-semibold">
                 <i class="fas fa-trash mr-2"></i>Hapus Barang Permanen
             </button>
         </form>

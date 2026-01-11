@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="flex justify-between items-start mb-8">
@@ -16,14 +16,6 @@
                 Kembali
             </a>
         </div>
-
-        <!-- Alerts -->
-        @if (session('success'))
-            <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
-                <span>{{ session('success') }}</span>
-                <button onclick="this.parentElement.style.display='none';" class="text-green-700 font-bold text-xl">&times;</button>
-            </div>
-        @endif
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Main Card -->
@@ -189,10 +181,10 @@
                         <a href="{{ route('purchase-requests.edit', $purchaseRequest) }}" class="w-full bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-center transition-colors">
                             <i class="fas fa-edit mr-2"></i>Edit
                         </a>
-                        <form method="POST" action="{{ route('purchase-requests.destroy', $purchaseRequest) }}" onsubmit="return confirm('Yakin ingin menghapus PR ini?');">
+                        <form id="deletePRForm{{ $purchaseRequest->id }}" method="POST" action="{{ route('purchase-requests.destroy', $purchaseRequest) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                            <button type="button" onclick="confirmDeletePR('deletePRForm{{ $purchaseRequest->id }}')" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
                                 <i class="fas fa-trash mr-2"></i>Hapus
                             </button>
                         </form>

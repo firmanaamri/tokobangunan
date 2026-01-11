@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
@@ -120,7 +120,7 @@
             <!-- Action Buttons -->
             @if($purchaseRequest->status === 'pending')
                 <div class="flex gap-4 mt-8">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+                <button type="button" onclick="confirmSave(this.closest('form'), 'purchase request')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
                         <i class="fas fa-save mr-2"></i>Simpan Perubahan
                     </button>
                     <a href="{{ route('purchase-requests.show', $purchaseRequest) }}" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-900 font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 text-center">
