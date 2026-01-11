@@ -172,7 +172,7 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <a href="{{ route('logout') }}"
-                   onclick="event.preventDefault(); this.closest('form').submit();"
+                   onclick="event.preventDefault(); confirmLogout(this.closest('form'));"
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-700 hover:bg-red-100/40 hover:text-red-800 transition-all duration-300 font-medium group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                     <span class="whitespace-nowrap logout-text">Keluar</span>

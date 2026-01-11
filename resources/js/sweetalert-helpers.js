@@ -195,3 +195,27 @@ window.showErrorToast = function (message) {
         timerProgressBar: true,
     });
 };
+
+// Logout confirmation
+window.confirmLogout = function (form) {
+    Swal.fire({
+        title: "Keluar dari akun?",
+        text: "Anda akan keluar dari sesi ini dan harus login kembali.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#ef4444",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: '<i class="fas fa-sign-out-alt mr-2"></i>Keluar',
+        cancelButtonText: '<i class="fas fa-times mr-2"></i>Batal',
+        reverseButtons: true,
+        customClass: {
+            popup: "rounded-xl",
+            confirmButton: "font-bold px-6 py-2 rounded-lg",
+            cancelButton: "font-bold px-6 py-2 rounded-lg",
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+};

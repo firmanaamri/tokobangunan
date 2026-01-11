@@ -85,7 +85,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <a href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); this.closest('form').submit();"
+                           onclick="event.preventDefault(); confirmLogout(this.closest('form'));"
                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                             Keluar (Logout)
                         </a>

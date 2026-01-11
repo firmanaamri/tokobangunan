@@ -91,7 +91,7 @@
                 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); confirmLogout(this.closest('form'))"
                        :class="{ 'justify-center': sidebarCollapsed && mdScreen }"
                        class="flex items-center space-x-3 px-3 py-2 rounded-md text-red-400 hover:bg-red-500/10 hover:text-red-300 group relative">
                         <svg class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>

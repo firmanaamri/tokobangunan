@@ -11,36 +11,23 @@ class LandingPageController extends Controller
     /**
      * Display the landing page
      */
-    public function index(Request $request)
-    {
-        // Get only categories that have products in stock
-        $categories = Kategori::withCount([
-            'barang' => function ($query) {
-                $query->where('stok_saat_ini', '>', 0);
-            }
-        ])
-        ->having('barang_count', '>', 0)
-        ->get();
+    // Di dalam LandingController function index/landing
+public function index(Request $request)
+{
+    $query = $request->input('q');
 
-        // Get featured products (in stock and newest)
-        $featuredProducts = Barang::where('stok_saat_ini', '>', 0)
-            ->orderBy('created_at', 'desc')
-            ->limit(8)
-            ->get();
+    $products = Barang::with('kategori') // Pastikan load relasi kategori
+        ->when($query, function ($q) use ($query) {
+            $q->where('nama_barang', 'like', '%' . $query . '%')
+              ->orWhereHas('kategori', function ($subQ) use ($query) {
+                  // Mencari berdasarkan nama kategori
+                  $subQ->where('nama_kategori', 'like', '%' . $query . '%');
+              });
+        })
+        ->paginate(12);
 
-        // Search functionality
-        $query = $request->input('q');
-        $products = [];
-        
-        if ($query) {
-            $products = Barang::where('stok_saat_ini', '>', 0)
-                ->where(function ($q) use ($query) {
-                    $q->where('nama_barang', 'like', "%{$query}%")
-                      ->orWhere('sku', 'like', "%{$query}%");
-                })
-                ->paginate(12);
-        }
+    $categories = Kategori::withCount('barang')->get(); // Sesuaikan nama model
 
-        return view('landing', compact('categories', 'featuredProducts', 'products', 'query'));
-    }
+    return view('landing', compact('products', 'categories', 'query'));
+}
 }

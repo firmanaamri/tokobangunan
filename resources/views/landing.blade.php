@@ -18,10 +18,7 @@
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Mengatur warna background navigasi agar sedikit krem transparan */
         .glass-nav { background: rgba(253, 251, 247, 0.95); backdrop-filter: blur(10px); }
-        
-        /* Custom Cream Colors jika Tailwind default kurang pas */
         .bg-cream-50 { background-color: #FAF7F2; }
         .bg-cream-100 { background-color: #F5F0E6; }
     </style>
@@ -140,8 +137,8 @@
                     <p class="text-sm font-medium text-stone-500 mt-1">Kualitas Asli</p>
                 </div>
                 <div class="p-6 text-center group hover:bg-cream-50 transition rounded-r-2xl">
-                    <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">24/7</p>
-                    <p class="text-sm font-medium text-stone-500 mt-1">Pemesanan Online</p>
+                    <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">Kami</p>
+                    <p class="text-sm font-medium text-stone-500 mt-1">Buka Setiap Hari</p>
                 </div>
             </div>
         </div>
@@ -187,7 +184,7 @@
                         </div>
                         <input type="text" name="q" value="{{ $query }}" 
                                class="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl leading-5 bg-cream-50 text-stone-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-all shadow-sm" 
-                               placeholder="Cari semen, cat, paku...">
+                               placeholder="Cari nama barang atau kategori (contoh: Semen, Cat)...">
                         @if($query)
                             <a href="{{ route('landing') }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-red-500">
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -200,17 +197,22 @@
                     @forelse ($products as $product)
                     <div class="group relative bg-white border border-stone-200 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
                         <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-stone-100 relative h-48 flex items-center justify-center">
-                            <div class="absolute top-3 left-3 z-10">
-                                @if($product->stok_saat_ini < 10)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
+                            <div class="absolute top-3 right-3 z-10">
+                                @if($product->stok_saat_ini <= 0)
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 border border-stone-300 shadow-sm">
+                                        Stok Habis
+                                    </span>
+                                @elseif($product->stok_saat_ini < 10)
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 shadow-sm animate-pulse">
                                         Stok Menipis
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm">
                                         Ready Stock
                                     </span>
                                 @endif
                             </div>
+                            
                             <svg class="h-20 w-20 text-stone-300 group-hover:scale-110 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
@@ -218,39 +220,44 @@
 
                         <div class="flex-1 p-5 flex flex-col justify-between">
                             <div>
-                                <h3 class="text-lg font-bold text-stone-900 group-hover:text-emerald-700 transition-colors">
+                                <h3 class="text-lg font-bold text-stone-900 group-hover:text-emerald-700 transition-colors line-clamp-2">
                                     {{ $product->nama_barang }}
                                 </h3>
-                                <p class="text-sm text-stone-500 mt-1">{{ $product->kategori->nama_kategori ?? 'Umum' }}</p>
-                            </div>
-                            <div class="mt-4 flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs text-stone-400 uppercase tracking-wide font-semibold">Harga</p>
-                                    <p class="text-xl font-bold text-emerald-700">Rp {{ number_format($product->harga ?? 0, 0, ',', '.') }}</p>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+                                    <p class="text-sm text-stone-500">{{ $product->kategori->nama_kategori ?? 'Umum' }}</p>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-xs text-stone-400 uppercase tracking-wide font-semibold">Stok</p>
-                                    <p class="text-sm font-medium text-stone-700">{{ $product->stok_saat_ini }} <span class="text-xs text-stone-500">{{ $product->satuan }}</span></p>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-stone-100">
+                                <div class="flex items-end justify-between">
+                                    <div>
+                                        <p class="text-xs text-stone-400 uppercase tracking-wide font-semibold mb-1">Harga Satuan</p>
+                                        <p class="text-lg font-extrabold text-emerald-700">Rp {{ number_format($product->harga ?? 0, 0, ',', '.') }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xs text-stone-400 uppercase tracking-wide font-semibold mb-1">Stok Tersedia</p>
+                                        <p class="text-lg font-bold text-stone-800">
+                                            {{ $product->stok_saat_ini }} 
+                                            <span class="text-xs font-normal text-stone-500">{{ $product->satuan }}</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="px-5 pb-5 mt-auto">
-                            <button class="w-full py-2 bg-stone-800 text-white rounded-lg text-sm font-medium opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:bg-emerald-700">
-                                Lihat Detail
-                            </button>
-                        </div>
+                        
                     </div>
                     @empty
-                    <div class="col-span-full text-center py-20">
-                        <div class="inline-block p-4 rounded-full bg-stone-100 mb-4">
+                    <div class="col-span-full text-center py-20 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
+                        <div class="inline-block p-4 rounded-full bg-white mb-4 shadow-sm">
                             <svg class="h-10 w-10 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                         </div>
-                        <h3 class="text-lg font-medium text-stone-900">Produk tidak ditemukan</h3>
-                        <p class="text-stone-500 mt-1">Coba kata kunci lain atau reset pencarian Anda.</p>
+                        <h3 class="text-lg font-bold text-stone-900">Produk tidak ditemukan</h3>
+                        <p class="text-stone-500 mt-1">Kami tidak dapat menemukan produk dengan kata kunci "<strong>{{ $query }}</strong>".</p>
                         @if($query)
-                            <a href="{{ route('landing') }}" class="mt-4 inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                                Reset Pencarian &rarr;
+                            <a href="{{ route('landing') }}" class="mt-6 inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-medium transition-colors shadow-sm">
+                                Reset Pencarian
                             </a>
                         @endif
                     </div>
@@ -341,9 +348,8 @@
                 <div>
                     <h4 class="text-white font-semibold mb-4">Jam Operasional</h4>
                     <ul class="space-y-2 text-sm text-stone-400">
-                        <li class="flex justify-between"><span>Senin - Jumat</span> <span>08:00 - 17:00</span></li>
-                        <li class="flex justify-between"><span>Sabtu</span> <span>08:00 - 15:00</span></li>
-                        <li class="flex justify-between text-red-400"><span>Minggu</span> <span>Tutup</span></li>
+                        <li class="flex justify-between"><span>Senin - Ahad</span> <span>08:00 - 17:00</span></li>
+                        
                     </ul>
                 </div>
             </div>
