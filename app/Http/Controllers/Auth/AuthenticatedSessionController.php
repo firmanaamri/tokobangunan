@@ -28,6 +28,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // If the intended URL was the quarantines admin page (or any quarantines path),
+        // ignore it and send users to the dashboard instead to avoid landing on that list after login.
+        $intended = $request->session()->get('url.intended');
+        if ($intended && str_contains($intended, '/admin/quarantines')) {
+            $request->session()->forget('url.intended');
+            return redirect()->route('dashboard');
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -19,7 +19,6 @@
                         <option value="week">Minggu Ini</option>
                         <option value="month">Bulan Ini</option>
                         <option value="year">Tahun Ini</option>
-                        <option value="previous_year">Tahun Sebelumnya</option>
                         <option value="custom">Custom Range</option>
                     </select>
                 </div>
@@ -129,14 +128,14 @@
     <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-slate-50">
+                <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Barang</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Kategori</th>
-                        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Jumlah Masuk</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Tanggal Masuk</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Keterangan</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Barang</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Kategori</th>
+                        <th class="px-6 py-3 text-center text-xs font-semibold uppercase">Jumlah Masuk</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Tanggal Masuk</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Keterangan</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">User</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -144,8 +143,12 @@
                     <tr class="hover:bg-slate-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="flex-shrink-0 h-10 w-10 bg-slate-100 rounded flex items-center justify-center text-slate-600 font-semibold text-xs">
-                                    {{ substr($item->barang->nama_barang, 0, 2) }}
+                                <div class="flex-shrink-0 h-10 w-10 bg-emerald-50 rounded flex items-center justify-center text-emerald-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 5v10" />
+                                        <path d="M8 11l4 4 4-4" />
+                                        <path d="M5 21h14" />
+                                    </svg>
                                 </div>
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-slate-900">{{ $item->barang->nama_barang }}</p>

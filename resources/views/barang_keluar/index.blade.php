@@ -19,7 +19,6 @@
                         <option value="week">Minggu Ini</option>
                         <option value="month">Bulan Ini</option>
                         <option value="year">Tahun Ini</option>
-                        <option value="previous_year">Tahun Sebelumnya</option>
                         <option value="custom">Custom Range</option>
                     </select>
                 </div>
@@ -57,7 +56,6 @@
                         <option value="week">Minggu Ini</option>
                         <option value="month">Bulan Ini</option>
                         <option value="year">Tahun Ini</option>
-                        <option value="previous_year">Tahun Sebelumnya</option>
                         <option value="custom">Custom Range</option>
                     </select>
                 </div>
@@ -126,17 +124,17 @@
         </div>
     @endif
 
-    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+    <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-slate-50">
+                <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Barang</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Kategori</th>
-                        <th class="px-6 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Jumlah Keluar</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Tanggal Keluar</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Keterangan</th>
-                        <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Barang</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Kategori</th>
+                        <th class="px-6 py-3 text-center text-xs font-semibold uppercase">Jumlah Keluar</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Tanggal Keluar</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Keterangan</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase">User</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">

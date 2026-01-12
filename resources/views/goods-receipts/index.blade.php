@@ -74,16 +74,16 @@
             @if ($receipts->count() > 0)
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-full">
-                        <thead class="bg-slate-50">
+                        <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">No. GRN</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">No. PO</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Supplier</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Jumlah</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Tanggal</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">No. GRN</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">No. PO</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Barang</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Supplier</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Jumlah</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Tanggal</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold  uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200">
