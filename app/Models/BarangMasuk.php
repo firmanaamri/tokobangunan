@@ -17,6 +17,12 @@ class BarangMasuk extends Model
     protected $fillable = [
         'barang_id',
         'jumlah_barang_masuk',
+        'quantity_received',
+        'quantity_accepted',
+        'quantity_rejected',
+        'rejection_reason',
+        'rejection_photo',
+        'disposition',
         'tanggal_masuk',
         'keterangan',
         'user_id',
@@ -25,6 +31,9 @@ class BarangMasuk extends Model
 
     protected $casts = [
         'jumlah_barang_masuk' => 'integer',
+        'quantity_received' => 'integer',
+        'quantity_accepted' => 'integer',
+        'quantity_rejected' => 'integer',
         'tanggal_masuk' => 'date',
     ];
 
@@ -58,5 +67,10 @@ class BarangMasuk extends Model
     public function goodsReceipt(): BelongsTo
     {
         return $this->belongsTo(GoodsReceipt::class, 'goods_receipt_id');
+    }
+
+    public function quarantine(): HasOne
+    {
+        return $this->hasOne(Quarantine::class, 'barang_masuk_id');
     }
 }

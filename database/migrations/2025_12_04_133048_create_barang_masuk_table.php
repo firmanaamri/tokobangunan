@@ -15,6 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade');
             $table->integer('jumlah_barang_masuk');
+            // fields for inspection / rejection tracking
+            $table->integer('quantity_received')->nullable();
+            $table->integer('quantity_accepted')->nullable();
+            $table->integer('quantity_rejected')->nullable();
+            $table->string('rejection_reason')->nullable();
+            $table->string('rejection_photo')->nullable();
+            $table->enum('disposition', ['pending','return','repair','dispose'])->default('pending');
             $table->date('tanggal_masuk');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->text('keterangan')->nullable();

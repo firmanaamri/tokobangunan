@@ -47,15 +47,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'nama_barang' => 'required|string|max:255',
-            'sku' => 'required|string|unique:barang',
+            'sku' => 'required|string|unique:barang,sku',
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
             'harga' => 'nullable|numeric|min:0',
             'stok_saat_ini' => 'required|integer|min:0',
             'deskripsi' => 'nullable|string',
-        ]);
+        ];
+
+        $messages = [
+            'sku.unique' => 'SKU sudah digunakan. Gunakan SKU lain yang unik.',
+            'sku.required' => 'SKU wajib diisi.',
+        ];
+
+        $validated = $request->validate($rules, $messages);
 
         $new = Barang::create($validated);
 

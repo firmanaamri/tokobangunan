@@ -18,17 +18,7 @@
             </div>
         </div>
 
-        <!-- Alert Errors -->
-        @if ($errors->any())
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-                <strong>Terjadi kesalahan:</strong>
-                <ul class="list-disc ml-5 mt-2">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <!-- Alerts handled by SweetAlert -->
 
         <!-- Form -->
         <form action="{{ route('barang.store') }}" method="POST" class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">

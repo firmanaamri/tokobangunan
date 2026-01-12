@@ -12,6 +12,7 @@ use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DailySaleController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\QuarantineController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
@@ -95,6 +96,7 @@ Route::middleware('auth')->group(function () {
     // Admin: User management
     Route::prefix('admin')->name('admin.')->middleware('can:isAdmin')->group(function () {
         Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('quarantines', QuarantineController::class)->only(['index','show','update']);
     });
 
     // Mirror API endpoints on web routes for simplicity / local testing

@@ -142,6 +142,20 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                     <span class="font-medium whitespace-nowrap sidebar-label">Barang Keluar</span>
                 </a>
+
+                     @php $pendingQuarantine = \App\Models\Quarantine::where('status','pending')->count(); @endphp
+                     <a href="{{ route('admin.quarantines.index') }}"
+                         class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
+                                  {{ request()->routeIs('admin.quarantines.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01" />
+                    </svg>
+                    <span class="font-medium whitespace-nowrap sidebar-label">Karantina Barang</span>
+                    @if($pendingQuarantine > 0)
+                        <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">{{ $pendingQuarantine }}</span>
+                    @endif
+                </a>
                 
                     <!-- Pengaturan (Admin) -->
                     <div class="pt-6">
@@ -162,7 +176,7 @@
         
         <div class="mt-auto border-t border-[#E8DFD3] pt-4 pb-2 bg-gradient-to-b from-transparent to-[#F5F0E8]/30 rounded-lg">
             <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-white/50 transition-all duration-300">
-                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-amber-600" src="profile.jpg" alt="Foto Profil">
+                <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-amber-600" src="{{ asset('profile.jpg') }}" alt="Foto Profil">
                 <div class="ml-3 min-w-0 profile-info">
                     <p class="text-sm font-semibold text-slate-900 truncate">{{ Auth::user()->name ?? 'Admin' }}</p>
                     <p class="text-xs text-amber-700 font-medium">Online</p>

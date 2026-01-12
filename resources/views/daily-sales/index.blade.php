@@ -4,7 +4,7 @@
 <div class="p-6">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold">Pencatatan Penjualan - {{ \Carbon\Carbon::parse($date ?? now())->format('d/m/Y') }}</h2>
-        <a href="{{ route('daily-sales.create') }}" class="px-4 py-2 bg-amber-400 text-white rounded">Buat Pencatatan</a>
+        <a href="{{ route('daily-sales.create') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">Buat Pencatatan</a>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
@@ -59,19 +59,19 @@
                     <input type="text" name="q" value="{{ $q ?? '' }}" placeholder="Nama barang..." class="mt-1 p-2 rounded border bg-white/50" />
                 </div>
                 <div>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Filter</button>
-                    <a href="{{ route('daily-sales.index') }}" class="ml-2 px-4 py-2 bg-gray-200 text-slate-700 rounded">Reset</a>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-800 text-white rounded-lg">Filter</button>
+                    <button type="button" onclick="window.location='{{ route('daily-sales.index') }}'" class="px-6 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg">Reset</button>
                 </div>
             </form>
 
             <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-slate-50">
+                        <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Nama Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Total Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Terakhir Dicatat</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Nama Barang</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Total Barang</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold uppercase">Terakhir Dicatat</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">

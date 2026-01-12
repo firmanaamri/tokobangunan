@@ -73,24 +73,34 @@
                     </p>
                 </div>
 
-                <!-- Jumlah Diterima -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-900 mb-2">Jumlah Diterima (Kondisi Baik) <span class="text-red-500">*</span></label>
-                    <input type="number" name="jumlah_diterima" value="{{ old('jumlah_diterima', $jumlah) }}" min="0" max="{{ $jumlah }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah_diterima') border-red-500 @enderror">
-                    @error('jumlah_diterima')
-                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                    @enderror
-                    <p class="text-slate-500 text-sm mt-1">Maksimal: {{ $jumlah }} {{ $purchase->satuan }}</p>
-                </div>
+                <!-- Quantities -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Quantity Received (Diterima Fisik)</label>
+                        <input type="number" name="quantity_received" value="{{ old('quantity_received', $jumlah) }}" min="0" max="{{ $jumlah }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('quantity_received') border-red-500 @enderror">
+                        @error('quantity_received')
+                            <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        <p class="text-slate-500 text-sm mt-1">Total fisik yang diterima dari pengiriman</p>
+                    </div>
 
-                <!-- Jumlah Rusak -->
-                <div>
-                    <label class="block text-sm font-bold text-slate-900 mb-2">Jumlah Rusak/Ditolak <span class="text-red-500">*</span></label>
-                    <input type="number" name="jumlah_rusak" value="{{ old('jumlah_rusak', 0) }}" min="0" max="{{ $jumlah }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('jumlah_rusak') border-red-500 @enderror">
-                    @error('jumlah_rusak')
-                        <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
-                    @enderror
-                    <p class="text-slate-500 text-sm mt-1">Barang yang rusak, tidak sesuai spesifikasi, atau ditolak</p>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Quantity Accepted (Kondisi Baik) <span class="text-red-500">*</span></label>
+                        <input type="number" name="quantity_accepted" value="{{ old('quantity_accepted', $jumlah) }}" min="0" max="{{ $jumlah }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('quantity_accepted') border-red-500 @enderror">
+                        @error('quantity_accepted')
+                            <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        <p class="text-slate-500 text-sm mt-1">Jumlah yang akan dimasukkan ke stok</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Quantity Rejected (Rusak/Ditolak) <span class="text-red-500">*</span></label>
+                        <input type="number" name="quantity_rejected" value="{{ old('quantity_rejected', 0) }}" min="0" max="{{ $jumlah }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('quantity_rejected') border-red-500 @enderror">
+                        @error('quantity_rejected')
+                            <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        <p class="text-slate-500 text-sm mt-1">Barang yang rusak, tidak sesuai spesifikasi, atau ditolak</p>
+                    </div>
                 </div>
 
                 <!-- Catatan Inspeksi -->
@@ -126,29 +136,32 @@
     </div>
 </div>
 
-<script>
+    <script>
 // Auto-calculate and validate
 document.addEventListener('DOMContentLoaded', function() {
-    const jumlahPO = {{ $purchase->jumlah_po }};
-    const jumlahDiterima = document.querySelector('input[name="jumlah_diterima"]');
-    const jumlahRusak = document.querySelector('input[name="jumlah_rusak"]');
+    const jumlahPO = {{ $jumlah }};
+    const qtyReceived = document.querySelector('input[name="quantity_received"]');
+    const qtyAccepted = document.querySelector('input[name="quantity_accepted"]');
+    const qtyRejected = document.querySelector('input[name="quantity_rejected"]');
 
     function validateTotal() {
-        const diterima = parseInt(jumlahDiterima.value) || 0;
-        const rusak = parseInt(jumlahRusak.value) || 0;
-        const total = diterima + rusak;
+        const received = parseInt(qtyReceived.value) || 0;
+        const accepted = parseInt(qtyAccepted.value) || 0;
+        const rejected = parseInt(qtyRejected.value) || 0;
+        const total = accepted + rejected;
 
+        // We require accepted + rejected == PO jumlah
         if (total !== jumlahPO) {
-            jumlahDiterima.setCustomValidity(`Total harus ${jumlahPO}`);
-            jumlahRusak.setCustomValidity(`Total harus ${jumlahPO}`);
+            qtyAccepted.setCustomValidity(`Total harus ${jumlahPO}`);
+            qtyRejected.setCustomValidity(`Total harus ${jumlahPO}`);
         } else {
-            jumlahDiterima.setCustomValidity('');
-            jumlahRusak.setCustomValidity('');
+            qtyAccepted.setCustomValidity('');
+            qtyRejected.setCustomValidity('');
         }
     }
 
-    jumlahDiterima.addEventListener('input', validateTotal);
-    jumlahRusak.addEventListener('input', validateTotal);
+    qtyAccepted.addEventListener('input', validateTotal);
+    qtyRejected.addEventListener('input', validateTotal);
 });
 </script>
 @endif

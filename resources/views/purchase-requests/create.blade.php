@@ -9,17 +9,7 @@
             <p class="text-slate-600 mt-2">Buat permintaan pembelian barang baru</p>
         </div>
 
-        <!-- Alerts -->
-        @if ($errors->any())
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-                <strong>Terjadi kesalahan:</strong>
-                <ul class="list-disc ml-5 mt-2">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <!-- Alerts handled by SweetAlert -->
 
         <!-- Form Card -->
         <form method="POST" action="{{ route('purchase-requests.store') }}" class="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
