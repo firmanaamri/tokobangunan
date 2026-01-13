@@ -108,7 +108,7 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-4 mt-8">
-                <button type="submit" class="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Purchase Request')" class="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                     <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengajuan
                 </button>
                 <a href="{{ route('purchase-requests.index') }}" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-900 font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 text-center">

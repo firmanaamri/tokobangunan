@@ -125,7 +125,7 @@
 
             <!-- Buttons -->
             <div class="bg-slate-100 px-8 py-4 flex gap-4">
-                <button type="submit" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Penerimaan Barang')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">
                     <i class="fas fa-check mr-2"></i>Simpan Penerimaan
                 </button>
                 <a href="{{ route('goods-receipts.ready') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">

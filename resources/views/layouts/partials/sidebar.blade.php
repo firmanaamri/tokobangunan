@@ -11,10 +11,17 @@
     :class="sidebarOpen ? 'w-64 translate-x-0' : 'w-20 sidebar-collapsed -translate-x-full md:translate-x-0'"
     class="bg-gradient-to-b from-[#FAF7F2] via-[#F8F4EE] to-[#F5F0E8] text-slate-800 p-3 transition-all duration-500 ease-in-out shadow-2xl border-r border-[#E8DFD3] overflow-hidden
            fixed inset-y-0 left-0 z-50 
-           md:relative md:z-auto md:flex md:flex-col md:justify-between"
+           flex flex-col justify-between md:relative md:z-auto"
 >
+    {{-- 
+       PERUBAHAN DI ATAS: 
+       Saya menghapus 'md:' pada 'flex flex-col justify-between'.
+       Sekarang sidebar akan selalu menjadi Flex Container baik di HP maupun Laptop.
+       Ini memaksa 'overflow-y-auto' di bawah untuk bekerja.
+    --}}
     
-    <div class="flex items-center justify-center mb-10 p-4">
+    {{-- BAGIAN HEADER / LOGO (Fixed height karena flex tidak grow) --}}
+    <div class="flex items-center justify-center mb-10 p-4 shrink-0">
         <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 min-w-0 hover:bg-black/10 rounded-lg p-2 transition-all duration-300">
              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-700 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                  <path d="M3 13h2v8H3zM17 6h2v15h-2zM10 9h2v12h-2z" />
@@ -23,6 +30,8 @@
         </a>
     </div>
 
+    {{-- BAGIAN MENU (Scrollable Area) --}}
+    {{-- flex-grow memaksanya mengisi sisa ruang, overflow-y-auto mengaktifkan scroll --}}
     <div class="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-amber-100">
         <div class="space-y-6">
             <nav class="space-y-1">
@@ -113,7 +122,7 @@
                 
                      <a href="{{ route('daily-sales.index') }}" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
-                                  {{ request()->routeIs('daily-sales.*') || request()->routeIs('cart.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
+                                   {{ request()->routeIs('daily-sales.*') || request()->routeIs('cart.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
                     <div class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 6h18M3 14h18M3 18h18" /></svg>
                         @if(session('cart') && count(session('cart')) > 0)
@@ -146,7 +155,7 @@
                      @php $pendingQuarantine = \App\Models\Quarantine::where('status','pending')->count(); @endphp
                      <a href="{{ route('admin.quarantines.index') }}"
                          class="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-300 group
-                                  {{ request()->routeIs('admin.quarantines.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
+                                   {{ request()->routeIs('admin.quarantines.*') ? 'bg-amber-200/80 text-slate-900 shadow-lg border-l-4 border-amber-700' : 'text-slate-700 hover:bg-amber-100/60 hover:text-slate-900' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01" />
@@ -157,7 +166,6 @@
                     @endif
                 </a>
                 
-                    <!-- Pengaturan (Admin) -->
                     <div class="pt-6">
                         <h3 class="text-xs uppercase tracking-wider text-amber-700 px-4 pb-3 font-bold section-title">Pengaturan</h3>
                     </div>
@@ -174,7 +182,8 @@
             </nav>
         </div>
         
-        <div class="mt-auto border-t border-[#E8DFD3] pt-4 pb-2 bg-gradient-to-b from-transparent to-[#F5F0E8]/30 rounded-lg">
+        {{-- BAGIAN FOOTER / PROFILE (Shrink-0 agar tidak mengecil) --}}
+        <div class="mt-auto border-t border-[#E8DFD3] pt-4 pb-2 bg-gradient-to-b from-transparent to-[#F5F0E8]/30 rounded-lg shrink-0">
             <div class="flex items-center mb-4 px-4 py-2 rounded-lg hover:bg-white/50 transition-all duration-300">
                 <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0 ring-2 ring-amber-600" src="{{ asset('profile.jpg') }}" alt="Foto Profil">
                 <div class="ml-3 min-w-0 profile-info">

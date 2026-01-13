@@ -9,9 +9,12 @@
                 <h1 class="text-4xl font-bold text-slate-900">PO Siap Terima</h1>
                 <p class="text-slate-600 mt-2">Daftar Purchase Order yang sudah lunas dan siap diterima barangnya</p>
             </div>
-            <a href="{{ route('goods-receipts.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
-                <i class="fas fa-arrow-left mr-2"></i>Kembali
-            </a>
+            <a href="{{ route('goods-receipts.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Daftar
+        </a>
         </div>
 
         <!-- Purchases Table -->

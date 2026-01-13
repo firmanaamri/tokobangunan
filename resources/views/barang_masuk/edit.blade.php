@@ -43,7 +43,7 @@
         </div>
 
         <div class="flex items-center space-x-3">
-            <button class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button>
+            <button type="button" onclick="confirmSave(this.closest('form'), 'Barang Masuk')" class="px-4 py-2 bg-blue-600 text-white rounded">Simpan</button>
             <a href="{{ route('barang-masuk.index') }}" class="text-gray-600">Batal</a>
         </div>
     </form>

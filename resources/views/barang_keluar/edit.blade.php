@@ -62,7 +62,7 @@
 
         <div class="mt-6 flex items-center justify-end space-x-3">
             <a href="{{ route('barang-keluar.index') }}" class="inline-block px-4 py-2 bg-slate-50 text-slate-600 border border-slate-200 rounded-md hover:bg-slate-100">Batal</a>
-            <button class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition">Perbarui</button>
+            <button type="button" onclick="confirmSave(this.closest('form'), 'Barang Keluar')" class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition">Perbarui</button>
         </div>
     </form>
 </div>

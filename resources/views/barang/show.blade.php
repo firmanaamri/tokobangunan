@@ -8,9 +8,11 @@
             <h1 class="text-3xl font-bold">{{ $barang->nama_barang }}</h1>
             <p class="text-sm text-slate-500 mt-1">SKU: <span class="font-mono">{{ $barang->sku }}</span></p>
         </div>
-        <a href="{{ route('barang') }}" class="text-sm text-slate-500 hover:text-slate-700 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-            Kembali ke Stok
+        <a href="{{ route('barang') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Daftar
         </a>
     </div>
 

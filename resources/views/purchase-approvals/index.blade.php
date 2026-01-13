@@ -131,9 +131,9 @@
                                     <span class="text-xs text-slate-500">{{ $pr->created_at->format('H:i') }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="{{ route('purchase-approvals.show', $pr) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-bold transition-colors duration-200 inline-block">
-                                        <i class="fas fa-eye mr-1"></i>Review
-                                    </a>
+                                    <a href="{{ route('purchase-approvals.show', $pr) }}" title="Detail" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                        </a>
                                 </td>
                             </tr>
                             @endforeach

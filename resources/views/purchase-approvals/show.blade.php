@@ -105,7 +105,7 @@
                                     <strong>Info:</strong> Saat Anda klik "Setujui", sistem otomatis akan membuat PO (Purchase Order) dengan nomor yang dihasilkan sistem.
                                 </div>
 
-                                <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                                <button type="button" onclick="confirmApprovePR(this.closest('form'))" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
                                     <i class="fas fa-check-circle mr-2"></i>Setujui PR & Buat PO
                                 </button>
                             </form>
@@ -130,8 +130,8 @@
                                     <strong>Perhatian:</strong> Penolakan bersifat permanent. Staff harus membuat PR baru jika ingin resubmit.
                                 </div>
 
-                                <button type="submit" class="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
-                                    onclick="confirmRejectPR(this.form)">
+                                <button type="button" class="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300"
+                                    onclick="confirmRejectPR(this.closest('form'))">
                                     <i class="fas fa-times-circle mr-2"></i>Tolak PR
                                 </button>
                             </form>
