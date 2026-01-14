@@ -152,6 +152,17 @@
                             <p class="font-semibold text-slate-900">{{ $purchaseRequest->updated_at->format('d M Y') }}</p>
                             <p class="text-xs text-slate-500">{{ $purchaseRequest->updated_at->format('H:i') }}</p>
                         </div>
+                        
+                        <!-- Payment Terms -->
+                        <div class="border-t border-slate-200 pt-3">
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Payment Term</p>
+                            <p class="font-semibold text-slate-900">{{ $purchaseRequest->payment_term ? $purchaseRequest->payment_term . ' hari' : '-' }}</p>
+                        </div>
+
+                        <div class="border-t border-slate-200 pt-3">
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Tanggal Jatuh Tempo (PR)</p>
+                            <p class="font-semibold text-slate-900">{{ $purchaseRequest->due_date ? $purchaseRequest->due_date->format('d M Y') : '-' }}</p>
+                        </div>
                     </div>
                 </div>
 

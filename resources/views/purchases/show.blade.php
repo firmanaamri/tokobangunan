@@ -15,12 +15,13 @@
                         <i class="fas fa-money-bill mr-2"></i>Catat Pembayaran
                     </a>
                 @endif
-                {{-- <a href="{{ route('purchases.edit', $purchase->id) }}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-edit mr-2"></i>Edit
-                </a> --}}
-                <a href="{{ route('purchases.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
-                    <i class="fas fa-arrow-left mr-2"></i>Kembali
-                </a>
+                
+                <a href="{{ route('purchases.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Daftar
+        </a>
             </div>
         </div>
 
@@ -40,7 +41,26 @@
                     </div>
                     <div>
                         <p class="text-xs text-slate-500 uppercase font-bold">Jatuh Tempo</p>
-                        <p class="text-lg font-bold text-slate-900">{{ $purchase->tanggal_jatuh_tempo ? $purchase->tanggal_jatuh_tempo->format('d M Y') : '-' }}</p>
+                        @php
+                            $displayDue = null;
+                            if (!empty($purchase->tanggal_jatuh_tempo)) {
+                                $displayDue = \Carbon\Carbon::parse($purchase->tanggal_jatuh_tempo);
+                            } elseif (!empty($purchase->purchaseRequest) && !empty($purchase->purchaseRequest->due_date)) {
+                                $displayDue = \Carbon\Carbon::parse($purchase->purchaseRequest->due_date);
+                            } elseif (!empty($purchase->purchaseRequest) && !empty($purchase->purchaseRequest->payment_term)) {
+                                $displayDue = \Carbon\Carbon::parse($purchase->tanggal_pembelian)->addDays(intval($purchase->purchaseRequest->payment_term));
+                            }
+                        @endphp
+
+                        @if($displayDue)
+                            @if($displayDue->isPast() && $purchase->status_pembayaran != 'lunas')
+                                <p class="text-lg font-bold text-red-700">{{ $displayDue->format('d M Y') }} <span class="inline-block bg-red-100 text-red-800 px-2 py-0.5 rounded ml-2 text-xs font-semibold">Overdue</span></p>
+                            @else
+                                <p class="text-lg font-bold text-slate-900">{{ $displayDue->format('d M Y') }}</p>
+                            @endif
+                        @else
+                            <p class="text-lg font-bold text-slate-400">-</p>
+                        @endif
                     </div>
                 </div>
             </div>

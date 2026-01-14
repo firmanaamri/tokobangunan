@@ -15,6 +15,7 @@ class Purchase extends Model
     protected $table = 'purchases';
 
     protected $fillable = [
+        'purchase_request_id', // Saya pindahkan ke atas agar rapi
         'barang_masuk_id',
         'barang_id',
         'supplier_id',
@@ -27,17 +28,19 @@ class Purchase extends Model
         'total_harga',
         'status_pembayaran',
         'status_pembelian',
-        'tanggal_jatuh_tempo',
+        'due_date', // --- BAGIAN PENTING ---
         'keterangan',
         'catatan',
-        'purchase_request_id',
     ];
 
     protected $casts = [
         'total_harga' => 'decimal:2',
         'harga_unit' => 'decimal:2',
         'tanggal_pembelian' => 'date',
-        'tanggal_jatuh_tempo' => 'date',
+        
+        // --- BAGIAN PENTING ---
+        // Agar saat dipanggil ($purchase->due_date) otomatis jadi objek Carbon (bisa diformat tanggalnya)
+        'due_date' => 'date', 
     ];
 
     /**

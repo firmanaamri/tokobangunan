@@ -1,4 +1,4 @@
-<footer class="mt-auto bg-gradient-to-r from-[#FAF7F2] via-[#F8F4EE] to-[#F5F0E8] border-t shadow-lg">
+{{-- <footer class="mt-auto bg-gradient-to-r from-[#FAF7F2] via-[#F8F4EE] to-[#F5F0E8] border-t shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Section 1: About Company -->
@@ -79,4 +79,4 @@
             </div>
         </div>
     </div>
-</footer>
+</footer> --}}

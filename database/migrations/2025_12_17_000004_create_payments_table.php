@@ -17,9 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sale_id')->nullable();
             // Add foreign key constraint only if sales table exists
-            if (Schema::hasTable('sales')) {
-                $table->foreign('sale_id')->references('id')->on('sales')->cascadeOnDelete();
-            }
+            
             
             $table->foreignId('purchase_id')->nullable();
             if (Schema::hasTable('purchases')) {
@@ -29,10 +27,9 @@ return new class extends Migration
             $table->decimal('amount', 12, 2);
             $table->string('method')->nullable();
             $table->enum('status', ['pending','paid','failed','refunded'])->default('pending');
-            $table->string('reference')->nullable();
             $table->string('bukti_pembayaran')->nullable();
             $table->timestamp('paid_at')->nullable();
-            $table->json('metadata')->nullable();
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
 

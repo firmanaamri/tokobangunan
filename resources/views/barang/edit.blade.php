@@ -7,7 +7,12 @@
             <h1 class="text-2xl font-bold">Edit Barang</h1>
             <p class="text-sm text-slate-400">Perbarui informasi produk</p>
         </div>
-        <a href="{{ route('barang') }}" class="text-sm text-slate-500 hover:text-slate-700">Kembali</a>
+        <a href="{{ route('barang') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Daftar
+        </a>
     </div>
 
     @if($errors->any())
@@ -60,7 +65,8 @@
 
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Stok Saat Ini</label>
-                <input type="number" name="stok_saat_ini" value="{{ old('stok_saat_ini', $barang->stok_saat_ini) }}" min="0" class="mt-1 block w-full border border-slate-200 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300">
+                <input type="number" name="stok_saat_ini" value="{{ old('stok_saat_ini', $barang->stok_saat_ini) }}" min="0" readonly class="mt-1 block w-full border border-slate-200 rounded px-3 py-2 text-sm bg-slate-50 cursor-not-allowed" aria-readonly="true">
+                <p class="text-xs text-slate-400 mt-1">Stok dikelola otomatis dari pencatatan barang masuk/penjualan dan tidak dapat diedit langsung.</p>
             </div>
         </div>
 

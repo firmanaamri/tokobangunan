@@ -8,26 +8,27 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     
+    {{-- Font Plus Jakarta Sans --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
+    {{-- Vite Assets (CSS & JS) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-nav { background: rgba(253, 251, 247, 0.95); backdrop-filter: blur(10px); }
-        .bg-cream-50 { background-color: #FAF7F2; }
-        .bg-cream-100 { background-color: #F5F0E6; }
     </style>
 </head>
-<body class="bg-cream-50 text-stone-800 antialiased">
+<body class="bg-[#FAF7F2] text-stone-800 antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
-    <header x-data="{ mobileMenuOpen: false }" class="fixed w-full top-0 z-50 transition-all duration-300 glass-nav border-b border-stone-200 shadow-sm">
+    {{-- HEADER / NAVBAR --}}
+    {{-- Menggunakan backdrop-blur-md dan bg-white/90 sebagai pengganti .glass-nav --}}
+    <header x-data="{ mobileMenuOpen: false }" 
+            class="fixed w-full top-0 z-50 transition-all duration-300 backdrop-blur-md bg-[#FDFBF7]/90 border-b border-stone-200 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
             <div class="w-full py-4 flex items-center justify-between border-b border-stone-200 lg:border-none">
+                {{-- LOGO --}}
                 <div class="flex items-center">
                     <a href="#" class="flex items-center gap-3 group">
                         <div class="bg-gradient-to-br from-emerald-600 to-amber-600 p-1.5 rounded-lg shadow-lg group-hover:scale-105 transition-transform">
@@ -39,6 +40,7 @@
                     </a>
                 </div>
                 
+                {{-- DESKTOP MENU --}}
                 <div class="hidden ml-10 space-x-8 lg:flex items-center">
                     <a href="#" class="text-sm font-medium text-stone-600 hover:text-emerald-700 transition-colors">Beranda</a>
                     <a href="#tentang" class="text-sm font-medium text-stone-600 hover:text-emerald-700 transition-colors">Tentang</a>
@@ -59,37 +61,51 @@
                     @endif
                 </div>
 
+                {{-- MOBILE MENU BUTTON --}}
                 <div class="ml-10 space-x-4 flex items-center lg:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="bg-white p-2 rounded-md text-stone-400 hover:text-stone-500 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="bg-white p-2 rounded-md text-stone-400 hover:text-stone-500 hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500 shadow-sm">
                         <span class="sr-only">Open menu</span>
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {{-- Icon Hamburger --}}
+                        <svg x-show="!mobileMenuOpen" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        {{-- Icon Close (X) --}}
+                        <svg x-show="mobileMenuOpen" x-cloak class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
             </div>
 
+            {{-- MOBILE MENU DROPDOWN --}}
             <div x-show="mobileMenuOpen" 
+                 x-cloak
                  x-transition:enter="duration-200 ease-out"
-                 x-transition:enter-start="opacity-0 scale-95"
-                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
                  x-transition:leave="duration-100 ease-in"
-                 x-transition:leave-start="opacity-100 scale-100"
-                 x-transition:leave-end="opacity-0 scale-95"
-                 class="py-4 flex flex-col space-y-2 lg:hidden border-b border-stone-200 bg-cream-50">
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 class="py-4 flex flex-col space-y-2 lg:hidden border-b border-stone-200 bg-[#FAF7F2]">
+                
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-emerald-700 hover:bg-stone-100">Beranda</a>
                 <a href="#produk" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-emerald-700 hover:bg-stone-100">Produk</a>
                 <a href="#kontak" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-emerald-700 hover:bg-stone-100">Kontak</a>
-                @if (auth()->check())
-                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 mt-4 text-center rounded-md font-bold bg-emerald-700 text-white">Dashboard Admin</a>
-                @else
-                    <a href="{{ route('login') }}" class="block px-3 py-2 mt-4 text-center rounded-md font-bold bg-stone-100 text-stone-800">Login Staff</a>
-                @endif
+                
+                <div class="border-t border-stone-200 pt-4 mt-2">
+                    @if (auth()->check())
+                        <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-center rounded-lg font-bold bg-emerald-700 text-white shadow-sm">Dashboard</a>
+                    @else
+                        {{-- INI YANG SUDAH DIPERBAIKI (Teks Login Staff -> Masuk) --}}
+                        <a href="{{ route('login') }}" class="block px-3 py-2 text-center rounded-lg font-bold bg-white border border-emerald-700 text-emerald-800">Masuk</a>
+                    @endif
+                </div>
             </div>
         </nav>
     </header>
 
     <main>
+        {{-- HERO SECTION --}}
         <div class="relative pt-24 pb-16 sm:pb-24 overflow-hidden">
             <div class="absolute inset-0">
                 <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Construction Site">
@@ -122,28 +138,30 @@
             </div>
         </div>
 
+        {{-- STATS SECTION --}}
         <div class="bg-white relative z-10 -mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl shadow-xl border border-stone-100">
             <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-stone-100">
-                <div class="p-6 text-center group hover:bg-cream-50 transition rounded-l-2xl">
+                <div class="p-6 text-center group hover:bg-[#FAF7F2] transition rounded-l-2xl">
                     <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">100+</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Jenis Material</p>
                 </div>
-                <div class="p-6 text-center group hover:bg-cream-50 transition">
+                <div class="p-6 text-center group hover:bg-[#FAF7F2] transition">
                     <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">500+</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Pelanggan Puas</p>
                 </div>
-                <div class="p-6 text-center group hover:bg-cream-50 transition">
+                <div class="p-6 text-center group hover:bg-[#FAF7F2] transition">
                     <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">100%</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Kualitas Asli</p>
                 </div>
-                <div class="p-6 text-center group hover:bg-cream-50 transition rounded-r-2xl">
+                <div class="p-6 text-center group hover:bg-[#FAF7F2] transition rounded-r-2xl">
                     <p class="text-3xl font-bold text-emerald-700 group-hover:scale-110 transition-transform">Kami</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Buka Setiap Hari</p>
                 </div>
             </div>
         </div>
 
-        <section id="kategori" class="py-20 bg-cream-50">
+        {{-- KATEGORI --}}
+        <section id="kategori" class="py-20 bg-[#FAF7F2]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-base text-amber-600 font-semibold tracking-wide uppercase">Koleksi Lengkap</h2>
@@ -153,7 +171,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @foreach ($categories as $category)
                     <a href="{{ route('landing', ['q' => $category->nama_kategori]) }}" class="group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-stone-200 hover:border-emerald-400 overflow-hidden">
-                        <div class="absolute inset-0 bg-cream-100 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-[#F5F0E6] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="relative z-10">
                             <div class="mx-auto h-12 w-12 text-emerald-600 mb-3 bg-stone-100 rounded-full flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
@@ -167,6 +185,7 @@
             </div>
         </section>
 
+        {{-- PRODUK --}}
         <section id="produk" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
@@ -183,7 +202,7 @@
                             </svg>
                         </div>
                         <input type="text" name="q" value="{{ $query }}" 
-                               class="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl leading-5 bg-cream-50 text-stone-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-all shadow-sm" 
+                               class="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl leading-5 bg-[#FAF7F2] text-stone-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-all shadow-sm" 
                                placeholder="Cari nama barang atau kategori (contoh: Semen, Cat)...">
                         @if($query)
                             <a href="{{ route('landing') }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-stone-400 hover:text-red-500">
@@ -245,8 +264,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        
                     </div>
                     @empty
                     <div class="col-span-full text-center py-20 bg-stone-50 rounded-3xl border border-dashed border-stone-300">
@@ -272,12 +289,13 @@
             </div>
         </section>
 
+        {{-- KONTAK SECTION --}}
         <section id="kontak" class="relative py-20 bg-stone-900 overflow-hidden">
             <div class="absolute top-0 left-0 -ml-20 -mt-20 w-80 h-80 rounded-full bg-emerald-600/10 blur-3xl"></div>
             <div class="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 rounded-full bg-amber-600/10 blur-3xl"></div>
 
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-3xl font-extrabold text-cream-50 sm:text-4xl text-white">
+                <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
                     Siap Memulai Proyek Anda?
                 </h2>
                 <p class="mt-4 text-xl text-stone-400 max-w-2xl mx-auto">
@@ -349,7 +367,6 @@
                     <h4 class="text-white font-semibold mb-4">Jam Operasional</h4>
                     <ul class="space-y-2 text-sm text-stone-400">
                         <li class="flex justify-between"><span>Senin - Ahad</span> <span>08:00 - 17:00</span></li>
-                        
                     </ul>
                 </div>
             </div>

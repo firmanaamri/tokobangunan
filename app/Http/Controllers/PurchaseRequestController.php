@@ -6,6 +6,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Barang;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini agar Auth::id() dikenali
 
 class PurchaseRequestController extends Controller
 {
@@ -42,21 +43,33 @@ class PurchaseRequestController extends Controller
             'jumlah_diminta' => 'required|integer|min:1',
             'satuan' => 'required|string',
             'supplier_id' => 'required|exists:suppliers,id',
+            // Gunakan nullable agar form boleh kosong
+            'payment_term' => 'nullable|integer|min:0', 
+            'due_date' => 'nullable|date',
             'catatan_request' => 'nullable|string',
         ]);
 
         // Generate nomor PR
         $lastPR = PurchaseRequest::orderBy('id', 'desc')->first();
-        $number = ($lastPR ? intval(substr($lastPR->nomor_pr, 2)) + 1 : 1);
+        // Menggunakan regex untuk mengambil angka saja agar lebih aman
+        $number = 1;
+        if ($lastPR) {
+            // Ambil angka dari string, misal PR000015 -> 15
+            if (preg_match('/\d+/', $lastPR->nomor_pr, $matches)) {
+                $number = intval($matches[0]) + 1;
+            }
+        }
         $nomor_pr = 'PR' . str_pad($number, 6, '0', STR_PAD_LEFT);
 
         $purchaseRequest = PurchaseRequest::create([
             'nomor_pr' => $nomor_pr,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(), // Gunakan Auth Facade
             'barang_id' => $validated['barang_id'],
             'supplier_id' => $validated['supplier_id'],
             'jumlah_diminta' => $validated['jumlah_diminta'],
             'satuan' => $validated['satuan'],
+            'payment_term' => $validated['payment_term'] ?? null,
+            'due_date' => $validated['due_date'] ?? null,
             'catatan_request' => $validated['catatan_request'] ?? null,
             'status' => 'pending',
         ]);
@@ -81,7 +94,7 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         // Only staff yang membuat bisa edit, dan hanya jika status pending
-        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== auth()->id()) {
+        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== Auth::id()) {
             return back()->with('error', 'Anda tidak bisa edit PR ini');
         }
 
@@ -96,7 +109,7 @@ class PurchaseRequestController extends Controller
      */
     public function update(Request $request, PurchaseRequest $purchaseRequest)
     {
-        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== auth()->id()) {
+        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== Auth::id()) {
             return back()->with('error', 'Anda tidak bisa edit PR ini');
         }
 
@@ -105,6 +118,8 @@ class PurchaseRequestController extends Controller
             'jumlah_diminta' => 'required|integer|min:1',
             'satuan' => 'required|string',
             'supplier_id' => 'required|exists:suppliers,id',
+            'payment_term' => 'nullable|integer|min:0',
+            'due_date' => 'nullable|date',
             'catatan_request' => 'nullable|string',
         ]);
 
@@ -113,6 +128,8 @@ class PurchaseRequestController extends Controller
             'supplier_id' => $validated['supplier_id'],
             'jumlah_diminta' => $validated['jumlah_diminta'],
             'satuan' => $validated['satuan'],
+            'payment_term' => $validated['payment_term'] ?? null,
+            'due_date' => $validated['due_date'] ?? null,
             'catatan_request' => $validated['catatan_request'] ?? null,
         ]);
 
@@ -125,7 +142,7 @@ class PurchaseRequestController extends Controller
      */
     public function destroy(PurchaseRequest $purchaseRequest)
     {
-        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== auth()->id()) {
+        if ($purchaseRequest->status !== 'pending' || $purchaseRequest->user_id !== Auth::id()) {
             return back()->with('error', 'Anda tidak bisa hapus PR ini');
         }
 

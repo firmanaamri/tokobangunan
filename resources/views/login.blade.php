@@ -63,11 +63,7 @@
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <label for="password" class="text-sm font-semibold text-stone-700">Password</label>
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">
-                                Lupa Password?
-                            </a>
-                        @endif
+                        
                     </div>
                     <div class="relative group">
                         <input 

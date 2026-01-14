@@ -13,6 +13,8 @@ class PurchaseRequest extends Model
         'barang_id',
         'jumlah_diminta',
         'satuan',
+        'payment_term',
+        'due_date',
         'status',
         'catatan_request',
         'catatan_approval',
@@ -22,6 +24,7 @@ class PurchaseRequest extends Model
 
     protected $casts = [
         'tanggal_approval' => 'datetime',
+        'due_date' => 'date',
     ];
 
     // Relationships

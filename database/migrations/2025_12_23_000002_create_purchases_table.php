@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
+            // purchase_request FK (nullable)
+            $table->foreignId('purchase_request_id')->nullable()->after('id')->constrained('purchase_requests')->nullOnDelete();
             $table->foreignId('barang_masuk_id')->constrained('barang_masuk')->onDelete('cascade');
             $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -20,7 +22,7 @@ return new class extends Migration
             $table->date('tanggal_pembelian');
             $table->decimal('total_harga', 12, 2);
             $table->enum('status_pembayaran', ['belum_bayar', 'sebagian', 'lunas'])->default('belum_bayar');
-            $table->date('tanggal_jatuh_tempo')->nullable();
+            $table->datetime('due_date')->nullable();
             $table->text('keterangan')->nullable();
             $table->timestamps();
 

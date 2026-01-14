@@ -43,6 +43,16 @@
                 </select>
             </div>
 
+            <div class="col-span-1">
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Goods Receipt (GRN)</label>
+                <select name="goods_receipt_id" class="mt-1 block w-full border border-slate-200 rounded-md px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300">
+                    <option value="">-- Pilih Goods Receipt --</option>
+                    @foreach($goodsReceipts as $gr)
+                        <option value="{{ $gr->id }}" {{ old('goods_receipt_id') == $gr->id ? 'selected' : '' }}>{{ $gr->nomor_grn }} @if($gr->tanggal_inspection) ({{ \Carbon\Carbon::parse($gr->tanggal_inspection)->format('d M Y') }}) @endif</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah</label>
                 <input type="number" name="jumlah_barang_masuk" class="mt-1 block w-full border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300" min="1" required>

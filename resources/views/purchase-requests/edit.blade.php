@@ -89,6 +89,30 @@
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+                
+                <!-- Payment Term -->
+                <div>
+                    <label for="payment_term" class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fas fa-calendar-day mr-2 text-emerald-500"></i>Payment Term (hari)
+                    </label>
+                    <input type="number" name="payment_term" id="payment_term" min="0" value="{{ old('payment_term', $purchaseRequest->payment_term) }}" {{ $purchaseRequest->status !== 'pending' ? 'disabled' : '' }} placeholder="Contoh: 30" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('payment_term') border-red-500 @enderror {{ $purchaseRequest->status !== 'pending' ? 'bg-slate-100' : '' }}">
+                    <p class="text-xs text-slate-500 mt-1">Masukkan jumlah hari jatuh tempo setelah tanggal pembelian.</p>
+                    @error('payment_term')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Due Date -->
+                <div>
+                    <label for="due_date" class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fas fa-calendar-alt mr-2 text-emerald-500"></i>Tanggal Jatuh Tempo (opsional)
+                    </label>
+                    <input type="date" name="due_date" id="due_date" value="{{ old('due_date', optional($purchaseRequest->due_date)->format('Y-m-d')) }}" {{ $purchaseRequest->status !== 'pending' ? 'disabled' : '' }} class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('due_date') border-red-500 @enderror {{ $purchaseRequest->status !== 'pending' ? 'bg-slate-100' : '' }}">
+                    <p class="text-xs text-slate-500 mt-1">Atur tanggal jatuh tempo spesifik jika ingin menimpa payment term.</p>
+                    @error('due_date')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Catatan Request -->
@@ -125,6 +149,28 @@
                     </a>
                 </div>
             @endif
+            <script>
+                (function(){
+                    function pad(n){ return n < 10 ? '0' + n : n }
+                    function computeDue(days){
+                        var d = new Date();
+                        d.setDate(d.getDate() + days);
+                        return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+                    }
+                    var pt = document.getElementById('payment_term');
+                    var dd = document.getElementById('due_date');
+                    if(!pt || !dd) return;
+                    if(pt.disabled) return;
+                    var handler = function(){
+                        var v = parseInt(pt.value);
+                        if(isNaN(v) || v < 0){ dd.value = ''; return; }
+                        dd.value = computeDue(v);
+                    };
+                    pt.addEventListener('input', handler);
+                    pt.addEventListener('change', handler);
+                    if(pt.value){ handler(); }
+                })();
+            </script>
         </form>
     </div>
 </div>

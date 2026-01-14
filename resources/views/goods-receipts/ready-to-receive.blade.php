@@ -7,9 +7,9 @@
         <div class="mb-8 flex justify-between items-center">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">PO Siap Terima</h1>
-                <p class="text-slate-600 mt-2">Daftar Purchase Order yang sudah lunas dan siap diterima barangnya</p>
+                <p class=" mt-2">Daftar Purchase Order yang sudah lunas dan siap diterima barangnya</p>
             </div>
-            <a href="{{ route('goods-receipts.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <a href="{{ route('goods-receipts.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white  border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -26,15 +26,15 @@
             @if ($purchases->count() > 0)
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-full">
-                        <thead class="bg-slate-50">
+                        <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">No. PO</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Supplier</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Jumlah</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Total</th>
-                                <th class="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase">Tanggal PO</th>
-                                <th class="px-6 py-3 text-center text-xs font-semibold text-slate-600 uppercase">Aksi</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">No. PO</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Barang</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Supplier</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Jumlah</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold  uppercase">Tanggal PO</th>
+                                <th class="px-6 py-3 text-center text-xs font-semibold  uppercase">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200">
@@ -53,7 +53,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="text-sm text-slate-600">{{ $purchase->supplier->nama_supplier }}</span>
+                                        <span class="text-sm ">{{ $purchase->supplier->nama_supplier }}</span>
                                     </td>
                                     <td class="px-6 py-4">
                                         @php
@@ -77,7 +77,7 @@
                                         <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}</span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="text-sm text-slate-600">{{ $purchase->tanggal_pembelian->format('d M Y') }}</span>
+                                        <span class="text-sm ">{{ $purchase->tanggal_pembelian->format('d M Y') }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-center">
                                         <a href="{{ route('goods-receipts.receive', $purchase->id) }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">

@@ -118,18 +118,16 @@
                             @enderror
                         </div>
 
-                        <!-- Stok Awal -->
+                        <!-- Stok Awal (ditampilkan, tetapi tidak dapat diubah di form) -->
                         <div>
-                            <label for="stok_saat_ini" class="block text-sm font-semibold text-slate-700 mb-2">
-                                Stok Awal <span class="text-red-500">*</span>
-                            </label>
-                            <input type="number" name="stok_saat_ini" id="stok_saat_ini" 
+                            <label for="stok_saat_ini" class="block text-sm font-semibold text-slate-700 mb-2">Stok Awal</label>
+                            <input type="number" name="stok_saat_ini" id="stok_saat_ini"
                                    value="{{ old('stok_saat_ini', 0) }}"
-                                   class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition"
+                                   class="w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 cursor-not-allowed"
                                    placeholder="0"
                                    min="0"
-                                   required>
-                            <p class="text-xs text-slate-500 mt-1">Masukkan jumlah stok awal saat menambah barang</p>
+                                   readonly aria-readonly="true">
+                            <p class="text-xs text-slate-500 mt-1">Stok awal diset otomatis ke <strong>0</strong>. Untuk menambah stok, gunakan proses pembelian atau pencatatan barang masuk.</p>
                             @error('stok_saat_ini')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror

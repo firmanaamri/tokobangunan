@@ -33,6 +33,16 @@
         </div>
 
         <div>
+            <label class="block text-sm font-medium text-gray-700">Goods Receipt (GRN)</label>
+            <select name="goods_receipt_id" class="mt-1 block w-full border-gray-300 rounded">
+                <option value="">-- Pilih Goods Receipt --</option>
+                @foreach($goodsReceipts as $gr)
+                    <option value="{{ $gr->id }}" {{ $item->goods_receipt_id == $gr->id ? 'selected' : '' }}>{{ $gr->nomor_grn }} @if($gr->tanggal_inspection) ({{ \Carbon\Carbon::parse($gr->tanggal_inspection)->format('d M Y') }}) @endif</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div>
             <label class="block text-sm font-medium text-gray-700">Tanggal</label>
             <input type="date" name="tanggal_masuk" value="{{ $item->tanggal_masuk->format('Y-m-d') }}" class="mt-1 block w-full border-gray-300 rounded">
         </div>

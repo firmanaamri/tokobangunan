@@ -7,64 +7,57 @@ use App\Models\BarangMasuk;
 use App\Models\Supplier;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PurchaseController extends Controller
 {
-    /**
-     * Tampilkan semua transaksi pembelian
-     */
     public function index()
     {
         $purchases = Purchase::with(['supplier', 'barangMasuk.barang', 'barang', 'user'])
             ->orderBy('tanggal_pembelian', 'desc')
             ->paginate(15);
-
         return view('purchases.index', compact('purchases'));
     }
 
-    /**
-     * Form create transaksi pembelian
-     */
     public function create($purchaseRequestId = null)
     {
-        // Purchases must be created from an approved Purchase Request (PR)
         if (!$purchaseRequestId) {
-            return redirect()->route('purchase-requests.index')
-                ->with('error', 'Pembelian hanya dapat dibuat dari Purchase Request yang sudah disetujui.');
+            return redirect()->route('purchase-requests.index')->with('error', 'Pembelian hanya dapat dibuat dari Purchase Request yang sudah disetujui.');
         }
 
         $pr = \App\Models\PurchaseRequest::with('barang')->find($purchaseRequestId);
-        if (!$pr) {
-            return redirect()->route('purchase-requests.index')
-                ->with('error', 'Purchase Request tidak ditemukan.');
+        if (!$pr || $pr->status !== 'approved') {
+            return redirect()->route('purchase-requests.index')->with('error', 'PR tidak ditemukan atau belum disetujui.');
         }
 
-        if ($pr->status !== 'approved') {
-            return redirect()->route('purchase-requests.show', $pr->id)
-                ->with('error', 'Purchase Request belum disetujui. Hanya PR yang disetujui yang dapat dibuat pembeliannya.');
-        }
-
-        // Prefill form values from PR
-        $barangMasuk = null;
         $suppliers = Supplier::where('status', 'aktif')->get();
+        $barangMasuk = null;
+        
+        $defaultDue = null;
+        if (!empty($pr->due_date)) {
+            $defaultDue = $pr->due_date->toDateString();
+        } elseif (!empty($pr->payment_term)) {
+            $defaultDue = date('Y-m-d', strtotime('+' . intval($pr->payment_term) . ' days'));
+        }
+
         $prefill = [
             'barang' => $pr->barang,
             'jumlah' => $pr->jumlah_diminta,
             'satuan' => $pr->satuan,
             'supplier_id' => $pr->supplier_id,
             'purchase_request_id' => $pr->id,
+            'due_date' => $defaultDue, 
         ];
 
         return view('purchases.create', compact('barangMasuk', 'suppliers', 'prefill'));
     }
 
-    /**
-     * Simpan transaksi pembelian baru
-     */
     public function store(Request $request)
     {
+        // 1. UBAH VALIDASI: Gunakan 'due_date'
         $validated = $request->validate([
             'purchase_request_id' => 'required|exists:purchase_requests,id',
             'barang_id' => 'required|exists:barang,id',
@@ -73,141 +66,111 @@ class PurchaseController extends Controller
             'supplier_id' => 'required|exists:suppliers,id',
             'tanggal_pembelian' => 'required|date',
             'total_harga' => 'required|numeric|min:0',
-            'tanggal_jatuh_tempo' => 'nullable|date|after_or_equal:tanggal_pembelian',
+            'due_date' => 'nullable|date|after_or_equal:tanggal_pembelian', 
             'keterangan' => 'nullable|string',
         ]);
 
-        // Ensure PR exists and is approved
         $pr = \App\Models\PurchaseRequest::find($validated['purchase_request_id']);
-        if (!$pr || $pr->status !== 'approved') {
-            return back()->withInput()->with('error', 'Purchase Request tidak valid atau belum disetujui.');
-        }
 
         DB::beginTransaction();
         try {
-            // NOTE: Do NOT update stock here. Stock should only change when
-            // barang diterima (Goods Receipt). We'll store the Purchase record
-            // and let the GoodsReceiptController create BarangMasuk and
-            // increment stock upon actual receipt.
             $barang = \App\Models\Barang::find($validated['barang_id']);
-
-            // Generate nomor PO (gunakan count pada kolom nomor_po untuk menghindari race pada created_at)
             $nomorPO = 'PO-' . date('Ymd') . '-' . str_pad(Purchase::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
 
-            // Simpan purchase dengan informasi lengkap (tidak membuat BarangMasuk)
+            // 2. AMBIL DARI INPUT 'due_date'
+            $dueDate = $validated['due_date'] ?? null;
+            
+            // Logika Fallback jika kosong
+            if (empty($dueDate)) {
+                if (!empty($pr->due_date)) {
+                    $dueDate = $pr->due_date->toDateString();
+                } elseif (!empty($pr->payment_term)) {
+                    $dueDate = Carbon::parse($validated['tanggal_pembelian'])->addDays(intval($pr->payment_term))->toDateString();
+                }
+            }
+
             $purchase = Purchase::create([
                 'barang_id' => $validated['barang_id'],
                 'supplier_id' => $validated['supplier_id'],
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'nomor_po' => $nomorPO,
                 'jumlah_po' => $validated['jumlah'],
                 'harga_unit' => $validated['harga_per_unit'],
                 'satuan' => $barang->satuan ?? null,
                 'tanggal_pembelian' => $validated['tanggal_pembelian'],
                 'total_harga' => $validated['total_harga'],
-                'tanggal_jatuh_tempo' => $validated['tanggal_jatuh_tempo'],
+                'due_date' => $dueDate, // SIMPAN LANGSUNG
                 'keterangan' => $validated['keterangan'],
                 'purchase_request_id' => $validated['purchase_request_id'],
                 'status_pembelian' => 'pending',
             ]);
 
             DB::commit();
-
-            return redirect()->route('purchases.show', $purchase->id)
-                ->with('success', 'Transaksi pembelian berhasil dibuat dengan nomor PO: ' . $nomorPO);
+            return redirect()->route('purchases.show', $purchase->id)->with('success', 'Transaksi pembelian berhasil dibuat.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->withInput()->with('error', 'Gagal menyimpan pembelian: ' . $e->getMessage());
+            return back()->withInput()->with('error', 'Gagal: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Tampilkan detail transaksi pembelian
-     */
     public function show(Purchase $purchase)
     {
         $purchase->load(['supplier', 'barangMasuk.barang', 'barang', 'user', 'payment', 'payments']);
         return view('purchases.show', compact('purchase'));
     }
 
-    /**
-     * Form edit transaksi pembelian
-     */
     public function edit(Purchase $purchase)
     {
         $suppliers = Supplier::where('status', 'aktif')->get();
         return view('purchases.edit', compact('purchase', 'suppliers'));
     }
 
-    /**
-     * Update transaksi pembelian
-     */
     public function update(Request $request, Purchase $purchase)
     {
+        // 3. UBAH VALIDASI UPDATE: Gunakan 'due_date'
         $validated = $request->validate([
             'supplier_id' => 'required|exists:suppliers,id',
             'tanggal_pembelian' => 'required|date',
             'total_harga' => 'required|numeric|min:0',
-            'tanggal_jatuh_tempo' => 'nullable|date|after_or_equal:tanggal_pembelian',
+            'due_date' => 'nullable|date|after_or_equal:tanggal_pembelian',
             'keterangan' => 'nullable|string',
         ]);
 
-        $purchase->update($validated);
+        $purchase->update([
+            'supplier_id' => $validated['supplier_id'],
+            'tanggal_pembelian' => $validated['tanggal_pembelian'],
+            'total_harga' => $validated['total_harga'],
+            'due_date' => $validated['due_date'], // MAPPING LANGSUNG
+            'keterangan' => $validated['keterangan'],
+        ]);
 
-        return redirect()->route('purchases.show', $purchase->id)
-            ->with('success', 'Transaksi pembelian berhasil diperbarui');
+        return redirect()->route('purchases.show', $purchase->id)->with('success', 'Transaksi diperbarui');
     }
 
-    /**
-     * Update status pembayaran
-     */
     public function updatePaymentStatus(Request $request, Purchase $purchase)
     {
-        $validated = $request->validate([
-            'status_pembayaran' => 'required|in:belum_bayar,sebagian,lunas',
-        ]);
-
+        $validated = $request->validate(['status_pembayaran' => 'required|in:belum_bayar,sebagian,lunas']);
         $purchase->update($validated);
-
-        return response()->json([
-            'message' => 'Status pembayaran berhasil diperbarui',
-            'status_pembayaran' => $purchase->status_pembayaran,
-        ]);
+        return response()->json(['message' => 'Status diperbarui', 'status_pembayaran' => $purchase->status_pembayaran]);
     }
 
-    /**
-     * Hapus transaksi pembelian
-     */
     public function destroy(Purchase $purchase)
     {
-        $nomorPO = $purchase->nomor_po;
         $purchase->delete();
-
-        return redirect()->route('purchases.index')
-            ->with('success', 'Transaksi pembelian ' . $nomorPO . ' berhasil dihapus');
+        return redirect()->route('purchases.index')->with('success', 'Transaksi dihapus');
     }
 
-    /**
-     * Export ke PDF (opsional)
-     */
     public function exportPDF(Purchase $purchase)
     {
         $purchase->load(['supplier', 'barangMasuk.barang', 'user']);
-        // Implementasi export PDF bisa menggunakan library seperti TCPDF atau Barryvdh
         return view('purchases.pdf', compact('purchase'));
     }
 
-    /**
-     * Form untuk mencatat pembayaran pembelian
-     */
     public function recordPayment(Purchase $purchase)
     {
         return view('purchases.record-payment', compact('purchase'));
     }
 
-    /**
-     * Simpan pembayaran pembelian
-     */
     public function storePayment(Request $request, Purchase $purchase)
     {
         $validated = $request->validate([
@@ -218,21 +181,13 @@ class PurchaseController extends Controller
             'bukti_pembayaran' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
         ]);
 
-        // Cek apakah pembayaran melebihi total
         $totalDibayar = Payment::where('purchase_id', $purchase->id)->sum('amount');
-        $totalBaru = $totalDibayar + $validated['jumlah_bayar'];
-
-        if ($totalBaru > $purchase->total_harga) {
-            return back()->with('error', 'Jumlah pembayaran melebihi total harga pembelian');
+        if (($totalDibayar + $validated['jumlah_bayar']) > $purchase->total_harga) {
+            return back()->with('error', 'Jumlah pembayaran melebihi total harga.');
         }
 
-        // Handle bukti pembayaran upload
-        $buktiPath = null;
-        if ($request->hasFile('bukti_pembayaran')) {
-            $buktiPath = $request->file('bukti_pembayaran')->store('bukti-pembayaran', 'public');
-        }
+        $buktiPath = $request->hasFile('bukti_pembayaran') ? $request->file('bukti_pembayaran')->store('bukti-pembayaran', 'public') : null;
 
-        // Buat record pembayaran
         Payment::create([
             'purchase_id' => $purchase->id,
             'amount' => $validated['jumlah_bayar'],
@@ -243,20 +198,10 @@ class PurchaseController extends Controller
             'metadata' => ['keterangan' => $validated['keterangan']],
         ]);
 
-        // Update status pembayaran purchase
         $totalDibayar = Payment::where('purchase_id', $purchase->id)->sum('amount');
-        
-        if ($totalDibayar >= $purchase->total_harga) {
-            $status = 'lunas';
-        } elseif ($totalDibayar > 0) {
-            $status = 'sebagian';
-        } else {
-            $status = 'belum_bayar';
-        }
-
+        $status = ($totalDibayar >= $purchase->total_harga) ? 'lunas' : (($totalDibayar > 0) ? 'sebagian' : 'belum_bayar');
         $purchase->update(['status_pembayaran' => $status]);
 
-        return redirect()->route('purchases.show', $purchase->id)
-            ->with('success', 'Pembayaran berhasil dicatat');
+        return redirect()->route('purchases.show', $purchase->id)->with('success', 'Pembayaran dicatat');
     }
 }

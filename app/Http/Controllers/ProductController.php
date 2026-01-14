@@ -53,7 +53,7 @@ class ProductController extends Controller
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
             'harga' => 'nullable|numeric|min:0',
-            'stok_saat_ini' => 'required|integer|min:0',
+            //'stok_saat_ini' => 'required|integer|min:0', // stok awal diatur otomatis (0)
             'deskripsi' => 'nullable|string',
         ];
 
@@ -63,6 +63,9 @@ class ProductController extends Controller
         ];
 
         $validated = $request->validate($rules, $messages);
+
+        // Ensure initial stock is 0 on creation; stock will change only via purchases or barang masuk/keluar
+        $validated['stok_saat_ini'] = 0;
 
         $new = Barang::create($validated);
 
@@ -99,9 +102,14 @@ class ProductController extends Controller
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
             'harga' => 'nullable|numeric|min:0',
-            'stok_saat_ini' => 'required|integer|min:0',
+            //'stok_saat_ini' => 'required|integer|min:0', // jangan izinkan edit stok di form
             'deskripsi' => 'nullable|string',
         ]);
+
+        // Prevent direct update of stok_saat_ini from edit form
+        if (array_key_exists('stok_saat_ini', $validated)) {
+            unset($validated['stok_saat_ini']);
+        }
 
         $barang->update($validated);
 

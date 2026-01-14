@@ -3,7 +3,6 @@
 @section('content')
 <div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Manajemen Pembelian</h1>
@@ -14,9 +13,6 @@
             </a>
         </div>
 
-        <!-- Alerts handled by SweetAlert -->
-
-        <!-- Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200">
@@ -26,6 +22,7 @@
                             <th class="px-6 py-4 text-left text-sm font-bold">Supplier</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Barang</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Tanggal</th>
+                            <th class="px-6 py-4 text-left text-sm font-bold">Jatuh Tempo</th>
                             <th class="px-6 py-4 text-right text-sm font-bold">Total Harga</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Status Bayar</th>
                             <th class="px-6 py-4 text-center text-sm font-bold">Aksi</th>
@@ -59,6 +56,53 @@
                                 <td class="px-6 py-4">
                                     <span class="text-slate-900">{{ $purchase->tanggal_pembelian->format('d M Y') }}</span>
                                 </td>
+                                
+                                {{-- KOLOM JATUH TEMPO (SUDAH DIPERBAIKI) --}}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @php
+                                        $dueDate = null;
+
+                                        // 1. Cek langsung dari kolom 'due_date' (Prioritas Utama)
+                                        // Karena sudah dicasting 'date' di Model, ini otomatis jadi objek Carbon
+                                        if (!empty($purchase->due_date)) {
+                                            $dueDate = $purchase->due_date;
+                                        } 
+                                        // 2. Fallback: Cek dari Purchase Request (jika ada)
+                                        elseif (!empty($purchase->purchaseRequest) && !empty($purchase->purchaseRequest->due_date)) {
+                                            $dueDate = $purchase->purchaseRequest->due_date;
+                                        } 
+                                        // 3. Fallback: Hitung dari Payment Term PR
+                                        elseif (!empty($purchase->purchaseRequest) && !empty($purchase->purchaseRequest->payment_term)) {
+                                            $dueDate = \Carbon\Carbon::parse($purchase->tanggal_pembelian)->addDays(intval($purchase->purchaseRequest->payment_term));
+                                        }
+
+                                        // Cek apakah telat bayar (Overdue)
+                                        $isOverdue = $dueDate ? ($dueDate->isPast() && $purchase->status_pembayaran != 'lunas') : false;
+                                    @endphp
+
+                                    @if($dueDate)
+                                        @if($isOverdue)
+                                            {{-- Tampilan Merah jika Telat --}}
+                                            <div class="flex flex-col">
+                                                <span class="text-sm font-bold text-red-600">
+                                                    {{ $dueDate->format('d M Y') }}
+                                                </span>
+                                                <span class="text-[10px] uppercase font-bold text-red-500 tracking-wide mt-0.5">
+                                                    Overdue
+                                                </span>
+                                            </div>
+                                        @else
+                                            {{-- Tampilan Normal --}}
+                                            <span class="text-sm text-slate-700 font-medium">
+                                                {{ $dueDate->format('d M Y') }}
+                                            </span>
+                                        @endif
+                                    @else
+                                        {{-- Tampilan Kosong --}}
+                                        <span class="text-sm text-slate-400">-</span>
+                                    @endif
+                                </td>
+
                                 <td class="px-6 py-4 text-right">
                                     <span class="font-bold text-slate-900">Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}</span>
                                 </td>
@@ -102,7 +146,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                                <td colspan="8" class="px-6 py-12 text-center">
                                     <i class="fas fa-inbox text-4xl text-slate-300 mb-4"></i>
                                     <p class="text-slate-500 font-semibold">Tidak ada data transaksi pembelian</p>
                                 </td>
@@ -113,7 +157,6 @@
             </div>
         </div>
 
-        <!-- Pagination -->
         <div class="mt-6">
             {{ $purchases->links() }}
         </div>

@@ -126,8 +126,8 @@
                                         <span class="text-sm text-slate-600">{{ $receipt->tanggal_inspection?->format('d M Y') ?? '-' }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <a href="{{ route('goods-receipts.show', $receipt->id) }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">
-                                            <i class="fas fa-eye mr-1"></i>Detail
+                                        <a href="{{ route('goods-receipts.show', $receipt->id) }}" title="Detail" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                         </a>
                                     </td>
                                 </tr>

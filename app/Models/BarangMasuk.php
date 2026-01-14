@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\GoodsReceipt;
 
 class BarangMasuk extends Model
 {
@@ -34,7 +35,12 @@ class BarangMasuk extends Model
         'quantity_received' => 'integer',
         'quantity_accepted' => 'integer',
         'quantity_rejected' => 'integer',
+        'goods_receipt_id' => 'integer',
         'tanggal_masuk' => 'date',
+    ];
+
+    protected $attributes = [
+        'goods_receipt_id' => null,
     ];
 
     /**
@@ -72,5 +78,35 @@ class BarangMasuk extends Model
     public function quarantine(): HasOne
     {
         return $this->hasOne(Quarantine::class, 'barang_masuk_id');
+    }
+
+    /**
+     * Try to auto-link goods_receipt_id from `keterangan` if present.
+     */
+    protected static function booted()
+    {
+        static::creating(function (self $model) {
+            if (empty($model->goods_receipt_id) && !empty($model->keterangan)) {
+                if (preg_match('/GRN[\s:\-]*([A-Z0-9]+)/i', $model->keterangan, $m)) {
+                    $nomor = $m[1];
+                    $gr = GoodsReceipt::where('nomor_grn', 'like', "%{$nomor}%")->first();
+                    if ($gr) {
+                        $model->goods_receipt_id = $gr->id;
+                    }
+                }
+            }
+        });
+
+        static::updating(function (self $model) {
+            if (empty($model->goods_receipt_id) && !empty($model->keterangan)) {
+                if (preg_match('/GRN[\s:\-]*([A-Z0-9]+)/i', $model->keterangan, $m)) {
+                    $nomor = $m[1];
+                    $gr = GoodsReceipt::where('nomor_grn', 'like', "%{$nomor}%")->first();
+                    if ($gr) {
+                        $model->goods_receipt_id = $gr->id;
+                    }
+                }
+            }
+        });
     }
 }

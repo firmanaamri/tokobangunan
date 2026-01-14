@@ -25,13 +25,13 @@
                 <div class="p-6 text-sm text-slate-500 text-center">Belum ada barang keluar untuk tanggal ini.</div>
             @else
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-slate-50">
+                    <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                         <tr>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase whitespace-nowrap">Waktu</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase whitespace-nowrap">Barang</th>
-                            <th class="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase whitespace-nowrap">Jumlah</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase whitespace-nowrap">Petugas</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase whitespace-nowrap">Keterangan</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold  whitespace-nowrap">Waktu</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold  whitespace-nowrap">Barang</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold  whitespace-nowrap">Jumlah</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold  whitespace-nowrap">Petugas</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold  whitespace-nowrap">Keterangan</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">

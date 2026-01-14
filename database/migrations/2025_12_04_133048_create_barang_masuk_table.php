@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->id();
+            // goods receipt FK (nullable)
+            $table->foreignId('goods_receipt_id')->nullable()->after('id')->constrained('goods_receipts')->nullOnDelete();
             $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade');
             $table->integer('jumlah_barang_masuk');
             // fields for inspection / rejection tracking

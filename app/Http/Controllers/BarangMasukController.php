@@ -111,7 +111,8 @@ class BarangMasukController extends Controller
     {
         $barangs = Barang::with('kategori')->orderBy('nama_barang')->get();
         $kategoris = \App\Models\Kategori::orderBy('nama_kategori')->get();
-        return view('barang_masuk.create', compact('barangs', 'kategoris'));
+        $goodsReceipts = \App\Models\GoodsReceipt::orderBy('tanggal_inspection', 'desc')->get();
+        return view('barang_masuk.create', compact('barangs', 'kategoris', 'goodsReceipts'));
     }
 
     /**
@@ -121,6 +122,7 @@ class BarangMasukController extends Controller
     {
         $validated = $request->validate([
             'barang_id' => 'required|exists:barang,id',
+            'goods_receipt_id' => 'nullable|exists:goods_receipts,id',
             'jumlah_barang_masuk' => 'required|integer|min:1',
             'tanggal_masuk' => 'nullable|date',
             'keterangan' => 'nullable|string',
@@ -147,7 +149,8 @@ class BarangMasukController extends Controller
     public function edit(BarangMasuk $barang_masuk)
     {
         $barangs = Barang::orderBy('nama_barang')->get();
-        return view('barang_masuk.edit', ['item' => $barang_masuk, 'barangs' => $barangs]);
+        $goodsReceipts = \App\Models\GoodsReceipt::orderBy('tanggal_inspection', 'desc')->get();
+        return view('barang_masuk.edit', ['item' => $barang_masuk, 'barangs' => $barangs, 'goodsReceipts' => $goodsReceipts]);
     }
 
     /**
@@ -157,6 +160,7 @@ class BarangMasukController extends Controller
     {
         $validated = $request->validate([
             'barang_id' => 'required|exists:barang,id',
+            'goods_receipt_id' => 'nullable|exists:goods_receipts,id',
             'jumlah_barang_masuk' => 'required|integer|min:1',
             'tanggal_masuk' => 'nullable|date',
             'keterangan' => 'nullable|string',
