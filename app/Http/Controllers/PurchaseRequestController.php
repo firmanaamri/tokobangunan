@@ -13,11 +13,33 @@ class PurchaseRequestController extends Controller
     /**
      * Display a listing of purchase requests
      */
-    public function index()
+   /**
+     * Display a listing of purchase requests
+     */
+    public function index(Request $request) // 1. Tambahkan parameter Request
     {
-        $purchaseRequests = PurchaseRequest::with(['user', 'barang', 'supplier', 'approver'])
-            ->latest()
-            ->paginate(15);
+        // 2. Inisialisasi Query Builder
+        $query = PurchaseRequest::with(['user', 'barang', 'supplier', 'approver']);
+
+        // 3. Logika Pencarian (Berdasarkan nomor_pr)
+        if ($request->filled('search')) {
+            $query->where('nomor_pr', 'like', '%' . $request->search . '%');
+            // Opsional: Jika ingin cari nama barang juga, gunakan orWhereHas
+            // $query->orWhereHas('barang', function($q) use ($request) {
+            //     $q->where('nama_barang', 'like', '%' . $request->search . '%');
+            // });
+        }
+
+        // 4. Logika Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 5. Eksekusi Query
+        $purchaseRequests = $query->latest()->paginate(15);
+
+        // 6. Penting: Tambahkan ini agar filter tidak hilang saat klik 'Next Page'
+        $purchaseRequests->appends($request->all());
         
         return view('purchase-requests.index', compact('purchaseRequests'));
     }

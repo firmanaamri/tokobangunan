@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Background Halaman: Cream Gradient sesuai permintaan --}}
 <div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
+        
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Pengajuan Pembelian (PR)</h1>
@@ -14,34 +15,38 @@
             </a>
         </div>
 
-        <!-- Alerts -->
-        <!-- Alerts handled by SweetAlert -->
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
+            
+            {{-- Kolom 1: Cari Nomor PR --}}
+            <div class="w-full">
+                <label class="block text-sm text-slate-600 mb-1">Cari Nomor PR:</label>
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Contoh: PR000001" 
+                       class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-200 outline-none transition-all" />
+            </div>
 
-        <!-- Filters -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6">
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                <div>
-                    <label class="text-xs font-semibold text-slate-600">Cari Nomor PR</label>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="PR000001" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-400 focus:ring-emerald-200">
-                </div>
-                <div>
-                    <label class="text-xs font-semibold text-slate-600">Status</label>
-                    <select name="status" class="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-emerald-400 focus:ring-emerald-200">
-                        <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="approved" {{ request('status')=='approved' ? 'selected' : '' }}>Approved</option>
-                        <option value="rejected" {{ request('status')=='rejected' ? 'selected' : '' }}>Rejected</option>
-                        <option value="completed" {{ request('status')=='completed' ? 'selected' : '' }}>Completed</option>
-                    </select>
-                </div>
-                <div class="flex gap-2">
-                    <button class="w-full bg-gradient-to-r from-slate-800 to-slate-700 text-white font-semibold px-4 py-2 rounded-lg shadow hover:from-slate-900 hover:to-slate-800 transition">Filter</button>
-                    <a href="{{ route('purchase-requests.index') }}" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition">Reset</a>
-                </div>
-            </form>
-        </div>
+            {{-- Kolom 2: Status --}}
+            <div class="w-full">
+                <label class="block text-sm text-slate-600 mb-1">Status:</label>
+                <select name="status" class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:border-blue-500 focus:ring-blue-200 outline-none transition-all cursor-pointer">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="approved" {{ request('status')=='approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="rejected" {{ request('status')=='rejected' ? 'selected' : '' }}>Rejected</option>
+                    <option value="completed" {{ request('status')=='completed' ? 'selected' : '' }}>Completed</option>
+                </select>
+            </div>
 
-        <!-- Table -->
+            {{-- Kolom 3: Tombol Action --}}
+            <div class="flex gap-2 w-full">
+                <button type="submit" class="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition shadow-sm font-medium">
+                    Filter
+                </button>
+                <a href="{{ route('purchase-requests.index') }}" class="px-4 py-2.5 bg-red-100 hover:bg-red-200 text-red-700 border border-red-200 rounded-lg transition shadow-sm font-medium text-center">
+                    Reset
+                </a>
+            </div>
+        </form>
+
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200">
@@ -56,11 +61,11 @@
                             <th class="px-6 py-4 text-center text-sm font-bold">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200">
+                    <tbody class="divide-y divide-slate-200 bg-white">
                         @forelse($purchaseRequests as $pr)
                         <tr class="hover:bg-slate-50 transition-colors duration-200">
                             <td class="px-6 py-4">
-                                <span class="font-mono text-sm font-bold text-slate-900">{{ $pr->nomor_pr }}</span>
+                                <span class="font-mono text-sm font-bold text-slate-900 bg-slate-100 px-2 py-1 rounded">{{ $pr->nomor_pr }}</span>
                             </td>
                             <td class="px-6 py-4">
                                 <div>
@@ -79,50 +84,57 @@
                             </td>
                             <td class="px-6 py-4">
                                 @php
-                                    $statusColor = [
-                                        'pending' => 'bg-amber-100 text-amber-800',
-                                        'approved' => 'bg-emerald-100 text-emerald-800',
-                                        'rejected' => 'bg-red-100 text-red-800',
-                                        'completed' => 'bg-blue-100 text-blue-800',
-                                    ][$pr->status] ?? 'bg-slate-100 text-slate-800';
+                                    $statusClasses = [
+                                        'pending'   => 'bg-amber-100 text-amber-800 border border-amber-200',
+                                        'approved'  => 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+                                        'rejected'  => 'bg-red-100 text-red-800 border border-red-200',
+                                        'completed' => 'bg-blue-100 text-blue-800 border border-blue-200',
+                                    ];
+                                    $currentClass = $statusClasses[$pr->status] ?? 'bg-slate-100 text-slate-800 border border-slate-200';
                                 @endphp
-                                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $statusColor }}">
+                                <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $currentClass }}">
                                     {{ ucfirst($pr->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex gap-2 justify-center">
-                                    <a href="{{ route('purchase-requests.show', $pr) }}" class="bg-blue-500 hover:bg-blue-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors duration-200" aria-label="Lihat">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <a href="{{ route('purchase-requests.show', $pr) }}" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors shadow-sm" 
+                                    title="Lihat">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
                                     </a>
                                     @if($pr->status === 'pending' && $pr->user_id === auth()->id())
-                                        <a href="{{ route('purchase-requests.edit', $pr) }}" class="bg-slate-500 hover:bg-slate-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors duration-200" aria-label="Edit">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
-                                            </svg>
-                                        </a>
+                                        <a href="{{ route('purchase-requests.edit', $pr) }}" 
+   class="bg-amber-500 hover:bg-amber-600 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors shadow-sm" 
+   title="Edit">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+    </svg>
+
+</a>
                                     @endif
                                 </div>
                             </td>
                         </tr>
                         @empty
-                            <tr>
-                                <td colspan="7" class="px-6 py-12 text-center">
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center bg-slate-50">
+                                <div class="flex flex-col items-center justify-center">
                                     <i class="fas fa-inbox text-4xl text-slate-300 mb-4"></i>
                                     <p class="text-slate-500 font-semibold">Tidak ada data Purchase Request</p>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Pagination -->
         <div class="mt-6">
             {{ $purchaseRequests->links() }}
         </div>

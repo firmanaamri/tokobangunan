@@ -19,7 +19,7 @@ class Payment extends Model
         'reference',
         'bukti_pembayaran',
         'paid_at',
-        'metadata',
+        'keterangan',
     ];
 
     protected $casts = [
@@ -31,10 +31,7 @@ class Payment extends Model
     /**
      * Relasi ke Sale
      */
-    public function sale(): BelongsTo
-    {
-        return $this->belongsTo(Sale::class);
-    }
+    
 
     /**
      * Relasi ke Purchase (Pembelian)

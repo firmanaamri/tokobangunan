@@ -6,7 +6,10 @@ use App\Models\GoodsReceipt;
 use App\Models\Purchase;
 use App\Models\BarangMasuk;
 use App\Models\Barang;
+use App\Models\Quarantine; // Pastikan model Quarantine diimport jika ada
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class GoodsReceiptController extends Controller
@@ -35,15 +38,15 @@ class GoodsReceiptController extends Controller
      */
     public function receive(Purchase $purchase)
     {
-        // Check if purchase already has GRN
+        // Cek apakah PO sudah pernah diterima sebelumnya
         if ($purchase->goodsReceipt) {
             return redirect()->route('goods-receipts.show', $purchase->goodsReceipt->id)
-                ->with('info', 'PO ini sudah memiliki penerimaan barang');
+                ->with('info', 'PO ini sudah memiliki penerimaan barang (GRN).');
         }
 
-        // Only lunas purchases can be received
+        // Hanya PO lunas yang bisa diterima (sesuai aturan bisnis Anda)
         if ($purchase->status_pembayaran !== 'lunas') {
-            return back()->with('error', 'PO harus lunas dulu sebelum menerima barang');
+            return back()->with('error', 'PO harus berstatus LUNAS sebelum barang bisa diterima.');
         }
 
         $purchase->load(['supplier', 'barang', 'user', 'barangMasuk.barang']);
@@ -52,119 +55,100 @@ class GoodsReceiptController extends Controller
     }
 
     /**
-     * Store goods receipt
+     * Store goods receipt (Inti Perbaikan Ada Disini)
      */
     public function store(Request $request, Purchase $purchase)
     {
-        // Load relations
         $purchase->load(['barang', 'barangMasuk']);
         
-        // Check if jumlah_po is set, fallback to barangMasuk
-        $jumlah = $purchase->jumlah_po ?? $purchase->barangMasuk?->jumlah_barang_masuk;
+        // Ambil jumlah yang harus diterima (dari PO atau BarangMasuk)
+        $jumlahTarget = $purchase->jumlah_po ?? $purchase->barangMasuk?->jumlah_barang_masuk;
         
-        if (!$jumlah) {
-            return back()->with('error', 'PO ini belum memiliki jumlah barang yang valid. Silakan perbarui data PO terlebih dahulu.');
+        if (!$jumlahTarget) {
+            return back()->with('error', 'PO ini tidak memiliki data jumlah barang yang valid.');
         }
 
-        // Accept both legacy field names (`jumlah_diterima`, `jumlah_rusak`) and new names (`quantity_accepted`, `quantity_rejected`)
+        // Validasi Input
         $validated = $request->validate([
-            'quantity_received' => 'nullable|integer|min:0|max:' . $jumlah,
-            'quantity_accepted' => 'nullable|integer|min:0|max:' . $jumlah,
+            'quantity_received' => 'nullable|integer|min:0',
+            'quantity_accepted' => 'nullable|integer|min:0',
             'quantity_rejected' => 'nullable|integer|min:0',
-            'jumlah_diterima' => 'nullable|integer|min:0|max:' . $jumlah,
+            // Support nama field lama (legacy)
+            'jumlah_diterima' => 'nullable|integer|min:0',
             'jumlah_rusak' => 'nullable|integer|min:0',
             'catatan_inspection' => 'nullable|string|max:1000',
             'foto_kerusakan' => 'nullable|image|max:2048',
         ]);
 
-        // Normalize values: prefer new field names when present
-        $qtyReceived = $request->input('quantity_received');
-        $qtyAccepted = $request->input('quantity_accepted');
-        $qtyRejected = $request->input('quantity_rejected');
+        // Normalisasi Data (Menggabungkan field lama & baru)
+        $qtyAccepted = $request->input('quantity_accepted') ?? $request->input('jumlah_diterima') ?? 0;
+        $qtyRejected = $request->input('quantity_rejected') ?? $request->input('jumlah_rusak') ?? 0;
+        
+        // Jika quantity_received tidak diisi, asumsikan sama dengan jumlah target PO
+        $qtyReceived = $request->input('quantity_received') ?? $jumlahTarget;
 
-        if ($qtyAccepted === null && $request->filled('jumlah_diterima')) {
-            $qtyAccepted = (int) $request->input('jumlah_diterima');
-        }
-        if ($qtyRejected === null && $request->filled('jumlah_rusak')) {
-            $qtyRejected = (int) $request->input('jumlah_rusak');
-        }
-        if ($qtyReceived === null) {
-            // default to PO jumlah
-            $qtyReceived = $jumlah;
-        }
-
-        $qtyAccepted = (int) ($qtyAccepted ?? 0);
-        $qtyRejected = (int) ($qtyRejected ?? 0);
-        $qtyReceived = (int) $qtyReceived;
-
-        // Validation: accepted + rejected must equal jumlah PO (or quantity_received)
-        $total = $qtyAccepted + $qtyRejected;
-        if ($total != $jumlah) {
-            return back()->withErrors(['quantity_accepted' => "Total diterima + rusak harus sama dengan jumlah PO ({$jumlah})"]);
-        }
+        // Validasi Konsistensi Jumlah
+        $totalFisik = $qtyAccepted + $qtyRejected;
+        
+        // Opsional: Validasi agar tidak terima lebih dari PO (Uncomment jika perlu strict)
+        // if ($totalFisik > $jumlahTarget) {
+        //     return back()->with('error', "Total diterima ($totalFisik) melebihi jumlah PO ($jumlahTarget).");
+        // }
 
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
-            // Generate GRN number
+            // 1. Generate Nomor GRN
             $lastGRN = GoodsReceipt::orderBy('id', 'desc')->first();
             $number = ($lastGRN ? intval(substr($lastGRN->nomor_grn, 3)) + 1 : 1);
             $nomor_grn = 'GRN' . str_pad($number, 6, '0', STR_PAD_LEFT);
 
-            // Determine status based on rejected/accepted quantities
-            $status = 'approved';
+            // 2. Tentukan Status GRN
+            $statusGRN = 'approved';
             if ($qtyRejected > 0) {
-                $status = ($qtyAccepted > 0) ? 'partial' : 'rejected';
+                $statusGRN = ($qtyAccepted > 0) ? 'partial' : 'rejected';
             }
 
-            // Handle photo upload
+            // 3. Upload Foto (Jika ada)
             $fotoPath = null;
             if ($request->hasFile('foto_kerusakan')) {
                 $fotoPath = $request->file('foto_kerusakan')->store('grn-photos', 'public');
             }
 
-            // Create GRN
+            // 4. Buat Data Goods Receipt (GRN)
             $grn = GoodsReceipt::create([
                 'nomor_grn' => $nomor_grn,
                 'purchase_id' => $purchase->id,
-                'jumlah_po' => $jumlah,
-                'jumlah_diterima' => $qtyAccepted,
-                'jumlah_rusak' => $qtyRejected,
-                'status' => $status,
+                'jumlah_po' => $jumlahTarget,
+                'jumlah_diterima' => $qtyAccepted, // Barang Bagus
+                'jumlah_rusak' => $qtyRejected,    // Barang Reject
+                'status' => $statusGRN,
                 'catatan_inspection' => $validated['catatan_inspection'],
                 'foto_kerusakan' => $fotoPath,
-                'inspector_id' => auth()->id(),
+                'inspector_id' => Auth::id(),
                 'tanggal_inspection' => Carbon::now(),
             ]);
 
-            // Get barang_id - from purchase or existing barangMasuk
+           // 5. Buat Data BarangMasuk (Log Inventory)
             $barang_id = $purchase->barang_id ?? $purchase->barangMasuk?->barang_id;
-            if (!$barang_id) {
-                throw new \Exception('Barang ID tidak ditemukan pada Purchase Order ini');
-            }
-
-            // Create BarangMasuk record to track received/accepted/rejected quantities
+            
             $barangMasuk = BarangMasuk::create([
                 'barang_id' => $barang_id,
-                'jumlah_barang_masuk' => $qtyAccepted,
-                'quantity_received' => $qtyReceived,
+                'jumlah_barang_masuk' => $qtyAccepted, 
+                'quantity_received' => $qtyReceived,   
                 'quantity_accepted' => $qtyAccepted,
                 'quantity_rejected' => $qtyRejected,
                 'rejection_reason' => $validated['catatan_inspection'] ?? null,
                 'rejection_photo' => $fotoPath,
-                'disposition' => $qtyRejected > 0 ? 'pending' : 'pending',
+                
+                // PERBAIKAN: Ubah jadi 'pending' saja (karena ini nilai default yang aman di DB Anda)
+                'disposition' => 'pending', 
+                
                 'tanggal_masuk' => Carbon::now(),
-                'user_id' => auth()->id(),
-                'keterangan' => "Penerimaan dari PO {$purchase->nomor_po} (GRN {$nomor_grn})",
+                'user_id' => Auth::id(),
+                'keterangan' => "Penerimaan PO #{$purchase->nomor_po} (GRN: {$nomor_grn})",
             ]);
-
-            // Update purchase with barang_masuk_id and status
-            $purchase->update([
-                'barang_masuk_id' => $barangMasuk->id,
-                'status_pembelian' => $qtyAccepted > 0 ? 'received' : 'pending',
-            ]);
-
-            // Increment stock only for accepted quantity
+            // 6. Update Stok Barang (Hanya yang diterima/bagus)
             if ($qtyAccepted > 0) {
                 $barang = Barang::find($barang_id);
                 if ($barang) {
@@ -172,27 +156,48 @@ class GoodsReceiptController extends Controller
                 }
             }
 
-            // If there are rejected items, create quarantine record linked to barang_masuk
+            // 7. Update Status PO (Purchase)
+            $purchase->update([
+                'barang_masuk_id' => $barangMasuk->id,
+                // Jika ada barang diterima, status PO jadi received. Jika semua reject, tetap pending/issue.
+                'status_pembelian' => ($qtyAccepted > 0) ? 'received' : 'pending',
+            ]);
+
+            // =========================================================================
+            // 8. UPDATE STATUS PR (PURCHASE REQUEST) -> AGAR DASHBOARD COMPLETED MUNCUL
+            // =========================================================================
+            if ($qtyAccepted > 0 && $purchase->purchaseRequest) {
+                // Kita anggap jika barang sudah diterima (meski parsial), 
+                // siklus pengadaan untuk PR ini sudah selesai (Completed).
+                $purchase->purchaseRequest->update(['status' => 'completed']);
+            }
+            // =========================================================================
+
+            // 9. Handle Barang Reject (Masuk Karantina)
             if ($qtyRejected > 0) {
-                \App\Models\Quarantine::create([
-                    'barang_masuk_id' => $barangMasuk->id,
-                    'barang_id' => $barang_id,
-                    'supplier_id' => $purchase->supplier_id ?? null,
-                    'quantity' => $qtyRejected,
-                    'reason' => $validated['catatan_inspection'] ?? null,
-                    'photo' => $fotoPath,
-                    'status' => 'pending',
-                    'created_by' => auth()->id(),
-                ]);
+                // Pastikan model Quarantine ada. Jika tidak, hapus blok ini.
+                if (class_exists(\App\Models\Quarantine::class)) {
+                    \App\Models\Quarantine::create([
+                        'barang_masuk_id' => $barangMasuk->id,
+                        'barang_id' => $barang_id,
+                        'supplier_id' => $purchase->supplier_id ?? null,
+                        'quantity' => $qtyRejected,
+                        'reason' => $validated['catatan_inspection'] ?? null,
+                        'photo' => $fotoPath,
+                        'status' => 'pending',
+                        'created_by' => Auth::id(),
+                    ]);
+                }
             }
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('goods-receipts.show', $grn->id)
-                ->with('success', "Penerimaan barang berhasil dicatat! GRN #{$nomor_grn}");
+                ->with('success', "Penerimaan barang berhasil! GRN #{$nomor_grn} diterbitkan.");
+
         } catch (\Exception $e) {
-            \DB::rollBack();
-            return back()->with('error', 'Gagal menyimpan penerimaan barang: ' . $e->getMessage());
+            DB::rollBack();
+            return back()->with('error', 'Gagal memproses penerimaan barang: ' . $e->getMessage());
         }
     }
 
@@ -201,18 +206,18 @@ class GoodsReceiptController extends Controller
      */
     public function show(GoodsReceipt $goodsReceipt)
     {
-        $goodsReceipt->load(['purchase.supplier', 'purchase.barang', 'purchase.barangMasuk.barang', 'inspector', 'barangMasuk.barang']);
+        $goodsReceipt->load(['purchase.supplier', 'purchase.barang', 'inspector', 'purchase.barangMasuk']);
         return view('goods-receipts.show', compact('goodsReceipt'));
     }
 
     /**
-     * List purchases that are ready to receive (lunas but no GRN yet)
+     * List purchases that are ready to receive
      */
     public function purchasesReadyToReceive()
     {
         $purchases = Purchase::with(['supplier', 'barang', 'barangMasuk.barang', 'user'])
             ->where('status_pembayaran', 'lunas')
-            ->whereDoesntHave('goodsReceipt')
+            ->whereDoesntHave('goodsReceipt') // Hanya yang belum diterima
             ->latest('tanggal_pembelian')
             ->paginate(15);
 

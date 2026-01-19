@@ -195,7 +195,7 @@ class PurchaseController extends Controller
             'paid_at' => $validated['tanggal_pembayaran'],
             'bukti_pembayaran' => $buktiPath,
             'status' => 'paid',
-            'metadata' => ['keterangan' => $validated['keterangan']],
+            'keterangan' => $validated['keterangan'],
         ]);
 
         $totalDibayar = Payment::where('purchase_id', $purchase->id)->sum('amount');

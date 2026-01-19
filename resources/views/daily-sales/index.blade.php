@@ -65,11 +65,11 @@
         <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end mb-6">
             <div class="w-full">
                 <label class="block text-sm text-slate-600 mb-1">Tampilkan Tanggal:</label>
-                <input type="date" name="date" value="{{ $date ?? date('Y-m-d') }}" class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                <input type="date" name="date" value="{{ $date ?? date('Y-m-d') }}" class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:border-emerald-400 focus:ring-emerald-200" />
             </div>
             <div class="w-full">
                 <label class="block text-sm text-slate-600 mb-1">Cari Barang:</label>
-                <input type="text" name="q" value="{{ $q ?? '' }}" placeholder="Nama barang..." class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition" />
+                <input type="text" name="q" value="{{ $q ?? '' }}" placeholder="Nama barang..." class="w-full p-2.5 rounded-lg border border-gray-300 bg-white focus:border-emerald-400 focus:ring-emerald-200" />
             </div>
             {{-- Tombol Action: Flex row agar tombol berdampingan --}}
             <div class="flex gap-2 w-full">

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            // purchase_request FK (nullable)
-            $table->foreignId('purchase_request_id')->nullable()->after('id')->constrained('purchase_requests')->nullOnDelete();
+            // purchase_request FK (nullable) — purchase_requests created later, keep plain column
+            $table->unsignedBigInteger('purchase_request_id')->nullable();
             $table->foreignId('barang_masuk_id')->constrained('barang_masuk')->onDelete('cascade');
             $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('jumlah_diminta');
             $table->string('satuan')->nullable();
             // Payment terms: jumlah hari (payment_term) atau tanggal jatuh tempo khusus (due_date)
-            $table->integer('payment_term')->nullable()->after('satuan');
-            $table->dateTime('due_date')->nullable()->after('payment_term');
+            $table->integer('payment_term')->nullable();
+            $table->dateTime('due_date')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
             $table->text('catatan_request')->nullable();
             $table->text('catatan_approval')->nullable(); // Catatan dari admin saat approve/reject
