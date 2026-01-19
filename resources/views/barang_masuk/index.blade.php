@@ -56,7 +56,6 @@
                         <option value="week">Minggu Ini</option>
                         <option value="month">Bulan Ini</option>
                         <option value="year">Tahun Ini</option>
-                        <option value="previous_year">Tahun Sebelumnya</option>
                         <option value="custom">Custom Range</option>
                     </select>
                 </div>

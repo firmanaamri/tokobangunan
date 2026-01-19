@@ -199,8 +199,10 @@
                         <a href="{{ route('goods-receipts.ready') }}" class="text-slate-500 hover:text-slate-800 font-semibold text-sm transition-colors">
                             Batal
                         </a>
-                        <button type="button" onclick="confirmCreate(this.closest('form'), 'Penerimaan Barang')" class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform hover:-translate-y-0.5">
-                            <i class="fas fa-check-circle mr-2"></i> Konfirmasi Penerimaan
+                        {{-- TOMBOL DIKECILKAN: py-2.5 px-6 rounded-lg text-sm --}}
+                        <button type="button" onclick="confirmCreate(this.closest('form'), 'Penerimaan Barang')" 
+                            class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-md shadow-emerald-500/20 transition-all transform hover:-translate-y-0.5 text-sm">
+                            <i class="fas fa-check-circle mr-2"></i> Konfirmasi 
                         </button>
                     </div>
                 </form>
@@ -208,10 +210,8 @@
         </div>
 
         <script>
-        // Logic for auto-calculation and validation
         document.addEventListener('DOMContentLoaded', function() {
             const jumlahPO = {{ $jumlah }};
-            // Note: quantity_received is now calculated, not manual
             const qtyReceivedHidden = document.getElementById('quantity_received_hidden');
             const qtyAccepted = document.querySelector('input[name="quantity_accepted"]');
             const qtyRejected = document.querySelector('input[name="quantity_rejected"]');
@@ -222,11 +222,9 @@
                 const rejected = parseInt(qtyRejected.value) || 0;
                 const total = accepted + rejected;
 
-                // Update Visual Display
                 displayTotal.innerText = total;
                 qtyReceivedHidden.value = total;
 
-                // Visual Validation Feedback
                 if (total === jumlahPO) {
                     displayTotal.classList.remove('text-red-600', 'text-amber-500');
                     displayTotal.classList.add('text-emerald-600');
@@ -239,11 +237,10 @@
                 } else {
                     displayTotal.classList.remove('text-emerald-600', 'text-red-600');
                     displayTotal.classList.add('text-amber-500');
-                    qtyAccepted.setCustomValidity(''); // Allow partial receipt? Usually logic depends. Assuming must match for now based on your old code
+                    qtyAccepted.setCustomValidity(''); 
                 }
             }
 
-            // File Upload Styling Logic
             const fileInput = document.getElementById('foto-input');
             const fileNameDisplay = document.getElementById('file-name');
             
@@ -259,7 +256,6 @@
             qtyAccepted.addEventListener('input', updateTotal);
             qtyRejected.addEventListener('input', updateTotal);
             
-            // Init check
             updateTotal();
         });
         </script>

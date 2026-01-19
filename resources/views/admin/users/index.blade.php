@@ -34,7 +34,7 @@
                                 </svg>
                             </a>
 
-                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Hapus user ini?');" style="display:inline;">
+                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="delete-user-form" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" aria-label="Hapus" title="Hapus" class="bg-red-600 hover:bg-red-700 text-white w-9 h-9 inline-flex items-center justify-center rounded-lg transition-colors duration-200">
@@ -58,5 +58,43 @@
     <div class="mt-4">
         {{ $users->links() }}
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if(session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: {!! json_encode(session('success')) !!},
+                timer: 2000,
+                showConfirmButton: false
+            });
+        });
+    </script>
+    @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.delete-user-form').forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Hapus user ini?',
+                        text: 'Data tidak dapat dikembalikan!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#dc2626',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Hapus',
+                        cancelButtonText: 'Batal',
+                        reverseButtons: true
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </div>
 @endsection

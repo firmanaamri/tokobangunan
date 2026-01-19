@@ -80,10 +80,11 @@
                                         <span class="text-sm ">{{ $purchase->tanggal_pembelian->format('d M Y') }}</span>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <a href="{{ route('goods-receipts.receive', $purchase->id) }}" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-                                            <i class="fas fa-box mr-1"></i>Terima Barang
-                                        </a>
-                                    </td>
+                                    <a href="{{ route('goods-receipts.receive', $purchase->id) }}" 
+                                    class="inline-flex items-center justify-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1.5 px-3 rounded-lg transition-colors duration-200 text-sm whitespace-nowrap shadow-sm">
+                                        <i class="fas fa-box mr-2"></i>Terima Barang
+                                    </a>
+                                </td>
                                 </tr>
                             @endforeach
                         </tbody>

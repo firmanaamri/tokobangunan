@@ -9,7 +9,7 @@
                 <p class="text-slate-600 mt-2">Kelola transaksi pembelian dari supplier</p>
             </div>
             <a href="{{ route('purchase-requests.create') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
-                <i class="fas fa-plus mr-2"></i>Transaksi Baru (Buat PR)
+                <i class="fas fa-plus mr-2"></i> Buat PR
             </a>
         </div>
 
