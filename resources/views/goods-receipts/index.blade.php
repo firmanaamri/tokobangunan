@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="mb-8 flex justify-between items-center">
@@ -9,7 +9,7 @@
                 <h1 class="text-4xl font-bold text-slate-900">Penerimaan Barang</h1>
                 <p class="text-slate-600 mt-2">Daftar Goods Receipt Notes dan Inspeksi Barang</p>
             </div>
-            <a href="{{ route('goods-receipts.ready') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">
+            <a href="{{ route('goods-receipts.ready') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">
                 <i class="fas fa-truck mr-2"></i>PO Siap Terima
             </a>
         </div>

@@ -15,7 +15,6 @@ class BarangKeluar extends Model
 
     protected $fillable = [
         'barang_id',
-        'sale_id',
         'jumlah_barang_keluar',
         'tanggal_keluar',
         'keterangan',
@@ -43,11 +42,5 @@ class BarangKeluar extends Model
            return $this->belongsTo(User::class, 'user_id');
        }
 
-       /**
-        * Relasi ke Sale
-        */
-       public function sale(): BelongsTo
-       {
-           return $this->belongsTo(Sale::class, 'sale_id');
-       }
+     
 }

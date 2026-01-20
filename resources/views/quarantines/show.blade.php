@@ -117,58 +117,77 @@
                 </div>
                 
                 <div class="p-6">
-                    <form action="{{ route('admin.quarantines.update', $quarantine->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        
+                    @if($quarantine->status === 'pending')
+                        <form action="{{ route('admin.quarantines.update', $quarantine->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Pilih Status Baru</label>
+                                <div class="space-y-2">
+                                    {{-- PENDING --}}
+                                    <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'pending' ? 'ring-2 ring-yellow-400 border-yellow-400 bg-yellow-50' : 'border-slate-200' }}">
+                                        <input type="radio" name="status" value="pending" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'pending' ? 'checked' : '' }}>
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-medium text-slate-900">Pending</span>
+                                            <span class="block text-xs text-slate-500">Menunggu keputusan</span>
+                                        </div>
+                                    </label>
+
+                                    {{-- RETURNED --}}
+                                    <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'returned' ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50' : 'border-slate-200' }}">
+                                        <input type="radio" name="status" value="returned" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'returned' ? 'checked' : '' }}>
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-medium text-slate-900">Returned</span>
+                                            <span class="block text-xs text-slate-500">Dikembalikan ke Supplier</span>
+                                        </div>
+                                    </label>
+
+                                    {{-- REPAIRED --}}
+                                    <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'repaired' ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-50' : 'border-slate-200' }}">
+                                        <input type="radio" name="status" value="repaired" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'repaired' ? 'checked' : '' }}>
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-medium text-slate-900">Repaired</span>
+                                            <span class="block text-xs text-slate-500">Sudah diperbaiki & kembali ke stok</span>
+                                        </div>
+                                    </label>
+
+                                    {{-- DISPOSED --}}
+                                    <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'disposed' ? 'ring-2 ring-red-500 border-red-500 bg-red-50' : 'border-slate-200' }}">
+                                        <input type="radio" name="status" value="disposed" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'disposed' ? 'checked' : '' }}>
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-medium text-slate-900">Disposed</span>
+                                            <span class="block text-xs text-slate-500">Dibuang / Dimusnahkan</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Simpan Perubahan
+                            </button>
+                        </form>
+                    @else
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Pilih Status Baru</label>
-                            <div class="space-y-2">
-                                {{-- PENDING --}}
-                                <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'pending' ? 'ring-2 ring-yellow-400 border-yellow-400 bg-yellow-50' : 'border-slate-200' }}">
-                                    <input type="radio" name="status" value="pending" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'pending' ? 'checked' : '' }}>
-                                    <div class="ml-3">
-                                        <span class="block text-sm font-medium text-slate-900">Pending</span>
-                                        <span class="block text-xs text-slate-500">Menunggu keputusan</span>
-                                    </div>
-                                </label>
-
-                                {{-- RETURNED --}}
-                                <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'returned' ? 'ring-2 ring-blue-500 border-blue-500 bg-blue-50' : 'border-slate-200' }}">
-                                    <input type="radio" name="status" value="returned" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'returned' ? 'checked' : '' }}>
-                                    <div class="ml-3">
-                                        <span class="block text-sm font-medium text-slate-900">Returned</span>
-                                        <span class="block text-xs text-slate-500">Dikembalikan ke Supplier</span>
-                                    </div>
-                                </label>
-
-                                {{-- REPAIRED --}}
-                                <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'repaired' ? 'ring-2 ring-emerald-500 border-emerald-500 bg-emerald-50' : 'border-slate-200' }}">
-                                    <input type="radio" name="status" value="repaired" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'repaired' ? 'checked' : '' }}>
-                                    <div class="ml-3">
-                                        <span class="block text-sm font-medium text-slate-900">Repaired</span>
-                                        <span class="block text-xs text-slate-500">Sudah diperbaiki & kembali ke stok</span>
-                                    </div>
-                                </label>
-
-                                {{-- DISPOSED --}}
-                                <label class="flex items-center p-3 border rounded-lg hover:bg-slate-50 cursor-pointer transition {{ $quarantine->status == 'disposed' ? 'ring-2 ring-red-500 border-red-500 bg-red-50' : 'border-slate-200' }}">
-                                    <input type="radio" name="status" value="disposed" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" {{ $quarantine->status == 'disposed' ? 'checked' : '' }}>
-                                    <div class="ml-3">
-                                        <span class="block text-sm font-medium text-slate-900">Disposed</span>
-                                        <span class="block text-xs text-slate-500">Dibuang / Dimusnahkan</span>
-                                    </div>
-                                </label>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Status Tindak Lanjut</label>
+                            <div class="p-4 border rounded-lg bg-slate-50 text-slate-700">
+                                <span class="inline-flex px-3 py-1 rounded-full text-sm font-semibold border {{ $statusStyles[$quarantine->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ ucfirst($quarantine->status) }}
+                                </span>
+                                <p class="text-sm text-slate-500 mt-2">Status telah ditetapkan dan tidak dapat diubah kembali.</p>
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <button disabled class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-slate-300 cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
                             Simpan Perubahan
                         </button>
-                    </form>
+                    @endif
                 </div>
             </div>
             

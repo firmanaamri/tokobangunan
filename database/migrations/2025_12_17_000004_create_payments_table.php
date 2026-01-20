@@ -15,8 +15,7 @@ return new class extends Migration
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_id')->nullable();
-            // Add foreign key constraint only if sales table exists
+           
             
             
             $table->foreignId('purchase_id')->nullable();

@@ -1,20 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex items-center gap-3 mb-4">
-                <a href="{{ route('stokbarang') }}" class="text-slate-600 hover:text-slate-900 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                </a>
+            <div class="flex items-center gap-3 mb-4 justify-between">
                 <div>
                     <h1 class="text-4xl font-bold text-slate-900">Tambah Barang Baru</h1>
                     <p class="text-slate-600 mt-2">Masukkan informasi barang ke dalam sistem</p>
                 </div>
+                <a href="{{ route('admin.quarantines.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Kembali ke Daftar
+        </a>
             </div>
         </div>
 
@@ -154,7 +155,7 @@
                 <a href="{{ route('stokbarang') }}" class="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition font-semibold">
                     Batal
                 </a>
-                <button type="button" onclick="confirmCreate(this.closest('form'), 'Barang')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Barang')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300">
                     <i class="fas fa-save mr-2"></i>Simpan Barang
                 </button>
             </div>

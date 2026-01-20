@@ -15,11 +15,11 @@
     <div class="mb-6">
         <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
             <div class="w-full">
-                <label class="block text-sm font-semibold text-slate-600 mb-1">Pencarian</label>
+                <label class="block text-sm font-semibold  mb-1">Pencarian</label>
                 <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari barang / PO..." class="w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition" />
             </div>
             <div class="w-full">
-                <label class="block text-sm font-semibold text-slate-600 mb-1">Status</label>
+                <label class="block text-sm font-semibold  mb-1">Status</label>
                 <select name="status" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
                     <option value="">Semua Status</option>
                     <option value="pending" {{ request('status')=='pending' ? 'selected' : '' }}>Pending</option>
@@ -29,7 +29,7 @@
                 </select>
             </div>
             <div class="w-full">
-                <label class="block text-sm font-semibold text-slate-600 mb-1">Supplier</label>
+                <label class="block text-sm font-semibold  mb-1">Supplier</label>
                 <select name="supplier_id" class="w-full p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none transition">
                     <option value="">Semua Supplier</option>
                     @if(isset($suppliers))
@@ -50,34 +50,34 @@
     <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
         <div class="overflow-x-auto w-full">
             <table class="min-w-full divide-y divide-gray-200 text-sm">
-                <thead class="bg-slate-50">
+                <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                     <tr>
-                        <th class="px-4 py-3 text-left font-bold text-slate-600 uppercase whitespace-nowrap">ID</th>
-                        <th class="px-4 py-3 text-left font-bold text-slate-600 uppercase whitespace-nowrap">Barang</th>
-                        <th class="px-4 py-3 text-left font-bold text-slate-600 uppercase whitespace-nowrap">Supplier / PO</th>
-                        <th class="px-4 py-3 text-center font-bold text-slate-600 uppercase whitespace-nowrap">Qty</th>
-                        <th class="px-4 py-3 text-left font-bold text-slate-600 uppercase whitespace-nowrap">Alasan</th>
-                        <th class="px-4 py-3 text-left font-bold text-slate-600 uppercase whitespace-nowrap">Status</th>
-                        <th class="px-4 py-3 text-center font-bold text-slate-600 uppercase whitespace-nowrap">Aksi</th>
+                        <th class="px-4 py-3 text-left font-bold  uppercase whitespace-nowrap">ID</th>
+                        <th class="px-4 py-3 text-left font-bold  uppercase whitespace-nowrap">Barang</th>
+                        <th class="px-4 py-3 text-left font-bold  uppercase whitespace-nowrap">Supplier / PO</th>
+                        <th class="px-4 py-3 text-center font-bold  uppercase whitespace-nowrap">Qty</th>
+                        <th class="px-4 py-3 text-left font-bold  uppercase whitespace-nowrap">Alasan</th>
+                        <th class="px-4 py-3 text-left font-bold  uppercase whitespace-nowrap">Status</th>
+                        <th class="px-4 py-3 text-center font-bold  uppercase whitespace-nowrap">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
                     @forelse($quarantines as $q)
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="px-4 py-4 whitespace-nowrap text-slate-600">#{{ $q->id }}</td>
+                        <td class="px-4 py-4 whitespace-nowrap ">#{{ $q->id }}</td>
                         <td class="px-4 py-4 whitespace-nowrap">
                             <div class="flex flex-col">
                                 <span class="font-bold text-slate-800">{{ $q->barang->nama_barang ?? '-' }}</span>
                                 <span class="text-xs text-slate-500">{{ $q->barang->sku ?? '' }}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-4 whitespace-nowrap text-slate-600">
+                        <td class="px-4 py-4 whitespace-nowrap ">
                             {{ $q->barangMasuk?->purchase?->nomor_po ?? '-' }}
                         </td>
                         <td class="px-4 py-4 whitespace-nowrap text-center font-bold text-amber-600">
                             {{ $q->quantity }}
                         </td>
-                        <td class="px-4 py-4 min-w-[200px] text-slate-600">
+                        <td class="px-4 py-4 min-w-[200px] ">
                             {{ Str::limit($q->reason, 60) }}
                         </td>
                         <td class="px-4 py-4 whitespace-nowrap">

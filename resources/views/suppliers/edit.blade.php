@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
         <div class="mb-8">
             <h1 class="text-4xl font-bold text-slate-900">Edit Supplier</h1>
@@ -103,7 +103,7 @@
             </div>
 
             <div class="bg-slate-100 px-8 py-4 flex gap-4">
-                <button type="button" onclick="confirmSave(this.closest('form'), 'Supplier')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg">
+                <button type="button" onclick="confirmSave(this.closest('form'), 'Supplier')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg">
                     <i class="fas fa-save mr-2"></i>Simpan Perubahan
                 </button>
                 <a href="{{ route('suppliers.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">

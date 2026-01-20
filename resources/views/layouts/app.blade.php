@@ -81,7 +81,7 @@
             </div>
         </header>
 
-        <main class="flex-1 p-6 md:p-10 bg-[#FAF7F2]">
+        <main class="flex-1 p-6 md:p-10 bg-white">
             @include('layouts.partials.notification')
             
             @hasSection('content')

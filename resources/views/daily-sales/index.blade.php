@@ -12,7 +12,7 @@
         </div>
         
         {{-- Tombol dibuat full width di mobile (w-full), auto di desktop --}}
-        <a href="{{ route('daily-sales.create') }}" class="w-full md:w-auto text-center bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">
+        <a href="{{ route('daily-sales.create') }}" class="w-full md:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">
             + Buat Pencatatan
         </a>
     </div>

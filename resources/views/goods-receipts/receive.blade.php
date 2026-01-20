@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6 font-sans">
+<div class="min-h-screen bg-white p-6 font-sans">
     <div class="max-w-5xl mx-auto">
         
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -55,7 +55,7 @@
             
             <div class="lg:col-span-1 space-y-6">
                 <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden relative group">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500"></div>
+                    <div class="absolute top-0 left-0 w-full h-1 bg-blue-600"></div>
                     
                     <div class="p-6">
                         <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Detail Pesanan</h3>

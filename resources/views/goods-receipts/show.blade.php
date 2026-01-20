@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-4 md:p-8 font-sans">
+<div class="min-h-screen bg-white p-4 md:p-8 font-sans">
     <div class="max-w-5xl mx-auto">
         
         {{-- ================= HEADER ================= --}}

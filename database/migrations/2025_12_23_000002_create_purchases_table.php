@@ -13,19 +13,42 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            // purchase_request FK (nullable) — purchase_requests created later, keep plain column
+            
+            // Kolom dari file pertama (Create)
             $table->unsignedBigInteger('purchase_request_id')->nullable();
-            $table->foreignId('barang_masuk_id')->constrained('barang_masuk')->onDelete('cascade');
+            
+            // PERUBAHAN 1: barang_masuk_id dibuat NULLABLE (sesuai update file ke-2)
+            // agar bisa mencatat PO sebelum barang diterima.
+            $table->foreignId('barang_masuk_id')->nullable()->constrained('barang_masuk')->onDelete('cascade');
+            
             $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
+            
+            // PERUBAHAN 2: Penambahan kolom baru dari file update (Procurement)
+            // Disisipkan di sini agar urutan kolomnya rapi
+            $table->foreignId('barang_id')->nullable()->constrained('barang')->nullOnDelete();
+            $table->integer('jumlah_po')->nullable();
+            $table->string('satuan', 50)->nullable();
+            $table->decimal('harga_unit', 12, 2)->default(0);
+            
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nomor_po')->unique();
             $table->date('tanggal_pembelian');
             $table->decimal('total_harga', 12, 2);
+            
             $table->enum('status_pembayaran', ['belum_bayar', 'sebagian', 'lunas'])->default('belum_bayar');
+            
+            // PERUBAHAN 3: Penambahan kolom status_pembelian dari file update
+            $table->enum('status_pembelian', ['pending', 'ordered', 'received'])->default('pending');
+            
             $table->datetime('due_date')->nullable();
             $table->text('keterangan')->nullable();
+            
+            // PERUBAHAN 4: Penambahan kolom catatan dari file update
+            $table->text('catatan')->nullable();
+            
             $table->timestamps();
 
+            // Indexes
             $table->index('supplier_id');
             $table->index('user_id');
             $table->index('tanggal_pembelian');

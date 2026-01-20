@@ -128,10 +128,9 @@ window.confirmRejectPR = function (form) {
                         icon: "error",
                         title: "Validasi diperlukan",
                         text: "Silakan isi alasan penolakan sebelum melanjutkan.",
-                        timer: 3000,
-                        showConfirmButton: false,
-                        toast: true,
-                        position: "top-end",
+                        showConfirmButton: true,
+                        confirmButtonText: "Tutup",
+                        customClass: { popup: "rounded-xl" },
                     });
                     return;
                 }
@@ -219,10 +218,9 @@ window.confirmCreate = function (form, itemType = "data") {
                         icon: "error",
                         title: "Validasi diperlukan",
                         text: "Silakan lengkapi form sebelum melanjutkan.",
-                        timer: 3000,
-                        showConfirmButton: false,
-                        toast: true,
-                        position: "top-end",
+                        showConfirmButton: true,
+                        confirmButtonText: "Tutup",
+                        customClass: { popup: "rounded-xl" },
                     });
                     return;
                 }
@@ -238,11 +236,9 @@ window.showSuccessToast = function (message) {
         icon: "success",
         title: "Berhasil!",
         text: message,
-        timer: 3000,
-        showConfirmButton: false,
-        toast: true,
-        position: "top-end",
-        timerProgressBar: true,
+        showConfirmButton: true,
+        confirmButtonText: "OK",
+        customClass: { popup: "rounded-xl" },
     });
 };
 
@@ -252,11 +248,9 @@ window.showErrorToast = function (message) {
         icon: "error",
         title: "Gagal!",
         text: message,
-        timer: 3000,
-        showConfirmButton: false,
-        toast: true,
-        position: "top-end",
-        timerProgressBar: true,
+        showConfirmButton: true,
+        confirmButtonText: "Tutup",
+        customClass: { popup: "rounded-xl" },
     });
 };
 

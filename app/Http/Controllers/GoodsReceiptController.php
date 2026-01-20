@@ -6,7 +6,7 @@ use App\Models\GoodsReceipt;
 use App\Models\Purchase;
 use App\Models\BarangMasuk;
 use App\Models\Barang;
-use App\Models\Quarantine; // Pastikan model Quarantine diimport jika ada
+use App\Models\Quarantine; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ class GoodsReceiptController extends Controller
                 ->with('info', 'PO ini sudah memiliki penerimaan barang (GRN).');
         }
 
-        // Hanya PO lunas yang bisa diterima (sesuai aturan bisnis Anda)
+        
         if ($purchase->status_pembayaran !== 'lunas') {
             return back()->with('error', 'PO harus berstatus LUNAS sebelum barang bisa diterima.');
         }
@@ -90,10 +90,7 @@ class GoodsReceiptController extends Controller
         // Validasi Konsistensi Jumlah
         $totalFisik = $qtyAccepted + $qtyRejected;
         
-        // Opsional: Validasi agar tidak terima lebih dari PO (Uncomment jika perlu strict)
-        // if ($totalFisik > $jumlahTarget) {
-        //     return back()->with('error', "Total diterima ($totalFisik) melebihi jumlah PO ($jumlahTarget).");
-        // }
+        
 
         try {
             DB::beginTransaction();
@@ -120,8 +117,8 @@ class GoodsReceiptController extends Controller
                 'nomor_grn' => $nomor_grn,
                 'purchase_id' => $purchase->id,
                 'jumlah_po' => $jumlahTarget,
-                'jumlah_diterima' => $qtyAccepted, // Barang Bagus
-                'jumlah_rusak' => $qtyRejected,    // Barang Reject
+                'jumlah_diterima' => $qtyAccepted, 
+                'jumlah_rusak' => $qtyRejected,    
                 'status' => $statusGRN,
                 'catatan_inspection' => $validated['catatan_inspection'],
                 'foto_kerusakan' => $fotoPath,
@@ -140,8 +137,6 @@ class GoodsReceiptController extends Controller
                 'quantity_rejected' => $qtyRejected,
                 'rejection_reason' => $validated['catatan_inspection'] ?? null,
                 'rejection_photo' => $fotoPath,
-                
-                // PERBAIKAN: Ubah jadi 'pending' saja (karena ini nilai default yang aman di DB Anda)
                 'disposition' => 'pending', 
                 
                 'tanggal_masuk' => Carbon::now(),
@@ -163,15 +158,13 @@ class GoodsReceiptController extends Controller
                 'status_pembelian' => ($qtyAccepted > 0) ? 'received' : 'pending',
             ]);
 
-            // =========================================================================
+            
             // 8. UPDATE STATUS PR (PURCHASE REQUEST) -> AGAR DASHBOARD COMPLETED MUNCUL
-            // =========================================================================
+            
             if ($qtyAccepted > 0 && $purchase->purchaseRequest) {
-                // Kita anggap jika barang sudah diterima (meski parsial), 
-                // siklus pengadaan untuk PR ini sudah selesai (Completed).
                 $purchase->purchaseRequest->update(['status' => 'completed']);
             }
-            // =========================================================================
+            
 
             // 9. Handle Barang Reject (Masuk Karantina)
             if ($qtyRejected > 0) {

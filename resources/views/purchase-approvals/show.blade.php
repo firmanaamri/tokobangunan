@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="flex justify-between items-start mb-8">
@@ -105,7 +105,7 @@
                                     <strong>Info:</strong> Saat Anda klik "Setujui", sistem otomatis akan membuat PO (Purchase Order) dengan nomor yang dihasilkan sistem.
                                 </div>
 
-                                <button type="button" onclick="confirmApprovePR(this.closest('form'))" class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
+                                <button type="button" onclick="confirmApprovePR(this.closest('form'))" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300">
                                     <i class="fas fa-check-circle mr-2"></i>Setujui PR & Buat PO
                                 </button>
                             </form>

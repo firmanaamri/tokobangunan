@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-slate-100 p-4 sm:p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
         
         <!-- Header -->
@@ -84,7 +84,7 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-3">
-                <button type="button" onclick="confirmCreate(this.closest('form'), 'Pencatatan Penjualan')" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold rounded-lg shadow-md transition">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Pencatatan Penjualan')" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition">
                     <i class="fas fa-save mr-2"></i>Simpan Pencatatan
                 </button>
                 <a href="{{ route('daily-sales.index') }}" class="px-6 py-3 bg-slate-300 hover:bg-slate-400 text-slate-900 font-bold rounded-lg transition">

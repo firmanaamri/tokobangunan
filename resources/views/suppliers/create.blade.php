@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-[#F8F4EE] to-[#FAF7F2] p-6">
+<div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
         <div class="mb-8">
             <h1 class="text-4xl font-bold text-slate-900">Tambah Supplier Baru</h1>
@@ -75,7 +75,8 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                         <label class="block text-sm font-bold text-slate-900 mb-2">Kode Pos</label>
-                        <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none">
+                        <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" maxlength="5" inputmode="numeric" pattern="\d{1,5}" oninput="this.value = this.value.replace(/\D/g, '').slice(0,5)" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kode_pos') border-red-500 @enderror">
+                        @error('kode_pos') <p class="text-red-500 text-sm mt-2">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-900 mb-2">Status <span class="text-red-500">*</span></label>
@@ -93,7 +94,7 @@
             </div>
 
             <div class="bg-slate-100 px-8 py-4 flex gap-4">
-                <button type="button" onclick="confirmCreate(this.closest('form'), 'Supplier')" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg">
+                <button type="button" onclick="confirmCreate(this.closest('form'), 'Supplier')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg">
                     Simpan
                 </button>
                 <a href="{{ route('suppliers.index') }}" class="bg-slate-500 hover:bg-slate-600 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">

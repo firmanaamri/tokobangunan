@@ -4,7 +4,7 @@
 <div class="max-w-7xl mx-auto p-6">
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold">Manajemen User</h1>
-        <a href="{{ route('admin.users.create') }}" class="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">Tambah User</a>
+        <a href="{{ route('admin.users.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg">Tambah User</a>
     </div>
 
     <div class="bg-white rounded-xl shadow-lg border overflow-x-auto">
@@ -66,8 +66,9 @@
                 icon: 'success',
                 title: 'Berhasil',
                 text: {!! json_encode(session('success')) !!},
-                timer: 2000,
-                showConfirmButton: false
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                customClass: { popup: 'rounded-xl' }
             });
         });
     </script>

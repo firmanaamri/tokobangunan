@@ -9,9 +9,7 @@ use App\Models\Kategori;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of products with stock information.
-     */
+    
     public function index(Request $request)
     {
         $query = Barang::with(['kategori', 'barangMasuk', 'barangKeluar']);
@@ -26,7 +24,7 @@ class ProductController extends Controller
         // Load relasi dengan sum aggregates
         $products = $query->withSum('barangMasuk', 'jumlah_barang_masuk')
                   ->withSum('barangKeluar', 'jumlah_barang_keluar')
-                  ->paginate(15);
+                  ->paginate(10);
 
         return view('stokbarang', compact('products'));
     }

@@ -38,16 +38,15 @@ class SupplierController extends Controller
             'alamat' => 'nullable|string',
             'kota' => 'nullable|string|max:100',
             'provinsi' => 'nullable|string|max:100',
-            // Hanya angka untuk kode pos
-            'kode_pos' => ['nullable','regex:/^\d+$/','max:10'],
+            // Kode pos: hanya angka, maksimal 5 digit
+            'kode_pos' => ['nullable','digits_between:1,5'],
             'status' => 'required|in:aktif,nonaktif',
             'keterangan' => 'nullable|string',
         ];
         $messages = [
             'nomor_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
             'nomor_telepon.max' => 'Nomor telepon maksimal 14 angka.',
-            'kode_pos.regex' => 'Kode pos hanya boleh berisi angka.',
-            'kode_pos.max' => 'Kode pos maksimal 10 angka.',
+            'kode_pos.digits_between' => 'Kode pos harus berupa angka dan maksimal 5 digit.',
         ];
         $validated = $request->validate($rules, $messages);
 
@@ -87,16 +86,15 @@ class SupplierController extends Controller
             'alamat' => 'nullable|string',
             'kota' => 'nullable|string|max:100',
             'provinsi' => 'nullable|string|max:100',
-            // Hanya angka untuk kode pos
-            'kode_pos' => ['nullable','regex:/^\d+$/','max:10'],
+            // Kode pos: hanya angka, maksimal 5 digit
+            'kode_pos' => ['nullable','digits_between:1,5'],
             'status' => 'required|in:aktif,nonaktif',
             'keterangan' => 'nullable|string',
         ];
         $messages = [
             'nomor_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
             'nomor_telepon.max' => 'Nomor telepon maksimal 14 angka.',
-            'kode_pos.regex' => 'Kode pos hanya boleh berisi angka.',
-            'kode_pos.max' => 'Kode pos maksimal 10 angka.',
+            'kode_pos.digits_between' => 'Kode pos harus berupa angka dan maksimal 5 digit.',
         ];
         $validated = $request->validate($rules, $messages);
 

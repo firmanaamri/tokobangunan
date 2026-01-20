@@ -5,11 +5,9 @@
                 icon: 'success',
                 title: 'Berhasil!',
                 text: '{{ $message }}',
-                timer: 3000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-                timerProgressBar: true
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                customClass: { popup: 'rounded-xl' }
             });
         });
     </script>
@@ -22,11 +20,9 @@
                 icon: 'error',
                 title: 'Gagal!',
                 text: '{{ $message }}',
-                timer: 3000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-                timerProgressBar: true
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup',
+                customClass: { popup: 'rounded-xl' }
             });
         });
     </script>
@@ -39,11 +35,9 @@
                 icon: 'warning',
                 title: 'Perhatian',
                 text: '{{ $message }}',
-                timer: 3000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end',
-                timerProgressBar: true
+                showConfirmButton: true,
+                confirmButtonText: 'Tutup',
+                customClass: { popup: 'rounded-xl' }
             });
         });
     </script>

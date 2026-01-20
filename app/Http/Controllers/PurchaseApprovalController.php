@@ -16,22 +16,17 @@ class PurchaseApprovalController extends Controller
      */
    public function index()
 {
-    // 1. Ambil data Pending untuk ditampilkan di Tabel (Sesuai kode view Anda)
+    
     $pendingPRs = PurchaseRequest::with(['user', 'barang', 'supplier'])
         ->where('status', 'pending')
         ->latest()
         ->paginate(15);
 
-    // 2. Hitung Statistik (INI BAGIAN YANG PERLU DIPERBAIKI)
-    // Pastikan key array-nya ('completed') sama persis dengan yang dipanggil di View
+   
     $stats = [
         'pending'   => PurchaseRequest::where('status', 'pending')->count(),
         'approved'  => PurchaseRequest::where('status', 'approved')->count(),
         'rejected'  => PurchaseRequest::where('status', 'rejected')->count(),
-        
-        // PERHATIKAN BARIS INI:
-        // Apakah di database tulisannya 'completed', 'Completed', atau 'selesai'?
-        // Pastikan sama persis.
         'completed' => PurchaseRequest::where('status', 'completed')->count(),
     ];
 
