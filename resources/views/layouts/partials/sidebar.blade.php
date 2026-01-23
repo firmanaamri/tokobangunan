@@ -46,8 +46,10 @@
         <a href="{{ route('dashboard') }}" class="flex items-center justify-center min-w-0 group transition-transform hover:scale-105 duration-300">
              <img src="{{ asset('favicon.png') }}" alt="JP" class="h-10 w-auto object-contain drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
              <span class="ml-3 text-xl font-extrabold text-white tracking-wide sidebar-label transition-colors duration-300">Jaya Prana</span>
-        </a>
+            
+        </a> 
     </div>
+    
 
     {{-- BAGIAN 2: MENU --}}
     <div class="flex flex-col flex-grow overflow-y-auto custom-scrollbar pr-1">

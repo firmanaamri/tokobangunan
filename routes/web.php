@@ -10,24 +10,30 @@ use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\PurchaseApprovalController;
 use App\Http\Controllers\GoodsReceiptController;
 use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\DailySaleController;
+use App\Http\Controllers\DailySaleController; // Pastikan ini ada
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\QuarantineController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PaymentController; // Tambahkan import ini
+use App\Http\Controllers\Api\WebhookController; // Tambahkan import ini
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+// --- GROUP AUTH ---
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Kategori
+    Route::resource('kategori', KategoriController::class);
 
     // Routes untuk Stok Barang
-    // index route (stok barang)
     Route::get('/stokbarang', [ProductController::class, 'index'])->name('stokbarang');
-    // also expose as /barang for existing view links
+    // Manual routes untuk ProductController (Bisa disederhanakan pakai Route::resource tapi manual juga oke)
     Route::get('/barang', [ProductController::class, 'index'])->name('barang');
     Route::get('/barang/create', [ProductController::class, 'create'])->name('barang.create');
     Route::post('/barang', [ProductController::class, 'store'])->name('barang.store');
@@ -36,21 +42,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/barang/{barang}', [ProductController::class, 'update'])->name('barang.update');
     Route::delete('/barang/{barang}', [ProductController::class, 'destroy'])->name('barang.destroy');
     
-    // Routes untuk Barang Masuk (READ ONLY - Auto-generated from Purchases) - Admin only
-    Route::resource('barang-masuk', BarangMasukController::class)->only(['index', 'show'])->middleware('can:isAdmin');
-    Route::get('/barang-masuk/export/pdf', [BarangMasukController::class, 'exportPDF'])->name('barang-masuk.export-pdf')->middleware('can:isAdmin');
-    
-    // Routes untuk Barang Keluar (READ ONLY - Auto-generated from Sales) - Admin only
-    Route::resource('barang-keluar', BarangKeluarController::class)->only(['index', 'show'])->middleware('can:isAdmin');
-    Route::get('/barang-keluar/export/pdf', [BarangKeluarController::class, 'exportPDF'])->name('barang-keluar.export-pdf')->middleware('can:isAdmin');
+    // Barang Masuk & Keluar (Admin Only)
+    Route::middleware('can:isAdmin')->group(function () {
+        Route::resource('barang-masuk', BarangMasukController::class)->only(['index', 'show']);
+        Route::get('/barang-masuk/export/pdf', [BarangMasukController::class, 'exportPDF'])->name('barang-masuk.export-pdf');
+        
+        Route::resource('barang-keluar', BarangKeluarController::class)->only(['index', 'show']);
+        Route::get('/barang-keluar/export/pdf', [BarangKeluarController::class, 'exportPDF'])->name('barang-keluar.export-pdf');
+    });
 
-    // Routes untuk Supplier (CRUD)
+    // Supplier & Purchase Request
     Route::resource('suppliers', SupplierController::class);
+    Route::resource('purchase-requests', PurchaseRequestController::class);
 
-    // Routes untuk Purchase Request (PR) - Pengajuan Pembelian oleh Staff
-    Route::resource('purchase-requests', PurchaseRequestController::class)->middleware('auth');
-
-    // Routes untuk Purchase Approval (Admin approval workflow)
+    // Purchase Approval
     Route::prefix('purchase-approvals')->name('purchase-approvals.')->group(function () {
         Route::get('/', [PurchaseApprovalController::class, 'index'])->name('index');
         Route::get('/{purchaseRequest}', [PurchaseApprovalController::class, 'show'])->name('show');
@@ -58,7 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/{purchaseRequest}/reject', [PurchaseApprovalController::class, 'reject'])->name('reject');
     });
 
-    // Routes untuk Goods Receipt (GRN - Penerimaan & Inspeksi Barang)
+    // Goods Receipt
     Route::prefix('goods-receipts')->name('goods-receipts.')->group(function () {
         Route::get('/', [GoodsReceiptController::class, 'index'])->name('index');
         Route::get('/ready-to-receive', [GoodsReceiptController::class, 'purchasesReadyToReceive'])->name('ready');
@@ -67,7 +72,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{goodsReceipt}/show', [GoodsReceiptController::class, 'show'])->name('show');
     });
 
-    // Routes untuk Purchase (Transaksi Pembelian dari Supplier)
+    // Purchases
     Route::resource('purchases', PurchaseController::class);
     Route::post('/purchases/{purchase}/update-payment-status', [PurchaseController::class, 'updatePaymentStatus'])->name('purchases.updatePaymentStatus');
     Route::get('/purchases/{purchase}/pdf', [PurchaseController::class, 'exportPDF'])->name('purchases.exportPDF');
@@ -75,27 +80,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchases/{purchase}/record-payment', [PurchaseController::class, 'storePayment'])->name('purchases.storePayment');
     Route::get('/barang-masuk/{barangMasuk}/create-purchase', [PurchaseController::class, 'create'])->name('purchases.createFromBarangMasuk');
 
-    // Routes untuk Sales / Transaksi
-    
-
-    // Routes untuk Pencatatan Penjualan Harian (Catat Barang Keluar)
-    Route::resource('daily-sales', App\Http\Controllers\DailySaleController::class)->middleware('auth');
-    Route::get('/daily-sales/recap', [App\Http\Controllers\DailySaleController::class, 'recap'])->name('daily-sales.recap')->middleware('auth');
-
-   
+    // Daily Sales (FIX URUTAN ROUTE)
+    // Route spesifik harus di atas resource
+    Route::get('/daily-sales/recap', [DailySaleController::class, 'recap'])->name('daily-sales.recap'); 
+    Route::resource('daily-sales', DailySaleController::class);
 
     // Payments
-    Route::post('/payments', [App\Http\Controllers\PaymentController::class, 'store'])->name('payments.store');
+    Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
 
-    // Admin: User management
+    // Admin Management
     Route::prefix('admin')->name('admin.')->middleware('can:isAdmin')->group(function () {
-        Route::resource('users', App\Http\Controllers\Admin\UserController::class);
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('quarantines', QuarantineController::class)->only(['index','show','update']);
     });
-
-    // Mirror API endpoints on web routes for simplicity / local testing
-    Route::post('/api/payments', [App\Http\Controllers\Api\PaymentApiController::class, 'store']);
-    Route::post('/api/payments/webhook', [App\Http\Controllers\Api\WebhookController::class, 'payment']);
 });
+
+// --- DI LUAR AUTH GROUP ---
+// Webhook harus bisa diakses publik (tanpa login session)
+// Pastikan URL ini juga dikecualikan di app/Http/Middleware/VerifyCsrfToken.php
+Route::post('/api/payments/webhook', [WebhookController::class, 'payment']);
 
 require __DIR__.'/auth.php';
