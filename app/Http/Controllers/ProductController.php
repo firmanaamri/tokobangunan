@@ -1,11 +1,11 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Models\Kategori;
+use Illuminate\Support\Facades\Storage; // PENTING: Jangan lupa import ini
 
 class ProductController extends Controller
 {
@@ -29,8 +29,6 @@ class ProductController extends Controller
         return view('stokbarang', compact('products'));
     }
 
-    
-
     /**
      * Show the form for creating a new product.
      */
@@ -53,16 +51,26 @@ class ProductController extends Controller
             'harga' => 'nullable|numeric|min:0',
             //'stok_saat_ini' => 'required|integer|min:0', // stok awal diatur otomatis (0)
             'deskripsi' => 'nullable|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi Gambar
         ];
 
         $messages = [
             'sku.unique' => 'SKU sudah digunakan. Gunakan SKU lain yang unik.',
             'sku.required' => 'SKU wajib diisi.',
+            'gambar.image' => 'File harus berupa gambar.',
+            'gambar.max' => 'Ukuran gambar maksimal 2MB.',
         ];
 
         $validated = $request->validate($rules, $messages);
 
-        // Ensure initial stock is 0 on creation; stock will change only via purchases or barang masuk/keluar
+        // --- PROSES UPLOAD GAMBAR BARU ---
+        if ($request->hasFile('gambar')) {
+            // Simpan ke folder 'storage/app/public/produk'
+            $path = $request->file('gambar')->store('produk', 'public');
+            $validated['gambar'] = $path;
+        }
+
+        // Ensure initial stock is 0 on creation
         $validated['stok_saat_ini'] = 0;
 
         $new = Barang::create($validated);
@@ -100,13 +108,25 @@ class ProductController extends Controller
             'kategori_id' => 'required|exists:kategori,id',
             'satuan' => 'required|string|max:50',
             'harga' => 'nullable|numeric|min:0',
-            //'stok_saat_ini' => 'required|integer|min:0', // jangan izinkan edit stok di form
             'deskripsi' => 'nullable|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi Gambar
         ]);
 
         // Prevent direct update of stok_saat_ini from edit form
         if (array_key_exists('stok_saat_ini', $validated)) {
             unset($validated['stok_saat_ini']);
+        }
+
+        // --- PROSES UPDATE GAMBAR ---
+        if ($request->hasFile('gambar')) {
+            // 1. Hapus gambar lama jika ada
+            if ($barang->gambar && Storage::disk('public')->exists($barang->gambar)) {
+                Storage::disk('public')->delete($barang->gambar);
+            }
+            
+            // 2. Upload gambar baru
+            $path = $request->file('gambar')->store('produk', 'public');
+            $validated['gambar'] = $path;
         }
 
         $barang->update($validated);
@@ -120,6 +140,11 @@ class ProductController extends Controller
      */
     public function destroy(Barang $barang)
     {
+        // --- HAPUS GAMBAR DARI STORAGE SAAT BARANG DIHAPUS ---
+        if ($barang->gambar && Storage::disk('public')->exists($barang->gambar)) {
+            Storage::disk('public')->delete($barang->gambar);
+        }
+
         $barang->delete();
 
         return redirect()->route('barang')

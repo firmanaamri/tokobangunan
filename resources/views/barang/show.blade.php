@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <!-- Header -->
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-bold">{{ $barang->nama_barang }}</h1>
@@ -16,15 +15,27 @@
         </a>
     </div>
 
-    <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Left Column: Info -->
         <div class="lg:col-span-2 space-y-6">
-            <!-- Informasi Utama -->
+            
+            <div class="bg-white rounded-xl shadow-sm border p-6 flex justify-center items-center bg-slate-50">
+                @if($barang->gambar)
+                    <img src="{{ asset('storage/' . $barang->gambar) }}" 
+                         alt="{{ $barang->nama_barang }}" 
+                         class="max-h-96 w-auto object-contain rounded-lg shadow-sm">
+                @else
+                    <div class="h-64 w-full flex flex-col items-center justify-center text-slate-400">
+                        <svg class="h-20 w-20 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                        <p>Tidak ada gambar produk</p>
+                    </div>
+                @endif
+            </div>
+
             <div class="bg-white rounded-xl shadow-sm border p-6">
                 <h2 class="text-lg font-semibold mb-4">Informasi Barang</h2>
                 <div class="space-y-4">
-                    <!-- Kategori -->
                     <div class="flex items-start">
                         <div class="w-32">
                             <label class="text-xs font-semibold text-slate-500 uppercase">Kategori</label>
@@ -36,7 +47,6 @@
                         </div>
                     </div>
 
-                    <!-- Satuan -->
                     <div class="flex items-start">
                         <div class="w-32">
                             <label class="text-xs font-semibold text-slate-500 uppercase">Satuan</label>
@@ -46,7 +56,6 @@
                         </div>
                     </div>
 
-                    <!-- Deskripsi -->
                     <div class="flex items-start">
                         <div class="w-32">
                             <label class="text-xs font-semibold text-slate-500 uppercase">Deskripsi</label>
@@ -60,7 +69,6 @@
                 </div>
             </div>
 
-            <!-- Riwayat Masuk -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
                 <h2 class="text-lg font-semibold mb-4 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
@@ -92,7 +100,6 @@
                 @endif
             </div>
 
-            <!-- Riwayat Keluar -->
             <div class="bg-white rounded-xl shadow-sm border p-6">
                 <h2 class="text-lg font-semibold mb-4 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
@@ -125,20 +132,16 @@
             </div>
         </div>
 
-        <!-- Right Column: Summary -->
         <div class="lg:col-span-1">
-            <!-- Stock Card -->
             <div class="bg-white rounded-xl shadow-sm border p-6 sticky top-6">
                 <h3 class="text-sm font-semibold text-slate-600 uppercase mb-4">Ringkasan Stok</h3>
 
-                <!-- Current Stock -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-1">Stok Saat Ini</p>
                     <p class="text-4xl font-bold text-blue-600">{{ number_format($barang->stok_saat_ini ?? 0) }}</p>
                     <p class="text-xs text-slate-500 mt-1">{{ $barang->satuan ?? 'pcs' }}</p>
                 </div>
 
-                <!-- Status -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-2">Status</p>
                     @php $status = $barang->status; @endphp
@@ -157,13 +160,11 @@
                     @endif
                 </div>
 
-                <!-- Harga -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-1">Harga</p>
                     <p class="text-2xl font-bold text-slate-900">Rp {{ number_format($barang->harga ?? 0, 2, ',', '.') }}</p>
                 </div>
 
-                <!-- Total Masuk -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-1">Total Masuk</p>
                     <p class="text-2xl font-semibold text-green-600">
@@ -171,7 +172,6 @@
                     </p>
                 </div>
 
-                <!-- Total Keluar -->
                 <div class="mb-6 pb-6 border-b">
                     <p class="text-xs text-slate-500 uppercase mb-1">Total Keluar</p>
                     <p class="text-2xl font-semibold text-red-600">
@@ -179,7 +179,6 @@
                     </p>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="space-y-2">
                     <a href="{{ route('barang.edit', $barang) }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium">
                         <i class="fas fa-edit mr-2"></i>Edit Barang

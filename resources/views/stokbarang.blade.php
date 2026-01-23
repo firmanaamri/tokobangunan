@@ -3,7 +3,6 @@
 @section('content')
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
-        <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Stok Barang</h1>
@@ -14,7 +13,6 @@
             </a>
         </div>
 
-        <!-- Search -->
         <form method="GET" action="{{ route('stokbarang') }}" class="mb-6">
             <div class="flex gap-3">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau SKU..." class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-200">
@@ -22,12 +20,12 @@
             </div>
         </form>
 
-        <!-- Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200">
                     <thead class="bg-gradient-to-r from-slate-800 to-slate-700 text-white">
                         <tr>
+                            <th class="px-6 py-4 text-center text-sm font-bold w-20">Gambar</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Nama Barang</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Kategori</th>
                             <th class="px-6 py-4 text-left text-sm font-bold">Harga</th>
@@ -41,6 +39,16 @@
                     <tbody class="divide-y divide-slate-200">
                         @forelse ($products as $product)
                             <tr class="hover:bg-slate-50 transition-colors duration-200">
+                                <td class="px-6 py-4 text-center">
+                                    @if($product->gambar)
+                                        <img src="{{ asset('storage/' . $product->gambar) }}" alt="Img" class="h-12 w-12 object-cover rounded-lg border border-slate-200 mx-auto">
+                                    @else
+                                        <div class="h-12 w-12 bg-slate-100 rounded-lg flex items-center justify-center mx-auto text-slate-400">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                    @endif
+                                </td>
+
                                 <td class="px-6 py-4">
                                     <p class="font-semibold text-slate-900">{{ $product->nama_barang }}</p>
                                     <p class="text-xs text-slate-500 mt-1">SKU: {{ $product->sku }}</p>
@@ -94,7 +102,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="9" class="px-6 py-12 text-center">
                                     <i class="fas fa-inbox text-4xl text-slate-300 mb-4"></i>
                                     <p class="text-slate-500 font-semibold">Tidak ada data barang</p>
                                 </td>
@@ -105,7 +113,6 @@
             </div>
         </div>
 
-        <!-- Pagination -->
         <div class="mt-6">
             {{ $products->links() }}
         </div>

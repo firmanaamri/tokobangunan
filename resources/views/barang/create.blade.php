@@ -3,35 +3,50 @@
 @section('content')
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
-        <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-4 justify-between">
                 <div>
                     <h1 class="text-4xl font-bold text-slate-900">Tambah Barang Baru</h1>
                     <p class="text-slate-600 mt-2">Masukkan informasi barang ke dalam sistem</p>
                 </div>
-                <a href="{{ route('admin.quarantines.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Kembali ke Daftar
-        </a>
+                <a href="{{ route('barang') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali ke Daftar
+                </a>
             </div>
         </div>
 
-        <!-- Alerts handled by SweetAlert -->
-
-        <!-- Form -->
-        <form action="{{ route('barang.store') }}" method="POST" class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+        {{-- PENTING: enctype="multipart/form-data" wajib ada untuk upload file --}}
+        <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
             @csrf
             
             <div class="p-6 space-y-6">
-                <!-- Info Dasar -->
                 <div class="border-b border-slate-200 pb-4">
                     <h2 class="text-lg font-semibold text-slate-900 mb-4">Informasi Dasar</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Nama Barang -->
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Foto Produk</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="gambar" class="flex flex-col items-center justify-center w-full h-32 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100 transition">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                        <svg class="w-8 h-8 mb-4 text-slate-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                        </svg>
+                                        <p class="mb-2 text-sm text-slate-500"><span class="font-semibold">Klik untuk upload</span> atau drag and drop</p>
+                                        <p class="text-xs text-slate-500">JPG, PNG, GIF (Maks. 2MB)</p>
+                                    </div>
+                                    <input id="gambar" name="gambar" type="file" accept="image/*" class="hidden" />
+                                </label>
+                            </div>
+                            @error('gambar')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div>
                             <label for="nama_barang" class="block text-sm font-semibold text-slate-700 mb-2">
                                 Nama Barang <span class="text-red-500">*</span>
@@ -46,7 +61,6 @@
                             @enderror
                         </div>
 
-                        <!-- SKU -->
                         <div>
                             <label for="sku" class="block text-sm font-semibold text-slate-700 mb-2">
                                 SKU (Kode Barang) <span class="text-red-500">*</span>
@@ -61,7 +75,6 @@
                             @enderror
                         </div>
 
-                        <!-- Kategori -->
                         <div>
                             <label for="kategori_id" class="block text-sm font-semibold text-slate-700 mb-2">
                                 Kategori <span class="text-red-500">*</span>
@@ -81,7 +94,6 @@
                             @enderror
                         </div>
 
-                        <!-- Satuan -->
                         <div>
                             <label for="satuan" class="block text-sm font-semibold text-slate-700 mb-2">
                                 Satuan <span class="text-red-500">*</span>
@@ -98,12 +110,10 @@
                     </div>
                 </div>
 
-                <!-- Harga & Stok -->
                 <div class="border-b border-slate-200 pb-4">
                     <h2 class="text-lg font-semibold text-slate-900 mb-4">Harga & Stok</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Harga -->
                         <div>
                             <label for="harga" class="block text-sm font-semibold text-slate-700 mb-2">
                                 Harga Jual (Rp)
@@ -119,7 +129,6 @@
                             @enderror
                         </div>
 
-                        <!-- Stok Awal (ditampilkan, tetapi tidak dapat diubah di form) -->
                         <div>
                             <label for="stok_saat_ini" class="block text-sm font-semibold text-slate-700 mb-2">Stok Awal</label>
                             <input type="number" name="stok_saat_ini" id="stok_saat_ini"
@@ -128,7 +137,7 @@
                                    placeholder="0"
                                    min="0"
                                    readonly aria-readonly="true">
-                            <p class="text-xs text-slate-500 mt-1">Stok awal diset otomatis ke <strong>0</strong>. Untuk menambah stok, gunakan proses pembelian atau pencatatan barang masuk.</p>
+                            <p class="text-xs text-slate-500 mt-1">Stok awal otomatis <strong>0</strong>. Gunakan menu barang masuk untuk menambah stok.</p>
                             @error('stok_saat_ini')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
@@ -136,7 +145,6 @@
                     </div>
                 </div>
 
-                <!-- Deskripsi -->
                 <div>
                     <label for="deskripsi" class="block text-sm font-semibold text-slate-700 mb-2">
                         Deskripsi
@@ -150,7 +158,6 @@
                 </div>
             </div>
 
-            <!-- Actions -->
             <div class="bg-slate-50 px-6 py-4 flex justify-between items-center border-t border-slate-200">
                 <a href="{{ route('stokbarang') }}" class="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 transition font-semibold">
                     Batal

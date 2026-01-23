@@ -8,34 +8,22 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     
-    {{-- Font Plus Jakarta Sans --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    {{-- Vite Assets (CSS & JS) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
-{{-- 
-    PERUBAHAN 1: Background Body 
-    bg-[#FAF7F2] diubah menjadi bg-[#E8F9FF] 
---}}
 <body class="bg-[#E8F9FF] text-stone-800 antialiased selection:bg-sky-100 selection:text-sky-900">
 
-    {{-- HEADER / NAVBAR --}}
-    {{-- 
-        PERUBAHAN 2: Background Header 
-        bg-[#FDFBF7]/90 diubah menjadi bg-[#E8F9FF]/90 agar menyatu 
-    --}}
     <header x-data="{ mobileMenuOpen: false }" 
             class="fixed w-full top-0 z-50 transition-all duration-300 backdrop-blur-md bg-[#E8F9FF]/90 border-b border-sky-100 shadow-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Top">
             <div class="w-full py-4 flex items-center justify-between border-b border-sky-100 lg:border-none">
-                {{-- LOGO --}}
                 <div class="flex items-center">
                     <a href="#" class="flex items-center gap-3 group">
                         <div class="bg-white p-1.5 rounded-lg shadow-lg group-hover:scale-105 transition-transform">
@@ -47,7 +35,6 @@
                     </a>
                 </div>
                 
-                {{-- DESKTOP MENU --}}
                 <div class="hidden ml-10 space-x-8 lg:flex items-center">
                     <a href="#" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Beranda</a>
                     <a href="#tentang" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Tentang</a>
@@ -68,7 +55,6 @@
                     @endif
                 </div>
 
-                {{-- MOBILE MENU BUTTON --}}
                 <div class="ml-10 space-x-4 flex items-center lg:hidden">
                     <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="bg-white p-2 rounded-md text-stone-400 hover:text-stone-500 hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500 shadow-sm">
                         <span class="sr-only">Open menu</span>
@@ -82,25 +68,10 @@
                 </div>
             </div>
 
-            {{-- MOBILE MENU DROPDOWN --}}
-            {{-- 
-                PERUBAHAN 3: Background Mobile Menu 
-                bg-[#FAF7F2] diubah menjadi bg-[#E8F9FF] 
-            --}}
-            <div x-show="mobileMenuOpen" 
-                 x-cloak
-                 x-transition:enter="duration-200 ease-out"
-                 x-transition:enter-start="opacity-0 -translate-y-2"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="duration-100 ease-in"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="py-4 flex flex-col space-y-2 lg:hidden border-b border-stone-200 bg-[#E8F9FF]">
-                
+            <div x-show="mobileMenuOpen" x-cloak x-transition:enter="duration-200 ease-out" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="duration-100 ease-in" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="py-4 flex flex-col space-y-2 lg:hidden border-b border-stone-200 bg-[#E8F9FF]">
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-sky-700 hover:bg-sky-100">Beranda</a>
                 <a href="#produk" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-sky-700 hover:bg-sky-100">Produk</a>
                 <a href="#kontak" class="block px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-sky-700 hover:bg-sky-100">Kontak</a>
-                
                 <div class="border-t border-stone-200 pt-4 mt-2">
                     @if (auth()->check())
                         <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-center rounded-lg font-bold bg-sky-600 text-white shadow-sm">Dashboard</a>
@@ -113,11 +84,9 @@
     </header>
 
     <main>
-        {{-- HERO SECTION --}}
         <div class="relative pt-24 pb-16 sm:pb-24 overflow-hidden">
             <div class="absolute inset-0">
                 <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Construction Site">
-                {{-- Overlay sedikit disesuaikan ke arah biru (slate) --}}
                 <div class="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/85 to-sky-900/40 mix-blend-multiply"></div>
             </div>
 
@@ -147,13 +116,8 @@
             </div>
         </div>
 
-        {{-- STATS SECTION --}}
         <div class="bg-white relative z-10 -mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl shadow-xl border border-sky-100">
             <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-sky-100">
-                {{-- 
-                    PERUBAHAN 4: Hover Stats
-                    hover:bg-[#FAF7F2] diubah menjadi hover:bg-[#E8F9FF]
-                --}}
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition rounded-l-2xl">
                     <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">100+</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Jenis Material</p>
@@ -173,11 +137,6 @@
             </div>
         </div>
 
-        {{-- KATEGORI --}}
-        {{-- 
-            PERUBAHAN 5: Background Section Kategori
-            bg-[#FAF7F2] diubah menjadi bg-[#E8F9FF]
-        --}}
         <section id="kategori" class="py-20 bg-[#E8F9FF]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -188,7 +147,6 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     @foreach ($categories as $category)
                     <a href="{{ route('landing', ['q' => $category->nama_kategori]) }}" class="group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-sky-100 hover:border-sky-400 overflow-hidden">
-                        {{-- Hover Overlay Kategori --}}
                         <div class="absolute inset-0 bg-[#D0F0FD] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         <div class="relative z-10">
                             <div class="mx-auto h-12 w-12 text-sky-600 mb-3 bg-sky-50 rounded-full flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all">
@@ -203,10 +161,8 @@
             </div>
         </section>
 
-        {{-- PRODUK --}}
         <section id="produk" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
                 <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-10 gap-6">
                     <div>
                         <h2 class="text-3xl font-extrabold text-stone-900">Katalog Produk</h2>
@@ -219,10 +175,6 @@
                                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        {{-- 
-                            PERUBAHAN 6: Background Search Input
-                            bg-[#FAF7F2] diubah menjadi bg-[#E8F9FF]
-                        --}}
                         <input type="text" name="q" value="{{ $query }}" 
                                class="block w-full pl-10 pr-3 py-3 border border-stone-200 rounded-xl leading-5 bg-[#E8F9FF] text-stone-900 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 sm:text-sm transition-all shadow-sm" 
                                placeholder="Cari nama barang atau kategori...">
@@ -237,26 +189,27 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     @forelse ($products as $product)
                     <div class="group relative bg-white border border-stone-200 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
-                        <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-stone-100 relative h-48 flex items-center justify-center">
+                        
+                        <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-stone-100 relative h-48 flex items-center justify-center group-hover:opacity-95 transition-opacity">
                             <div class="absolute top-3 right-3 z-10">
                                 @if($product->stok_saat_ini <= 0)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 border border-stone-300 shadow-sm">
-                                        Stok Habis
-                                    </span>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-stone-200 text-stone-600 border border-stone-300 shadow-sm">Habis</span>
                                 @elseif($product->stok_saat_ini < 10)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 shadow-sm animate-pulse">
-                                        Stok Menipis
-                                    </span>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200 shadow-sm animate-pulse">Menipis</span>
                                 @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-700 border border-sky-200 shadow-sm">
-                                        Ready Stock
-                                    </span>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-700 border border-sky-200 shadow-sm">Ready Stok</span>
                                 @endif
                             </div>
                             
-                            <svg class="h-20 w-20 text-stone-300 group-hover:scale-110 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
+                            @if($product->gambar)
+                                <img src="{{ asset('storage/' . $product->gambar) }}" 
+                                     alt="{{ $product->nama_barang }}" 
+                                     class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500">
+                            @else
+                                <svg class="h-20 w-20 text-stone-300 group-hover:scale-110 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                </svg>
+                            @endif
                         </div>
 
                         <div class="flex-1 p-5 flex flex-col justify-between">
@@ -311,7 +264,6 @@
             </div>
         </section>
 
-        {{-- KONTAK SECTION --}}
         <section id="kontak" class="relative py-20 bg-slate-900 overflow-hidden">
             <div class="absolute top-0 left-0 -ml-20 -mt-20 w-80 h-80 rounded-full bg-sky-600/10 blur-3xl"></div>
             <div class="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 rounded-full bg-emerald-600/10 blur-3xl"></div>

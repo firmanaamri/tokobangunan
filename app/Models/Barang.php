@@ -16,6 +16,7 @@ class Barang extends Model
 
     protected $fillable = [
         'nama_barang',
+        'gambar',
         'sku',
         'kategori_id',
         'satuan',
@@ -64,7 +65,7 @@ class Barang extends Model
             return 'Habis';
         }
 
-        if ($qty < 50) {
+        if ($qty < 20) {
             return 'Stok Menipis';
         }
 
