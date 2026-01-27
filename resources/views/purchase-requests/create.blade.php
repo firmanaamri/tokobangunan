@@ -19,12 +19,12 @@
                 <!-- Barang -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">
-                        <i class="fas fa-box mr-2 text-emerald-500"></i>Barang *
+                        <i class="fas fa-box mr-2 text-emerald-500"></i>Barang<span class="text-red-500">*</span>
                     </label>
-                    <select name="barang_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('barang_id') border-red-500 @enderror">
+                    <select id="barang-select" name="barang_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('barang_id') border-red-500 @enderror">
                         <option value="">-- Pilih Barang --</option>
                         @foreach($barangs as $barang)
-                            <option value="{{ $barang->id }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
+                            <option value="{{ $barang->id }}" data-satuan="{{ $barang->satuan }}" {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
                                 {{ $barang->nama_barang }} ({{ $barang->kategori->nama_kategori ?? '-' }})
                             </option>
                         @endforeach
@@ -37,7 +37,7 @@
                 <!-- Supplier -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">
-                        <i class="fas fa-truck mr-2 text-emerald-500"></i>Supplier *
+                        <i class="fas fa-truck mr-2 text-emerald-500"></i>Supplier<span class="text-red-500">*</span>
                     </label>
                     <select id="supplier-select" name="supplier_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('supplier_id') border-red-500 @enderror">
                         <option value="">-- Pilih Supplier --</option>
@@ -69,7 +69,7 @@
                 <!-- Jumlah Diminta -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">
-                        <i class="fas fa-calculator mr-2 text-emerald-500"></i>Jumlah Diminta *
+                        <i class="fas fa-calculator mr-2 text-emerald-500"></i>Jumlah Diminta<span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="jumlah_diminta" min="1" required value="{{ old('jumlah_diminta') }}" placeholder="100" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('jumlah_diminta') border-red-500 @enderror">
                     @error('jumlah_diminta')
@@ -80,13 +80,40 @@
                 <!-- Satuan -->
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">
-                        <i class="fas fa-ruler mr-2 text-emerald-500"></i>Satuan *
+                        <i class="fas fa-ruler mr-2 text-emerald-500"></i>Satuan<span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="satuan" required value="{{ old('satuan') }}" placeholder="pcs, dus, meter, etc" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('satuan') border-red-500 @enderror">
+                    <input id="satuan" type="text" name="satuan" required value="{{ old('satuan') }}" placeholder="pcs, dus, meter, etc" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('satuan') border-red-500 @enderror">
                     @error('satuan')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <script>
+                    (function(){
+                        var sel = document.getElementById('barang-select');
+                        var satuanInput = document.getElementById('satuan');
+                        if(!sel || !satuanInput) return;
+                        var initial = true;
+                        var handler = function(){
+                            var opt = sel.options[sel.selectedIndex];
+                            if(!opt) return;
+                            var s = opt.getAttribute('data-satuan') || '';
+                            if(initial){
+                                // on initial load, only populate when input is empty
+                                if(!satuanInput.value || satuanInput.value.trim() === ''){
+                                    satuanInput.value = s;
+                                }
+                                initial = false;
+                            } else {
+                                // on change, always update
+                                satuanInput.value = s;
+                            }
+                        };
+                        sel.addEventListener('change', handler);
+                        // compute initial if a barang is pre-selected
+                        if(sel.value){ handler(); }
+                    })();
+                </script>
                 
                     <!-- Payment Term -->
                     <div>
@@ -106,7 +133,7 @@
                             <i class="fas fa-calendar-alt mr-2 text-emerald-500"></i>Tanggal Jatuh Tempo (opsional)
                         </label>
                         <input type="date" name="due_date" id="due_date" value="{{ old('due_date') }}" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('due_date') border-red-500 @enderror">
-                        <p class="text-xs text-slate-500 mt-1">Atur tanggal jatuh tempo spesifik jika ingin menimpa payment term.</p>
+                        
                         @error('due_date')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toko Bangunan Jaya Prana - Solusi Konstruksi Terpercaya</title>
+    <title>Toko Bangunan Jaya Prana </title>
     
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
@@ -119,7 +119,7 @@
         <div class="bg-white relative z-10 -mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl shadow-xl border border-sky-100">
             <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-sky-100">
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition rounded-l-2xl">
-                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">100+</p>
+                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">50+</p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Jenis Material</p>
                 </div>
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition">

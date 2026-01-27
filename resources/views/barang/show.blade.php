@@ -184,7 +184,7 @@
                         <i class="fas fa-edit mr-2"></i>Edit Barang
                     </a>
                     <a href="{{ route('daily-sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm font-medium">
-                        <i class="fas fa-shopping-cart mr-2"></i>Buat Penjualan
+                        <i class="fas fa-shopping-cart mr-2"></i>Catat Penjualan
                     </a>
                     <form id="deleteBarangForm{{ $barang->id }}" action="{{ route('barang.destroy', $barang) }}" method="POST">
                         @csrf

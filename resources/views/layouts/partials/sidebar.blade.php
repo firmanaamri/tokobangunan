@@ -60,7 +60,7 @@
                 <a href="{{ route('dashboard') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('dashboard') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('dashboard') ? 'text-white' : 'text-blue-200 group-hover:text-amber-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -76,7 +76,7 @@
                 <a href="{{ route('stokbarang') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('stokbarang') || request()->routeIs('barang.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('stokbarang') ? 'text-white' : 'text-blue-200 group-hover:text-fuchsia-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -89,7 +89,7 @@
                 <a href="{{ route('suppliers.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('suppliers.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('suppliers.*') ? 'text-white' : 'text-blue-200 group-hover:text-rose-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -106,7 +106,7 @@
                 <a href="{{ route('purchase-requests.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('purchase-requests.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('purchase-requests.*') ? 'text-white' : 'text-blue-200 group-hover:text-cyan-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -120,7 +120,7 @@
                     <a href="{{ route('goods-receipts.index') }}" 
                        class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                               {{ request()->routeIs('goods-receipts.*') 
-                                 ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                                 ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                                  : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('goods-receipts.*') ? 'text-white' : 'text-blue-200 group-hover:text-teal-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -137,7 +137,7 @@
                 <a href="{{ route('purchase-approvals.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group relative font-medium mb-1
                           {{ request()->routeIs('purchase-approvals.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <div class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('purchase-approvals.*') ? 'text-white' : 'text-blue-200 group-hover:text-red-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -161,7 +161,7 @@
                 <a href="{{ route('purchases.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('purchases.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('purchases.*') ? 'text-white' : 'text-blue-200 group-hover:text-orange-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -173,7 +173,7 @@
                 <a href="{{ route('goods-receipts.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('goods-receipts.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('goods-receipts.*') ? 'text-white' : 'text-blue-200 group-hover:text-teal-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -190,7 +190,7 @@
                 <a href="{{ route('daily-sales.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('daily-sales.*') || request()->routeIs('cart.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <div class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('daily-sales.*') ? 'text-white' : 'text-blue-200 group-hover:text-lime-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -215,7 +215,7 @@
                 <a href="{{ route('barang-masuk.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('barang-masuk.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('barang-masuk.*') ? 'text-white' : 'text-blue-200 group-hover:text-emerald-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
@@ -227,7 +227,7 @@
                 <a href="{{ route('barang-keluar.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('barang-keluar.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('barang-keluar.*') ? 'text-white' : 'text-blue-200 group-hover:text-red-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -240,7 +240,7 @@
                 <a href="{{ route('admin.quarantines.index') }}"
                      class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                             {{ request()->routeIs('admin.quarantines.*') 
-                               ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                               ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                                : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <div class="relative">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('admin.quarantines.*') ? 'text-white' : 'text-blue-200 group-hover:text-yellow-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -263,7 +263,7 @@
                 <a href="{{ route('admin.users.index') }}" 
                    class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('admin.users.*') 
-                             ? 'bg-[#2a5a8d] text-white shadow-md ring-1 ring-white/20' 
+                             ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 transition-colors {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-blue-200 group-hover:text-indigo-300' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a4 4 0 100-8 4 4 0 000 8z" />

@@ -10,7 +10,7 @@
     
     <div class="flex gap-3">
         {{-- Tombol Baru: Kelola Kategori --}}
-        <a href="{{ route('kategori.index') }}" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 font-bold py-3 px-6 rounded-lg shadow-sm transition-all duration-300">
+        <a href="{{ route('kategori.index') }}" class="bg-[#FBEF76] border-slate-300 text-[#270254] hover:bg-[#FFD41D] font-bold py-3 px-6 rounded-lg shadow-sm transition-all duration-300">
             <i class="fas fa-tags mr-2"></i>Kelola Kategori
         </a>
 

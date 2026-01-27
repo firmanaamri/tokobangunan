@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Dashboard Inventori' }}</title>
+    <title>{{ $title ?? 'Dashboard Inventori' }} {{ Auth::user()->name ?? 'Admin' }}</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v={{ time() }}">
@@ -67,17 +67,16 @@
                     </svg>
                 </button>
                 
-                <h1 class="text-xl font-semibold text-gray-800 font-heading tracking-tight">
-                    {{ $header ?? 'Selamat Datang' }}
-                </h1>
+                <div>
+                    <h1 class="text-xl font-semibold text-gray-800 font-heading tracking-tight">
+                        {{ $header ?? 'Selamat Datang' }}
+                    </h1>
+                    <p class="text-sm text-slate-600 mt-1"> <span class="font-medium">{{ Auth::user()->name ?? 'Admin' }}</span> </p>
+                </div>
             </div>
             
             <div x-data="{ dropdownOpen: false }" class="relative">
-                <button  class="">
-                    <span class="font-medium">Halo, {{ Auth::user()->name ?? 'Admin' }}</span>
-                </button>
                 
-               
             </div>
         </header>
 
