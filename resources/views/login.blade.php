@@ -94,6 +94,16 @@
                             </svg>
                         </button>
                     </div>
+                    {{-- Tampilkan error kecil untuk username/password atau error sesi --}}
+                    @if(session('error'))
+                        <p class="mt-2 text-sm text-red-600">{{ session('error') }}</p>
+                    @endif
+                    @error('username')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @error('password')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="pt-2">
