@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
                 'name' => 'Administrator',
                 'email' => 'admin@tokobangunan.com',
                 'role' => 'admin',
-                'password' => Hash::make('admin12345'),
+                'password' => Hash::make('admin001'),
             ]
         );
 
@@ -32,12 +32,12 @@ class UserSeeder extends Seeder
                 'name' => 'Staff Toko',
                 'email' => 'staff@tokobangunan.com',
                 'role' => 'staff',
-                'password' => Hash::make('staff12345'),
+                'password' => Hash::make('staff001'),
             ]
         );
 
         $this->command->info('Default users created:');
-        $this->command->info('Admin: admin / admin12345');
-        $this->command->info('Staff: staff / staff12345');
+        $this->command->info('Admin: admin / admin001');
+        $this->command->info('Staff: staff / staff001');
     }
 }
