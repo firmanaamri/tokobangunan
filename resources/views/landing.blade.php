@@ -95,9 +95,10 @@
                         <span class="w-2 h-2 bg-sky-400 rounded-full mr-2 animate-pulse"></span>
                         Partner Konstruksi Terpercaya
                     </div> --}}
-                    <h1 class="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15]">
-                        <span class="whitespace-nowrap">Sistem Manajemen Inventori</span> <br>
-                        TB. <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-300">Jaya Prana</span>
+                   <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        <span class="block sm:inline sm:whitespace-nowrap">Sistem Manajemen Inventori</span>
+                        
+                        <br class="hidden sm:block"> TB. <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-300">Jaya Prana</span>
                     </h1>
                     <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl leading-relaxed">
                         Menyediakan material bangunan berkualitas tinggi dan alat pertukangan lengkap. 
