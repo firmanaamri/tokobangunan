@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Dashboard Inventori' }} {{ Auth::user()->name ?? 'Admin' }}</title>
+    <title>{{ $title ?? 'Dashboard Inventori' }} </title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon.png') }}?v={{ time() }}">

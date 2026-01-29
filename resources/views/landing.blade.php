@@ -37,7 +37,6 @@
                 
                 <div class="hidden ml-10 space-x-8 lg:flex items-center">
                     <a href="#" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Beranda</a>
-                    <a href="#tentang" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Tentang</a>
                     <a href="#kategori" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Kategori</a>
                     <a href="#produk" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Produk</a>
                     <a href="#kontak" class="text-sm font-medium text-stone-600 hover:text-sky-700 transition-colors">Kontak</a>
@@ -92,16 +91,16 @@
 
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-24">
                 <div class="md:w-2/3 lg:w-1/2">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full border border-sky-400/30 bg-sky-400/10 text-sky-200 text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-sm">
+                    {{-- <div class="inline-flex items-center px-3 py-1 rounded-full border border-sky-400/30 bg-sky-400/10 text-sky-200 text-xs font-semibold tracking-wide uppercase mb-6 backdrop-blur-sm">
                         <span class="w-2 h-2 bg-sky-400 rounded-full mr-2 animate-pulse"></span>
                         Partner Konstruksi Terpercaya
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
-                        Bangun Impian Anda <br>
-                        Bersama <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-300">Jaya Prana</span>
+                    </div> --}}
+                    <h1 class="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15]">
+                        <span class="whitespace-nowrap">Sistem Manajemen Inventori</span> <br>
+                        TB. <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-300">Jaya Prana</span>
                     </h1>
                     <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl leading-relaxed">
-                        Menyediakan material bangunan berkualitas tinggi, alat pertukangan lengkap, dan layanan konsultasi terbaik.
+                        Menyediakan material bangunan berkualitas tinggi dan alat pertukangan lengkap. 
                     </p>
                     <div class="mt-10 flex flex-col sm:flex-row gap-4">
                         <a href="#produk" class="inline-flex justify-center items-center px-8 py-4 border border-transparent text-base font-bold rounded-xl text-white bg-sky-500 hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]">
@@ -116,26 +115,82 @@
             </div>
         </div>
 
+       {{-- STATS SECTION DENGAN ANIMASI --}}
+
         <div class="bg-white relative z-10 -mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-2xl shadow-xl border border-sky-100">
+            {{-- 
+                Kita definisikan data langsung di parent div agar script lebih rapi 
+                Atau gunakan fungsi global sederhana.
+            --}}
             <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-sky-100">
+                
+                {{-- Item 1: 50+ --}}
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition rounded-l-2xl">
-                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">50+</p>
-                    <p class="text-sm font-medium text-stone-500 mt-1">Jenis Material</p>
+                    {{-- x-init="start()" artinya animasi langsung jalan saat halaman dimuat --}}
+                    <div x-data="counter(50, 1000)" x-init="start()">
+                        <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform cursor-default">
+                            <span x-text="current">0</span>+
+                        </p>
+                        <p class="text-sm font-medium text-stone-500 mt-1">Jenis Material</p>
+                    </div>
                 </div>
+
+                {{-- Item 2: 500+ --}}
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition">
-                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">500+</p>
-                    <p class="text-sm font-medium text-stone-500 mt-1">Pelanggan Puas</p>
+                    <div x-data="counter(500, 2000)" x-init="start()">
+                        <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform cursor-default">
+                            <span x-text="current">0</span>+
+                        </p>
+                        <p class="text-sm font-medium text-stone-500 mt-1">Pelanggan Puas</p>
+                    </div>
                 </div>
+
+                {{-- Item 3: 100% --}}
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition">
-                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">100%</p>
-                    <p class="text-sm font-medium text-stone-500 mt-1">Kualitas Asli</p>
+                    <div x-data="counter(100, 1500)" x-init="start()">
+                        <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform cursor-default">
+                            <span x-text="current">0</span>%
+                        </p>
+                        <p class="text-sm font-medium text-stone-500 mt-1">Kualitas Asli</p>
+                    </div>
                 </div>
+
+                {{-- Item 4: Teks Statis --}}
                 <div class="p-6 text-center group hover:bg-[#E8F9FF] transition rounded-r-2xl">
-                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform">Kami</p>
+                    <p class="text-3xl font-bold text-sky-700 group-hover:scale-110 transition-transform cursor-default">
+                        Kami
+                    </p>
                     <p class="text-sm font-medium text-stone-500 mt-1">Buka Setiap Hari</p>
                 </div>
             </div>
         </div>
+
+        
+        <script>
+            function counter(target, duration = 2000) {
+                return {
+                    current: 0,
+                    target: target,
+                    time: duration,
+                    start() {
+                        let startTimestamp = null;
+                        const step = (timestamp) => {
+                            if (!startTimestamp) startTimestamp = timestamp;
+                            const progress = Math.min((timestamp - startTimestamp) / this.time, 1);
+                            
+                            // Hitung angka progress
+                            this.current = Math.floor(progress * this.target);
+                            
+                            // Lanjut animasi jika belum selesai
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    }
+                };
+            }
+        </script>
 
         <section id="kategori" class="py-20 bg-[#E8F9FF]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -273,7 +328,7 @@
                     Siap Memulai Proyek Anda?
                 </h2>
                 <p class="mt-4 text-xl text-slate-400 max-w-2xl mx-auto">
-                    Kunjungi toko kami atau hubungi tim sales kami untuk mendapatkan penawaran harga terbaik.
+                    Kunjungi toko kami untuk mendapatkan penawaran harga terbaik.
                 </p>
 
                 <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
