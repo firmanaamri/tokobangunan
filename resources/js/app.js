@@ -1,8 +1,21 @@
 import "./bootstrap";
 
-import Alpine from "alpinejs";
-window.Alpine = Alpine;
-Alpine.start();
+// import Alpine from "alpinejs";
+// window.Alpine = Alpine;
+// Alpine.start();
+
+// Gunakan event listener ini agar aman bersama Livewire
+// document.addEventListener('alpine:init', () => {
+    
+//     // Jika dulu Anda punya logic sidebar disini, masukkan kembali seperti ini:
+//     Alpine.data('layout', () => ({
+//         sidebarOpen: true,
+//         toggleSidebar() {
+//             this.sidebarOpen = !this.sidebarOpen;
+//         }
+//     }));
+
+// });
 
 // 1. Import jQuery dan assign ke window
 // Ini WAJIB agar script di blade ($('#kota-select')...) bisa jalan

@@ -18,7 +18,8 @@ class ProductController extends Controller
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where('nama_barang', 'like', "%{$search}%")
-                  ->orWhere('sku', 'like', "%{$search}%");
+                  ->orWhere('sku', 'like', "%{$search}%")
+                  ->orWhere('satuan', 'like', "%{$search}%");
         }
 
         // Load relasi dengan sum aggregates
@@ -100,40 +101,52 @@ class ProductController extends Controller
     /**
      * Update the specified product in storage.
      */
-    public function update(Request $request, Barang $barang)
-    {
-        $validated = $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'sku' => 'required|string|unique:barang,sku,' . $barang->id,
-            'kategori_id' => 'required|exists:kategori,id',
-            'satuan' => 'required|string|max:50',
-            'harga' => 'nullable|numeric|min:0',
-            'deskripsi' => 'nullable|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi Gambar
-        ]);
+   public function update(Request $request, Barang $barang)
+{
+    $validated = $request->validate([
+        'nama_barang' => 'required|string|max:255',
+        'sku' => 'required|string|unique:barang,sku,' . $barang->id,
+        'kategori_id' => 'required|exists:kategori,id',
+        'satuan' => 'required|string|max:50',
+        'harga' => 'nullable|numeric|min:0',
+        'deskripsi' => 'nullable|string',
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ], [
+        'gambar.max'   => 'Ukuran foto terlalu besar! Maksimal adalah 2MB.',
+        'gambar.image' => 'File yang diupload harus berupa gambar (JPG, PNG).',
+        'gambar.mimes' => 'Format gambar harus jpeg, png, jpg, atau gif.',
+    ]);
 
-        // Prevent direct update of stok_saat_ini from edit form
-        if (array_key_exists('stok_saat_ini', $validated)) {
-            unset($validated['stok_saat_ini']);
+    // Hindari update stok manual dari form
+    unset($validated['stok_saat_ini']);
+
+    // --- LOGIKA HAPUS ATAU GANTI GAMBAR ---
+
+    // 1. Cek jika user mencentang 'Hapus Foto'
+    if ($request->has('hapus_gambar')) {
+        if ($barang->gambar && Storage::disk('public')->exists($barang->gambar)) {
+            Storage::disk('public')->delete($barang->gambar);
         }
-
-        // --- PROSES UPDATE GAMBAR ---
-        if ($request->hasFile('gambar')) {
-            // 1. Hapus gambar lama jika ada
-            if ($barang->gambar && Storage::disk('public')->exists($barang->gambar)) {
-                Storage::disk('public')->delete($barang->gambar);
-            }
-            
-            // 2. Upload gambar baru
-            $path = $request->file('gambar')->store('produk', 'public');
-            $validated['gambar'] = $path;
-        }
-
-        $barang->update($validated);
-
-        return redirect()->route('barang.show', $barang)
-                ->with('success', 'Barang berhasil diperbarui');
+        $validated['gambar'] = null; // Set kolom gambar di DB menjadi null
     }
+
+    // 2. Cek jika ada file gambar baru yang diunggah
+    if ($request->hasFile('gambar')) {
+        // Hapus gambar lama jika ada (agar tidak memenuhi storage)
+        if ($barang->gambar && Storage::disk('public')->exists($barang->gambar)) {
+            Storage::disk('public')->delete($barang->gambar);
+        }
+        
+        // Simpan gambar baru
+        $path = $request->file('gambar')->store('produk', 'public');
+        $validated['gambar'] = $path;
+    }
+
+    $barang->update($validated);
+
+    return redirect()->route('barang.show', $barang)
+                     ->with('success', 'Barang berhasil diperbarui');
+}
 
     /**
      * Remove the specified product from storage.

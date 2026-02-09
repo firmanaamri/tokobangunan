@@ -17,7 +17,7 @@
                     <p class="text-slate-600 mt-2">Status stok, supplier, dan aktivitas terkini</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                    <a href="{{ route('purchase-requests.create') }}" class="w-full sm:w-auto text-center bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-4 py-2 rounded-lg shadow">+ Ajukan Pembelian</a>
+                    <a href="{{ route('purchase-requests.create') }}" class="w-fit sm:w-auto text-center bg-[#FFD93D] hover:bg-[#FFC107] text-white font-semibold px-4 py-2 rounded-lg shadow">+ Ajukan Pembelian</a>
                 </div>
             </div>
 

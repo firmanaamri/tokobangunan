@@ -3,12 +3,12 @@
 @section('content')
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col justify-between md:flex-row md:justify-between md:items-center gap-4 mb-6">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Manajemen Pembelian</h1>
                 <p class="text-slate-600 mt-2">Kelola transaksi pembelian dari supplier</p>
             </div>
-            <a href="{{ route('purchase-requests.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+            <a href="{{ route('purchase-requests.create') }}" class=" w-fit text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                 <i class="fas fa-plus mr-2"></i> Buat PR
             </a>
         </div>

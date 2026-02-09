@@ -4,17 +4,17 @@
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="mb-8 flex justify-between items-center">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">PO Siap Terima</h1>
                 <p class=" mt-2">Daftar Purchase Order yang sudah lunas dan siap diterima barangnya</p>
             </div>
             <a href="{{ route('goods-receipts.index') }}" class="group flex items-center gap-2 px-4 py-2 bg-white  border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
             Kembali ke Daftar
-        </a>
+            </a>
         </div>
 
         <!-- Purchases Table -->

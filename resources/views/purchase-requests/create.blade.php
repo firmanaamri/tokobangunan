@@ -158,7 +158,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex gap-4 mt-8">
+            <div class="flex flex-row gap-4 mt-8">
                 <button type="button" onclick="confirmCreate(this.closest('form'), 'Purchase Request')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                     <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengajuan
                 </button>

@@ -2,29 +2,43 @@
 
 @section('content')
 <div class="min-h-screen bg-white p-6">
-   <div class="flex justify-between items-center mb-8">
+   <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
     <div>
         <h1 class="text-4xl font-bold text-slate-900">Stok Barang</h1>
         <p class="text-slate-600 mt-2">Pantau kategori, harga, riwayat, dan ketersediaan stok</p>
     </div>
     
-    <div class="flex gap-3">
-        {{-- Tombol Baru: Kelola Kategori --}}
-        <a href="{{ route('kategori.index') }}" class="bg-[#FBEF76] border-slate-300 text-[#270254] hover:bg-[#FFD41D] font-bold py-3 px-6 rounded-lg shadow-sm transition-all duration-300">
-            <i class="fas fa-tags mr-2"></i>Kelola Kategori
-        </a>
+    {{-- Gunakan Grid Cols 2 agar lebar pasti sama --}}
+        <div class="grid grid-cols-2 gap-3 mt-4">
+            <a href="{{ route('kategori.index') }}" class="flex items-center justify-center px-4 py-3 bg-[#FFD93D] text-white rounded-lg font-bold text-sm hover:bg-[#FFC107] transition shadow-sm">  
+                Kelola Kategori
+            </a>
 
-        {{-- Tombol Lama: Tambah Barang --}}
-        <a href="{{ route('barang.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
-            <i class="fas fa-plus mr-2"></i>Tambah Barang
-        </a>
-    </div>
+            <a href="{{ route('barang.create') }}" class="flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg font-bold text-sm hover:bg-blue-700 transition shadow-md">  
+                Tambah Barang
+            </a>
+        </div>
 </div>
 
-        <form method="GET" action="{{ route('stokbarang') }}" class="mb-6">
-            <div class="flex gap-3">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau SKU..." class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-200">
-                <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-3 rounded-lg font-bold">Cari</button>
+            <form method="GET" action="{{ route('stokbarang') }}" class="mb-6">
+            <div class="relative w-full max-w-md">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+
+                <input 
+                    type="search" 
+                    name="search" 
+                    value="{{ request('search') }}" 
+                    class="block w-full p-3 pl-10 text-sm text-slate-900 border border-slate-200 rounded-full bg-slate-50 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none transition shadow-sm" 
+                    
+                    {{-- UPDATE TEKS PLACEHOLDER DI SINI --}}
+                    placeholder="Cari nama, SKU, atau satuan..." 
+                    
+                    autocomplete="off"
+                >
             </div>
         </form>
 
@@ -87,15 +101,12 @@
                                     <p class="text-xs text-slate-500 mt-1 text-center">{{ $product->satuan ?? '' }}</p>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @php $status = $product->status; @endphp
-                                    @if ($status == 'Habis')
-                                        <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold animate-pulse">Habis</span>
-                                    @elseif ($status == 'Stok Menipis')
-                                        <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold animate-bounce">Menipis</span>
-                                    @else
-                                        <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">Aman</span>
-                                    @endif
-                                </td>
+    {{-- $product->status_color untuk WARNA --}}
+    {{-- $product->status untuk TEKS --}}
+    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $product->status_color }}">
+        {{ $product->status }}
+    </span>
+</td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex gap-2 justify-center">
                                         <a href="{{ route('barang.show', $product->id) }}" title="Detail" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">

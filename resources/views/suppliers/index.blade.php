@@ -4,17 +4,16 @@
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Manajemen Supplier</h1>
                 <p class="text-slate-600 mt-2">Kelola data supplier untuk pembelian barang</p>
             </div>
-            <a href="{{ route('suppliers.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+            <a href="{{ route('suppliers.create') }}" class="text-center w-fit bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                 <i class="fas fa-plus mr-2"></i>Supplier Baru
             </a>
         </div>
 
-        <!-- Alerts handled by SweetAlert -->
 
         <!-- Table -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200">

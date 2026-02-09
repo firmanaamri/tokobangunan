@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto">
-    <div class="mb-6 flex items-center justify-between">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-3xl font-bold">{{ $barang->nama_barang }}</h1>
             <p class="text-sm text-slate-500 mt-1">SKU: <span class="font-mono">{{ $barang->sku }}</span></p>
         </div>
-        <a href="{{ route('barang') }}" class="group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
+        <a href="{{ route('barang') }}" class=" w-fit group flex items-center gap-2 px-4 py-2 bg-white text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-800 transition shadow-sm font-medium text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -180,16 +180,16 @@
                 </div>
 
                 <div class="space-y-2">
-                    <a href="{{ route('barang.edit', $barang) }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium">
+                    <a href="{{ route('barang.edit', $barang) }}" class="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition text-sm font-medium">
                         <i class="fas fa-edit mr-2"></i>Edit Barang
                     </a>
-                    <a href="{{ route('daily-sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm font-medium">
+                    <a href="{{ route('daily-sales.create') }}" class="block w-full text-center px-4 py-2 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition text-sm font-medium">
                         <i class="fas fa-shopping-cart mr-2"></i>Catat Penjualan
                     </a>
                     <form id="deleteBarangForm{{ $barang->id }}" action="{{ route('barang.destroy', $barang) }}" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="button" onclick="confirmDelete('deleteBarangForm{{ $barang->id }}', 'barang {{ $barang->nama_barang }}')" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition text-sm font-medium">
+                        <button type="button" onclick="confirmDelete('deleteBarangForm{{ $barang->id }}', 'barang {{ $barang->nama_barang }}')" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition text-sm font-medium">
                             <i class="fas fa-trash mr-2"></i>Hapus Barang
                         </button>
                     </form>

@@ -42,13 +42,20 @@
 >
     
     {{-- BAGIAN 1: HEADER & LOGO --}}
-    <div class="flex items-center justify-center mb-6 p-4 shrink-0 border-b border-white/10 pb-6">
-        <a href="{{ route('dashboard') }}" class="flex items-center justify-center min-w-0 group transition-transform hover:scale-105 duration-300">
-             <img src="{{ asset('favicon.png') }}" alt="JP" class="h-10 w-auto object-contain drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
-             <span class="ml-3 text-xl font-extrabold text-white tracking-wide sidebar-label transition-colors duration-300">Jaya Prana</span>
-            
-        </a> 
-    </div>
+<div class="flex items-center justify-center mb-6 shrink-0 border-b border-white/10 transition-all duration-300"
+     :class="sidebarOpen ? 'p-6' : 'py-6 px-2'">
+ 
+    <a href="{{ route('dashboard') }}" class="flex items-center justify-center min-w-0 group transition-transform hover:scale-105 duration-300">
+
+         <img src="{{ asset('favicon.png') }}" alt="JP" 
+              class="h-10 w-auto object-contain drop-shadow-[0_0_5px_rgba(255,255,255,0.3)] shrink-0">
+         <span x-show="sidebarOpen" 
+               class="ml-3 text-xl font-extrabold text-white tracking-wide sidebar-label transition-colors duration-300 whitespace-nowrap overflow-hidden">
+            Jaya Prana
+         </span>
+        
+    </a> 
+</div>
     
 
     {{-- BAGIAN 2: MENU --}}

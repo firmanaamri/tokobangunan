@@ -4,7 +4,7 @@
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="mb-8 flex justify-between items-center">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Penerimaan Barang</h1>
                 <p class="text-slate-600 mt-2">Daftar Goods Receipt Notes dan Inspeksi Barang</p>

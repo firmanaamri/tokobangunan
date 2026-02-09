@@ -5,12 +5,12 @@
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
                 <h1 class="text-4xl font-bold text-slate-900">Pengajuan Pembelian (PR)</h1>
                 <p class="text-slate-600 mt-2">Daftar permintaan pembelian barang dari staff</p>
             </div>
-            <a href="{{ route('purchase-requests.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
+            <a href="{{ route('purchase-requests.create') }}" class="text-center w-fit bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                 <i class="fas fa-plus mr-2"></i>Ajukan PR Baru
             </a>
         </div>

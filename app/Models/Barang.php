@@ -57,6 +57,9 @@ class Barang extends Model
     /**
      * Human-readable status based on current stock.
      */
+    // 1. Accessor untuk Label Status (Teks)
+   // FUNGSI 1: Untuk Mengambil TEKS Status (Habis, Menipis, Aman)
+    // Dipanggil di view pakai: $product->status
     public function getStatusAttribute(): string
     {
         $qty = $this->stok_saat_ini ?? 0;
@@ -66,9 +69,22 @@ class Barang extends Model
         }
 
         if ($qty < 20) {
-            return 'Stok Menipis';
+            return 'Menipis';
         }
 
         return 'Aman';
+    }
+
+    // FUNGSI 2: Untuk Mengambil WARNA Status (Merah, Kuning, Hijau)
+    // Dipanggil di view pakai: $product->status_color
+    public function getStatusColorAttribute(): string
+    {
+        $qty = $this->stok_saat_ini ?? 0;
+
+        return match (true) {
+            $qty <= 0 => 'bg-red-100 text-red-800 animate-pulse', // Merah
+            $qty < 20 => 'bg-amber-100 text-amber-800 animate-bounce', // Kuning/Amber
+            default   => 'bg-emerald-100 text-emerald-800', // Hijau
+        };
     }
 }

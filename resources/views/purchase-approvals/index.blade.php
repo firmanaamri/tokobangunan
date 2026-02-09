@@ -4,9 +4,11 @@
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold text-slate-900">Persetujuan Pengajuan Pembelian</h1>
-            <p class="text-slate-600 mt-2">Daftar PR yang menunggu persetujuan admin</p>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-slate-900">Persetujuan Pengajuan Pembelian (PR)</h1>
+                <p class="text-slate-600 mt-2">Daftar PR yang menunggu persetujuan admin</p>
+            </div> 
         </div>
 
         <!-- Notification for New PRs -->
