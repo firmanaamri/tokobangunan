@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm font-medium uppercase tracking-wider mb-1">Total Tagihan</p>
-                <h3 class="text-2xl font-bold text-slate-800">Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}</h3>
+                <h3 class="text-2xl font-bold text-slate-800">Rp {{ number_format($purchase->display_total, 0, ',', '.') }}</h3>
             </div>
 
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 relative overflow-hidden group hover:shadow-md transition-all duration-300">
@@ -57,7 +57,7 @@
             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 relative overflow-hidden group hover:shadow-md transition-all duration-300">
                 <div class="absolute right-0 top-0 h-full w-1 bg-gradient-to-b from-rose-400 to-rose-600"></div>
                 @php
-                    $remaining = $purchase->total_harga - $alreadyPaid;
+                    $remaining = $purchase->display_total - $alreadyPaid;
                     if($remaining < 0) { $remaining = 0; }
                 @endphp
                 <div class="flex justify-between items-start mb-4">

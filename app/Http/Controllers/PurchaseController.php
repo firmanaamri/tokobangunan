@@ -57,12 +57,11 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-        // 1. UBAH VALIDASI: Gunakan 'due_date'
         $validated = $request->validate([
             'purchase_request_id' => 'required|exists:purchase_requests,id',
             'barang_id' => 'required|exists:barang,id',
             'jumlah' => 'required|integer|min:1',
-            'harga_per_unit' => 'required|numeric|min:0',
+            'harga_per_unit' => 'required|numeric|min:0', // Ini harga hasil nego
             'supplier_id' => 'required|exists:suppliers,id',
             'tanggal_pembelian' => 'required|date',
             'total_harga' => 'required|numeric|min:0',
@@ -74,13 +73,12 @@ class PurchaseController extends Controller
 
         DB::beginTransaction();
         try {
+            // Ambil Data Barang
             $barang = \App\Models\Barang::find($validated['barang_id']);
+            
             $nomorPO = 'PO-' . date('Ymd') . '-' . str_pad(Purchase::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
 
-            // 2. AMBIL DARI INPUT 'due_date'
             $dueDate = $validated['due_date'] ?? null;
-            
-            // Logika Fallback jika kosong
             if (empty($dueDate)) {
                 if (!empty($pr->due_date)) {
                     $dueDate = $pr->due_date->toDateString();
@@ -89,24 +87,31 @@ class PurchaseController extends Controller
                 }
             }
 
+            // 1. SIMPAN TRANSAKSI PO
             $purchase = Purchase::create([
                 'barang_id' => $validated['barang_id'],
                 'supplier_id' => $validated['supplier_id'],
                 'user_id' => Auth::id(),
                 'nomor_po' => $nomorPO,
                 'jumlah_po' => $validated['jumlah'],
-                'harga_unit' => $validated['harga_per_unit'],
+                'harga_unit' => $validated['harga_per_unit'], // Simpan harga nego
                 'satuan' => $barang->satuan ?? null,
                 'tanggal_pembelian' => $validated['tanggal_pembelian'],
                 'total_harga' => $validated['total_harga'],
-                'due_date' => $dueDate, // SIMPAN LANGSUNG
+                'due_date' => $dueDate,
                 'keterangan' => $validated['keterangan'],
                 'purchase_request_id' => $validated['purchase_request_id'],
                 'status_pembelian' => 'pending',
             ]);
 
+            // 2. MODIFIKASI: UPDATE HARGA BELI TERAKHIR DI MASTER BARANG
+            // Ini agar next time beli barang ini, harganya sudah update
+            $barang->update([
+                'harga_beli_terakhir' => $validated['harga_per_unit']
+            ]);
+
             DB::commit();
-            return redirect()->route('purchases.show', $purchase->id)->with('success', 'Transaksi pembelian berhasil dibuat.');
+            return redirect()->route('purchases.show', $purchase->id)->with('success', 'Transaksi pembelian berhasil dibuat dan harga pasar barang telah diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withInput()->with('error', 'Gagal: ' . $e->getMessage());
@@ -127,7 +132,6 @@ class PurchaseController extends Controller
 
     public function update(Request $request, Purchase $purchase)
     {
-        // 3. UBAH VALIDASI UPDATE: Gunakan 'due_date'
         $validated = $request->validate([
             'supplier_id' => 'required|exists:suppliers,id',
             'tanggal_pembelian' => 'required|date',
@@ -140,7 +144,7 @@ class PurchaseController extends Controller
             'supplier_id' => $validated['supplier_id'],
             'tanggal_pembelian' => $validated['tanggal_pembelian'],
             'total_harga' => $validated['total_harga'],
-            'due_date' => $validated['due_date'], // MAPPING LANGSUNG
+            'due_date' => $validated['due_date'], 
             'keterangan' => $validated['keterangan'],
         ]);
 
@@ -182,7 +186,8 @@ class PurchaseController extends Controller
         ]);
 
         $totalDibayar = Payment::where('purchase_id', $purchase->id)->sum('amount');
-        if (($totalDibayar + $validated['jumlah_bayar']) > $purchase->total_harga) {
+        $displayTotal = $purchase->display_total;
+        if (($totalDibayar + $validated['jumlah_bayar']) > $displayTotal) {
             return back()->with('error', 'Jumlah pembayaran melebihi total harga.');
         }
 
@@ -199,7 +204,7 @@ class PurchaseController extends Controller
         ]);
 
         $totalDibayar = Payment::where('purchase_id', $purchase->id)->sum('amount');
-        $status = ($totalDibayar >= $purchase->total_harga) ? 'lunas' : (($totalDibayar > 0) ? 'sebagian' : 'belum_bayar');
+        $status = ($totalDibayar >= $purchase->display_total) ? 'lunas' : (($totalDibayar > 0) ? 'sebagian' : 'belum_bayar');
         $purchase->update(['status_pembayaran' => $status]);
 
         return redirect()->route('purchases.show', $purchase->id)->with('success', 'Pembayaran dicatat');

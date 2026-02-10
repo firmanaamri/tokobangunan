@@ -104,7 +104,7 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-right">
-                                    <span class="font-bold text-slate-900">Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}</span>
+                                    <span class="font-bold text-slate-900">Rp {{ number_format($purchase->display_total, 0, ',', '.') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     @if ($purchase->status_pembayaran == 'belum_bayar')

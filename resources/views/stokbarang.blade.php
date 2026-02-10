@@ -101,12 +101,10 @@
                                     <p class="text-xs text-slate-500 mt-1 text-center">{{ $product->satuan ?? '' }}</p>
                                 </td>
                                 <td class="px-6 py-4">
-    {{-- $product->status_color untuk WARNA --}}
-    {{-- $product->status untuk TEKS --}}
-    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $product->status_color }}">
-        {{ $product->status }}
-    </span>
-</td>
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold {{ $product->status_color }}">
+                                        {{ $product->status }}
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex gap-2 justify-center">
                                         <a href="{{ route('barang.show', $product->id) }}" title="Detail" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-200 inline-flex items-center">

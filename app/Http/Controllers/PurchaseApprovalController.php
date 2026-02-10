@@ -4,99 +4,95 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseRequest;
 use App\Models\Purchase;
+use App\Models\Barang;   // <--- TAMBAHAN
+use App\Models\Supplier; // <--- TAMBAHAN
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahan agar Auth::id() tidak merah
-use Illuminate\Support\Facades\DB;   // Tambahan agar DB::transaction tidak merah
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class PurchaseApprovalController extends Controller
 {
-    /**
-     * Show pending PRs for approval
-     */
-   public function index()
-{
-    
-    $pendingPRs = PurchaseRequest::with(['user', 'barang', 'supplier'])
-        ->where('status', 'pending')
-        ->latest()
-        ->paginate(15);
+    public function index()
+    {
+        $pendingPRs = PurchaseRequest::with(['user', 'barang', 'supplier'])
+            ->where('status', 'pending')
+            ->latest()
+            ->paginate(15);
 
-   
-    $stats = [
-        'pending'   => PurchaseRequest::where('status', 'pending')->count(),
-        'approved'  => PurchaseRequest::where('status', 'approved')->count(),
-        'rejected'  => PurchaseRequest::where('status', 'rejected')->count(),
-        'completed' => PurchaseRequest::where('status', 'completed')->count(),
-    ];
+        $stats = [
+            'pending'   => PurchaseRequest::where('status', 'pending')->count(),
+            'approved'  => PurchaseRequest::where('status', 'approved')->count(),
+            'rejected'  => PurchaseRequest::where('status', 'rejected')->count(),
+            'completed' => PurchaseRequest::where('status', 'completed')->count(),
+        ];
 
-    // 3. Kirim ke View
-    return view('purchase-approvals.index', compact('pendingPRs', 'stats'));
-}
+        return view('purchase-approvals.index', compact('pendingPRs', 'stats'));
+    }
 
-    /**
-     * Show approval form
-     */
     public function show(PurchaseRequest $purchaseRequest)
     {
-        // $this->authorize('isAdmin');
-
         if ($purchaseRequest->status !== 'pending') {
             return back()->with('error', 'PR ini sudah di-process');
         }
 
         $purchaseRequest->load(['user', 'barang.kategori', 'supplier']);
+        
+        // TAMBAHAN: Kita butuh list supplier untuk dropdown di form approval
+        $suppliers = Supplier::where('status', 'aktif')->get(); 
 
-        return view('purchase-approvals.show', compact('purchaseRequest'));
+        return view('purchase-approvals.show', compact('purchaseRequest', 'suppliers'));
     }
 
-    /**
-     * Approve PR and auto-generate PO
-     */
     public function approve(Request $request, PurchaseRequest $purchaseRequest)
     {
-        // $this->authorize('isAdmin');
-
         if ($purchaseRequest->status !== 'pending') {
             return back()->with('error', 'PR ini sudah di-process');
         }
 
+        // 1. VALIDASI INPUT HARGA DEAL & SUPPLIER FINAL
         $validated = $request->validate([
+            'harga_deal'       => 'required|numeric|min:0',
+            'supplier_id'      => 'required|exists:suppliers,id',
             'catatan_approval' => 'nullable|string|max:1000',
         ]);
 
         try {
-            // Start transaction
             DB::beginTransaction();
 
-            // Update PR status
+            // 2. UPDATE PR
             $purchaseRequest->update([
-                'status' => 'approved',
-                'approved_by' => Auth::id(),
+                'status'           => 'approved',
+                'approved_by'      => Auth::id(),
                 'tanggal_approval' => Carbon::now(),
+                'supplier_id'      => $validated['supplier_id'], // Update supplier jika berubah
                 'catatan_approval' => $validated['catatan_approval'] ?? null,
             ]);
 
-            // Auto-generate PO from approved PR
-            $po = $this->generatePO($purchaseRequest);
+            // 3. GENERATE PO (Kirim Harga Deal & Supplier Final)
+            $po = $this->generatePO($purchaseRequest, $validated['harga_deal'], $validated['supplier_id']);
+
+            // 4. UPDATE HARGA PASAR DI MASTER BARANG
+            // Agar sistem makin pintar mencatat harga terakhir
+            $barang = Barang::find($purchaseRequest->barang_id);
+            if ($barang) {
+                $barang->update([
+                    'harga_beli_terakhir' => $validated['harga_deal']
+                ]);
+            }
 
             DB::commit();
 
             return redirect()->route('purchase-approvals.index')
-                ->with('success', "PR berhasil disetujui! PO #{$po->nomor_po} otomatis dibuat.");
+                ->with('success', "PR Disetujui! PO #{$po->nomor_po} terbentuk dengan harga Rp " . number_format($validated['harga_deal']));
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal approve PR: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Reject PR
-     */
     public function reject(Request $request, PurchaseRequest $purchaseRequest)
     {
-        // $this->authorize('isAdmin');
-
         if ($purchaseRequest->status !== 'pending') {
             return back()->with('error', 'PR ini sudah di-process');
         }
@@ -116,61 +112,48 @@ class PurchaseApprovalController extends Controller
             ->with('success', 'PR berhasil ditolak.');
     }
 
-    /**
-     * Generate PO from approved PR
-     */
-    private function generatePO(PurchaseRequest $purchaseRequest)
+    // MODIFIKASI: Terima parameter Harga & Supplier
+    private function generatePO(PurchaseRequest $purchaseRequest, $hargaDeal, $supplierId)
     {
         $purchaseRequest->loadMissing('barang');
 
-        // Generate nomor PO yang lebih aman
         $lastPO = Purchase::orderBy('id', 'desc')->first();
         $number = 1;
         
-        // Cek apakah ada PO terakhir dan ambil angkanya
         if ($lastPO) {
-            // Mengambil angka dari string, misal PO000005 -> 5
             if (preg_match('/\d+/', $lastPO->nomor_po, $matches)) {
                 $number = intval($matches[0]) + 1;
             }
         }
         $nomor_po = 'PO' . str_pad($number, 6, '0', STR_PAD_LEFT);
 
-        $hargaUnit = $purchaseRequest->barang?->harga ?? 0; // Pastikan harga ada
-        $jumlah = $purchaseRequest->jumlah_diminta;
-        $totalHarga = $hargaUnit * $jumlah;
+        // HITUNG TOTAL PAKAI HARGA DEAL (BUKAN HARGA MASTER)
+        $totalHarga = $hargaDeal * $purchaseRequest->jumlah_diminta;
 
-        // === PERBAIKAN UTAMA: LOGIKA DUE DATE ===
+        // Logika Due Date
         $dueDate = null;
         if (!empty($purchaseRequest->due_date)) {
-            // Prioritas 1: Jika di PR sudah ditentukan tanggalnya
             $dueDate = $purchaseRequest->due_date;
         } elseif (!empty($purchaseRequest->payment_term)) {
-            // Prioritas 2: Jika pakai payment term (hari), hitung dari hari ini
             $dueDate = Carbon::now()->addDays(intval($purchaseRequest->payment_term));
         }
-        // ========================================
 
-        // Create Purchase record from PR
         $po = Purchase::create([
-            'nomor_po' => $nomor_po,
-            'supplier_id' => $purchaseRequest->supplier_id,
-            'user_id' => Auth::id(),
-            'barang_masuk_id' => null, // Masih kosong karena barang belum diterima
-            'barang_id' => $purchaseRequest->barang_id,
-            'jumlah_po' => $jumlah,
-            'satuan' => $purchaseRequest->satuan,
-            'harga_unit' => $hargaUnit,
-            'total_harga' => $totalHarga,
+            'nomor_po'          => $nomor_po,
+            'supplier_id'       => $supplierId, // Pakai Supplier Final
+            'user_id'           => Auth::id(),
+            'barang_masuk_id'   => null,
+            'barang_id'         => $purchaseRequest->barang_id,
+            'jumlah_po'         => $purchaseRequest->jumlah_diminta,
+            'satuan'            => $purchaseRequest->satuan,
+            'harga_unit'        => $hargaDeal, // Pakai Harga Deal
+            'total_harga'       => $totalHarga,
             'tanggal_pembelian' => Carbon::now(),
             'status_pembayaran' => 'belum_bayar',
-            'status_pembelian' => 'pending',
-            
-            // Masukkan data due_date yang sudah dihitung
-            'due_date' => $dueDate, 
-
-            'keterangan' => $purchaseRequest->catatan_request,
-            'catatan' => $purchaseRequest->catatan_request,
+            'status_pembelian'  => 'pending', 
+            'due_date'          => $dueDate, 
+            'keterangan'        => $purchaseRequest->catatan_request,
+            'catatan'           => $purchaseRequest->catatan_request,
             'purchase_request_id' => $purchaseRequest->id,
         ]);
 

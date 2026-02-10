@@ -54,12 +54,13 @@ Route::middleware('auth')->group(function () {
     // Supplier & Purchase Request
     Route::resource('suppliers', SupplierController::class);
     Route::resource('purchase-requests', PurchaseRequestController::class);
-
+    
     // Purchase Approval
     Route::prefix('purchase-approvals')->name('purchase-approvals.')->group(function () {
         Route::get('/', [PurchaseApprovalController::class, 'index'])->name('index');
         Route::get('/{purchaseRequest}', [PurchaseApprovalController::class, 'show'])->name('show');
-        Route::post('/{purchaseRequest}/approve', [PurchaseApprovalController::class, 'approve'])->name('approve');
+        // Terima POST (form) dan PUT (jika ada client yang mengirim PUT)
+        Route::match(['post', 'put'], '/{purchaseRequest}/approve', [PurchaseApprovalController::class, 'approve'])->name('approve');
         Route::post('/{purchaseRequest}/reject', [PurchaseApprovalController::class, 'reject'])->name('reject');
     });
 

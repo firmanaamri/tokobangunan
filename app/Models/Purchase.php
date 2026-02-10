@@ -40,6 +40,27 @@ class Purchase extends Model
         'due_date' => 'date', 
     ];
 
+    // Tambahkan accessor untuk menampilkan total harga berdasarkan harga_beli_terakhir dari barang
+    // jika tersedia; fallback ke kolom `total_harga` yang tersimpan di DB.
+    public function getDisplayUnitPriceAttribute()
+    {
+        if ($this->barang && !is_null($this->barang->harga_beli_terakhir) && $this->barang->harga_beli_terakhir > 0) {
+            return $this->barang->harga_beli_terakhir;
+        }
+
+        return $this->harga_unit ?? 0;
+    }
+
+    public function getDisplayTotalAttribute()
+    {
+        // Jika barang ada dan harga_beli_terakhir tersedia, gunakan itu * jumlah
+        if ($this->barang && !is_null($this->barang->harga_beli_terakhir) && $this->barang->harga_beli_terakhir > 0) {
+            return bcmul((string) $this->barang->harga_beli_terakhir, (string) ($this->jumlah_po ?? 0), 2);
+        }
+
+        return $this->total_harga ?? 0;
+    }
+
     /**
      * Relasi ke BarangMasuk
      */

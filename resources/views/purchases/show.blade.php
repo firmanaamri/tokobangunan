@@ -114,7 +114,7 @@
                 <div>
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Total Tagihan</h3>
                     <p class="text-3xl font-extrabold text-slate-900 tracking-tight">
-                        <span class="text-sm font-medium text-slate-400 align-top mr-1">Rp</span>{{ number_format($purchase->total_harga, 0, ',', '.') }}
+                        <span class="text-sm font-medium text-slate-400 align-top mr-1">Rp</span>{{ number_format($purchase->display_total, 0, ',', '.') }}
                     </p>
                 </div>
                 
@@ -167,7 +167,7 @@
                                 </td>
                                 <td class="py-4 px-4 font-mono text-slate-600">{{ $barang->sku ?? '-' }}</td>
                                 <td class="py-4 px-4 text-right text-slate-700">
-                                    Rp {{ number_format($purchase->harga_unit, 0, ',', '.') }}
+                                    Rp {{ number_format($purchase->display_unit_price, 0, ',', '.') }}
                                 </td>
                                 <td class="py-4 px-4 text-center">
                                     <span class="inline-block px-2 py-1 bg-slate-100 rounded font-bold text-slate-700">
@@ -175,7 +175,7 @@
                                     </span>
                                 </td>
                                 <td class="py-4 pl-4 text-right font-bold text-slate-900">
-                                    Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}
+                                    Rp {{ number_format($purchase->display_total, 0, ',', '.') }}
                                 </td>
                             </tr>
                         </tbody>

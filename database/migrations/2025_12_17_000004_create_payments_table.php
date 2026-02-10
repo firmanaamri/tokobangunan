@@ -20,7 +20,7 @@ return new class extends Migration
             
             $table->foreignId('purchase_id')->nullable();
             if (Schema::hasTable('purchases')) {
-                $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+                $table->foreignId('purchase_id')->constrained('purchases')->onDelete('cascade');
             }
             
             $table->decimal('amount', 12, 2);

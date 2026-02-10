@@ -74,7 +74,7 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4">
-                                        <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($purchase->total_harga, 0, ',', '.') }}</span>
+                                        <span class="text-sm font-bold text-emerald-600">Rp {{ number_format($purchase->display_total, 0, ',', '.') }}</span>
                                     </td>
                                     <td class="px-6 py-4">
                                         <span class="text-sm ">{{ $purchase->tanggal_pembelian->format('d M Y') }}</span>

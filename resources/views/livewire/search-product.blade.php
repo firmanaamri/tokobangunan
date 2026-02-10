@@ -37,7 +37,7 @@
                     {{-- BADGE STATUS STOK (DIKEMBALIKAN) --}}
                    <div class="absolute top-3 right-3 z-10">
                         <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold border shadow-sm backdrop-blur-sm {{ $product->status_color }}">
-                            {{ $product->status_label }}
+                            {{ $product->status }}
                         </span>
                     </div>
 

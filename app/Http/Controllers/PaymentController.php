@@ -17,7 +17,7 @@ class PaymentController extends Controller
         // 2. Hitung Sisa Tagihan (Agar tidak overpayment)
         // Asumsi relasi di model Purchase bernama 'payments'
         $sudahDibayar = $purchase->payments()->sum('amount');
-        $sisaTagihan = $purchase->total_harga - $sudahDibayar;
+        $sisaTagihan = $purchase->display_total - $sudahDibayar;
 
         // 3. Validasi
         $request->validate([
@@ -53,21 +53,19 @@ class PaymentController extends Controller
 
             // 6. Cek Pelunasan & Update Status PR
             $totalBayarSekarang = $sudahDibayar + $request->amount;
-            
+
             // Toleransi perbedaan desimal (floating point)
-            if ($totalBayarSekarang >= ($purchase->total_harga - 1)) {
-                
+            if ($totalBayarSekarang >= ($purchase->display_total - 1)) {
                 // A. Update Status PO jadi Lunas
                 $purchase->update(['status_pembayaran' => 'lunas']);
 
-                // B. UPDATE STATUS PR JADI COMPLETED (Ini inti masalah Dashboard 0 tadi)
+                // B. UPDATE STATUS PR JADI COMPLETED
                 if ($purchase->purchaseRequest) {
                     $purchase->purchaseRequest->update(['status' => 'completed']);
                 }
-
             } else {
                 // Jika belum lunas
-                $purchase->update(['status_pembayaran' => 'partial']);
+                $purchase->update(['status_pembayaran' => 'sebagian']);
             }
 
             DB::commit();
