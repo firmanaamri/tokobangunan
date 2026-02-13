@@ -20,16 +20,17 @@
                 <div id="items" class="space-y-3">
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start product-row">
                         <div class="sm:col-span-6">
-                            <label class="block text-sm font-semibold text-slate-700 mb-2">Barang</label>
-                            <select name="barang_id[]" onchange="checkStock(this)" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none" required>
-                                <option value="" data-stok="0">Pilih barang</option>
-                                @foreach($barangs as $b)
-                                    <option value="{{ $b->id }}" data-stok="{{ $b->stok_saat_ini }}">
-                                        {{ $b->nama_barang }} — Stok: {{ $b->stok_saat_ini }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+    <label for="pilihan_barang" class="block text-sm font-semibold text-slate-700 mb-2">Barang</label>
+    
+    <select id="pilihan_barang" name="barang_id[]" onchange="checkStock(this)" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none" required>
+        <option value="" data-stok="0">Pilih barang</option>
+        @foreach($barangs as $b)
+            <option value="{{ $b->id }}" data-stok="{{ $b->stok_saat_ini }}">
+                {{ $b->nama_barang }} — Stok: {{ $b->stok_saat_ini }}
+            </option>
+        @endforeach
+    </select>
+</div>
                         <div class="sm:col-span-3">
                             <label class="block text-sm font-semibold text-slate-700 mb-2">Jumlah</label>
                             <input type="number" name="jumlah[]" min="1" placeholder="0" oninput="checkStock(this)" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none" required />

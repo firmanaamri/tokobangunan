@@ -3,22 +3,17 @@
 @section('content')
 <div class="min-h-screen bg-white p-6">
     <div class="max-w-4xl mx-auto">
-        <!-- Header -->
         <div class="mb-8">
             <h1 class="text-4xl font-bold text-slate-900">Ajukan Pengajuan Pembelian</h1>
             <p class="text-slate-600 mt-2">Buat permintaan pembelian barang baru</p>
         </div>
 
-        <!-- Alerts handled by SweetAlert -->
-
-        <!-- Form Card -->
         <form method="POST" action="{{ route('purchase-requests.store') }}" class="bg-white rounded-xl shadow-lg border border-slate-200 p-8">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Barang -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                    <label for="barang-select" class="block text-sm font-bold text-slate-700 mb-2">
                         <i class="fas fa-box mr-2 text-emerald-500"></i>Barang<span class="text-red-500">*</span>
                     </label>
                     <select id="barang-select" name="barang_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('barang_id') border-red-500 @enderror">
@@ -34,9 +29,8 @@
                     @enderror
                 </div>
 
-                <!-- Supplier -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                    <label for="supplier-select" class="block text-sm font-bold text-slate-700 mb-2">
                         <i class="fas fa-truck mr-2 text-emerald-500"></i>Supplier<span class="text-red-500">*</span>
                     </label>
                     <select id="supplier-select" name="supplier_id" required class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('supplier_id') border-red-500 @enderror">
@@ -66,20 +60,18 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <!-- Jumlah Diminta -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                    <label for="jumlah_diminta" class="block text-sm font-bold text-slate-700 mb-2">
                         <i class="fas fa-calculator mr-2 text-emerald-500"></i>Jumlah Diminta<span class="text-red-500">*</span>
                     </label>
-                    <input type="number" name="jumlah_diminta" min="1" required value="{{ old('jumlah_diminta') }}" placeholder="100" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('jumlah_diminta') border-red-500 @enderror">
+                    <input id="jumlah_diminta" type="number" name="jumlah_diminta" min="1" required value="{{ old('jumlah_diminta') }}" placeholder="100" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('jumlah_diminta') border-red-500 @enderror">
                     @error('jumlah_diminta')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Satuan -->
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">
+                    <label for="satuan" class="block text-sm font-bold text-slate-700 mb-2">
                         <i class="fas fa-ruler mr-2 text-emerald-500"></i>Satuan<span class="text-red-500">*</span>
                     </label>
                     <input id="satuan" type="text" name="satuan" required value="{{ old('satuan') }}" placeholder="pcs, dus, meter, etc" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('satuan') border-red-500 @enderror">
@@ -115,49 +107,44 @@
                     })();
                 </script>
                 
-                    <!-- Payment Term -->
-                    <div>
-                        <label for="payment_term" class="block text-sm font-bold text-slate-700 mb-2">
-                            <i class="fas fa-calendar-day mr-2 text-emerald-500"></i>Payment Term (hari)
-                        </label>
-                        <input type="number" name="payment_term" id="payment_term" min="0" value="{{ old('payment_term') }}" placeholder="Contoh: 30" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('payment_term') border-red-500 @enderror">
-                        <p class="text-xs text-slate-500 mt-1">Masukkan jumlah hari jatuh tempo setelah tanggal pembelian. Jika kosong, bisa diisi manual saat pembuatan Purchase.</p>
-                        @error('payment_term')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div>
+                    <label for="payment_term" class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fas fa-calendar-day mr-2 text-emerald-500"></i>Payment Term (hari)
+                    </label>
+                    <input type="number" name="payment_term" id="payment_term" min="0" value="{{ old('payment_term') }}" placeholder="Contoh: 30" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('payment_term') border-red-500 @enderror">
+                    <p class="text-xs text-slate-500 mt-1">Masukkan jumlah hari jatuh tempo setelah tanggal pembelian. Jika kosong, bisa diisi manual saat pembuatan Purchase.</p>
+                    @error('payment_term')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <!-- Due Date -->
-                    <div>
-                        <label for="due_date" class="block text-sm font-bold text-slate-700 mb-2">
-                            <i class="fas fa-calendar-alt mr-2 text-emerald-500"></i>Tanggal Jatuh Tempo (opsional)
-                        </label>
-                        <input type="date" name="due_date" id="due_date" value="{{ old('due_date') }}" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('due_date') border-red-500 @enderror">
-                        
-                        @error('due_date')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div>
+                    <label for="due_date" class="block text-sm font-bold text-slate-700 mb-2">
+                        <i class="fas fa-calendar-alt mr-2 text-emerald-500"></i>Tanggal Jatuh Tempo (opsional)
+                    </label>
+                    <input type="date" name="due_date" id="due_date" value="{{ old('due_date') }}" class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('due_date') border-red-500 @enderror">
+                    
+                    @error('due_date')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
-            <!-- Catatan Request -->
             <div class="mt-6">
-                <label class="block text-sm font-bold text-slate-700 mb-2">
+                <label for="catatan_request" class="block text-sm font-bold text-slate-700 mb-2">
                     <i class="fas fa-sticky-note mr-2 text-emerald-500"></i>Catatan / Keterangan (Opsional)
                 </label>
-                <textarea name="catatan_request" rows="4" placeholder="Masukkan keterangan atau spesifikasi tambahan..." class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('catatan_request') border-red-500 @enderror">{{ old('catatan_request') }}</textarea>
+                <textarea id="catatan_request" name="catatan_request" rows="4" placeholder="Masukkan keterangan atau spesifikasi tambahan..." class="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-emerald-400 focus:ring-emerald-200 @error('catatan_request') border-red-500 @enderror">{{ old('catatan_request') }}</textarea>
                 @error('catatan_request')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- Info Box -->
             <div class="mt-8 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
                 <i class="fas fa-info-circle mr-2"></i>
                 <strong>Informasi:</strong> PR ini akan diajukan dengan status <strong>Pending</strong> menunggu persetujuan dari admin. Anda bisa mengedit atau membatalkan selama masih pending.
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-row gap-4 mt-8">
                 <button type="button" onclick="confirmCreate(this.closest('form'), 'Purchase Request')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300">
                     <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengajuan

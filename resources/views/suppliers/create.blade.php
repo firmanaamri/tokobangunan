@@ -25,31 +25,33 @@
                         @error('nama_supplier') <p class="text-red-500 text-sm mt-2">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-900 mb-2">Kontak Person</label>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Kontak Person <span class="text-red-500">*</span></label>
                         <input type="text" name="kontak_person" value="{{ old('kontak_person') }}" placeholder="Nama kontak person" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('kontak_person') border-red-500 @enderror">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
-                        <label class="block text-sm font-bold text-slate-900 mb-2">Nomor Telepon</label>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Nomor Telepon <span class="text-red-500">*</span></label>
                         <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" maxlength="14" oninput="this.value = this.value.replace(/\D/g, '').slice(0,14)" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-900 mb-2">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Contoh: info@supplier.com" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none">
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Email <span class="text-red-500">*</span></label>
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Contoh: info@supplier.com" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('email') border-red-500 @enderror">
+                        @error('email') <p class="text-red-500 text-sm mt-2">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-slate-900 mb-2">Alamat</label>
-                    <textarea name="alamat" rows="2" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none">{{ old('alamat') }}</textarea>
+                    <label class="block text-sm font-bold text-slate-900 mb-2">Alamat <span class="text-red-500">*</span></label>
+                    <textarea name="alamat" rows="2" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none @error('alamat') border-red-500 @enderror">{{ old('alamat') }}</textarea>
+                    @error('alamat') <p class="text-red-500 text-sm mt-2">{{ $message }}</p> @enderror
                 </div>
 
                 {{-- BAGIAN INPUT KOTA & PROVINSI --}}
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
-                        <label class="block text-sm font-bold text-slate-900 mb-2">Kota</label>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Kota <span class="text-red-500">*</span></label>
                         <select id="kota-select" name="kota" class="w-full border-2 border-slate-300 rounded-lg px-4 py-2 focus:border-emerald-500 focus:outline-none">
                             <option value="">-- Pilih Kota --</option>
                             @foreach(config('indonesia.cities', []) as $city => $province)

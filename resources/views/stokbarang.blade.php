@@ -10,7 +10,7 @@
     
     {{-- Gunakan Grid Cols 2 agar lebar pasti sama --}}
         <div class="grid grid-cols-2 gap-3 mt-4">
-            <a href="{{ route('kategori.index') }}" class="flex items-center justify-center px-4 py-3 bg-[#FFD93D] text-white rounded-lg font-bold text-sm hover:bg-[#FFC107] transition shadow-sm">  
+            <a href="{{ route('kategori.index') }}" title="Tambah Kategori" class="flex items-center justify-center px-4 py-3 bg-[#FFD93D] text-white rounded-lg font-bold text-sm hover:bg-[#FFC107] transition shadow-sm">  
                 Kelola Kategori
             </a>
 

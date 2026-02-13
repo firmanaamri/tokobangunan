@@ -61,11 +61,11 @@
     {{-- BAGIAN 2: MENU --}}
     <div class="flex flex-col flex-grow overflow-y-auto custom-scrollbar pr-1">
         <div class="space-y-6">
-            <nav class="space-y-1.5">
+            <nav class=" space-y-1.5">
                 
                 {{-- Dashboard: AMBER (KUNING EMAS) --}}
-                <a href="{{ route('dashboard') }}" 
-                   class="flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
+                <a title="Dashboard" href="{{ route('dashboard') }}" 
+                   class=" flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group font-medium mb-1
                           {{ request()->routeIs('dashboard') 
                              ? 'bg-[#4D2B8C] text-white shadow-md ring-1 ring-white/20' 
                              : 'text-blue-100 hover:bg-white/10 hover:text-white hover:shadow-sm' }}">
@@ -76,7 +76,7 @@
                 </a>
 
                 <div class="pt-5 pb-2">
-                    <h3 class="text-[10px] uppercase tracking-wider text-blue-200/70 px-3 font-bold section-title">Master Data</h3>
+                    <h3 class="text-[10px] uppercase tracking-wider text-white px-3 font-bold section-title">Master Data</h3>
                 </div>
                 
                 {{-- Barang: FUCHSIA (UNGU CERAH) --}}
@@ -106,7 +106,7 @@
                 @endcan
 
                 <div class="pt-5 pb-2">
-                    <h3 class="text-[10px] uppercase tracking-wider text-blue-200/70 px-3 font-bold section-title">Transaksi</h3>
+                    <h3 class="text-[10px] uppercase tracking-wider text-white px-3 font-bold section-title">Transaksi</h3>
                 </div>
 
                 {{-- Pengajuan: CYAN (BIRU LANGIT) --}}
@@ -215,7 +215,7 @@
                 {{-- SECTION: ADMIN --}}
                 @can('isAdmin')
                 <div class="pt-5 pb-2">
-                    <h3 class="text-[10px] uppercase tracking-wider text-blue-200/70 px-3 font-bold section-title">Laporan & Admin</h3>
+                    <h3 class="text-[10px] uppercase tracking-wider text-white px-3 font-bold section-title">Laporan & Admin</h3>
                 </div>
 
                 {{-- Barang Masuk: EMERALD (HIJAU) --}}

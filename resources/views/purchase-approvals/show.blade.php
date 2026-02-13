@@ -242,7 +242,6 @@
 
 <script>
     function confirmApprove(button) {
-        // 1. Cek Validasi HTML5 Dulu (Required fields)
         const form = button.closest('form');
         if (!form.reportValidity()) {
             return; // Stop kalau ada field required yang kosong
@@ -254,10 +253,12 @@
             text: "Apakah harga deal dan supplier sudah benar? PO akan otomatis dibuat.",
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6', // Warna Biru
-            cancelButtonColor: '#d33',    // Warna Merah
-            confirmButtonText: 'Ya, Lanjutkan!',
-            cancelButtonText: 'Batal'
+            cancelButtonColor: '#6b7280',
+            confirmButtonColor: '#10b981', 
+            reverseButtons: true,    
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Lanjutkan!'
+            
         }).then((result) => {
             if (result.isConfirmed) {
                 form.submit(); // Submit form manual
@@ -278,8 +279,8 @@
             text: "Tindakan ini tidak bisa dibatalkan!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',    // Warna Merah
-            cancelButtonColor: '#3085d6', // Warna Biru
+            confirmButtonColor: '#d33',    
+            cancelButtonColor: '#3085d6', 
             confirmButtonText: 'Ya, Tolak!',
             cancelButtonText: 'Batal'
         }).then((result) => {
